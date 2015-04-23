@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+
+      {{ $clientName }},<p/>
+
+      {{ trans('texts.payment_message', ['amount' => $paymentAmount]) }}<p/>      
+
+      @if ($emailFooter)
+      {{ nl2br($emailFooter) }}
+      @else
+      {{ trans('texts.email_signature') }}<br/>      
+      {{ $accountName }}
+      @endif
+
+      @if ($showNinjaFooter)
+      <p/>
+      {{ trans('texts.ninja_email_footer', ['site' => '<a href="http://www.facturavirtual.com.bo">Facturación Virtual</a>']) }}
+      @endif
+      
+    </body>
+</html>

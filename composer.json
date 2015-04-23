@@ -1,0 +1,63 @@
+{
+	"name": "aleguisf/factvirt",
+	"description": "",
+	"keywords": ["invoice"],
+	"license": "Attribution Assurance License",
+	"authors": [
+		{
+			"name": "Ale Guis",
+			"email": "aguisbert@ipxserver.com"
+		}
+	],
+	"require": {
+		"laravel/framework": "4.1.25",
+		"patricktalmadge/bootstrapper": "4.1.x",
+		"zizaco/confide": "3.1.x",
+		"anahkiasen/former": "3.4.x",
+		"barryvdh/laravel-debugbar": "dev-master",
+		"chumper/datatable": "2.x",
+		"omnipay/omnipay": "~2.0",
+		"intervention/image": "1.x",
+		"webpatser/laravel-countries": "dev-master",
+		"barryvdh/laravel-ide-helper": "1.*",
+        "doctrine/dbal": "~2.3",
+        "jsanc623/phpbenchtime": "2.x"
+	},
+	"require-dev": {
+		"codeception/codeception": "dev-master"
+	},
+	"autoload": {
+		"classmap": [
+			"app/commands",
+			"app/controllers",
+			"app/models",
+			"app/database/migrations",
+			"app/database/seeds",
+			"app/tests/TestCase.php",
+			"app/libraries",
+			"vendor/php-payments/lib"
+		],
+		"psr-0" : {
+			"ipx" : "app/"
+		}
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"php artisan optimize",
+			"php artisan debugbar:publish"
+		],
+		"post-update-cmd": [
+			"php artisan clear-compiled",
+            "php artisan ide-helper:generate",
+			"php artisan debugbar:publish",
+			"php artisan optimize"
+		],
+		"post-create-project-cmd": [
+			"php artisan key:generate"
+		]
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}

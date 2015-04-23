@@ -1,0 +1,161 @@
+{
+   "1":{
+      "capital":"La Paz",
+      "citizenship":"null",
+      "country-code":"001",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"La Paz",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"La Paz",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },
+
+   "2":{
+      "capital":"La Paz",
+      "citizenship":"null",
+      "country-code":"002",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"El Alto",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"El Alto",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },
+
+   "3":{
+      "capital":"Cochabamba",
+      "citizenship":"null",
+      "country-code":"003",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Cochabamba",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Cochabamba",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },   
+
+   "4":{
+      "capital":"Santa Cruz",
+      "citizenship":"null",
+      "country-code":"004",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Santa Cruz de la Sierra",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Santa Cruz",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   }, 
+
+   "5":{
+      "capital":"Oruro",
+      "citizenship":"null",
+      "country-code":"005",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Oruro",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Oruro",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },  
+
+   "6":{
+      "capital":"Potosí",
+      "citizenship":"null",
+      "country-code":"006",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Potosí",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Potosí",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   }, 
+
+   "7":{
+      "capital":"Chuquisaca",
+      "citizenship":"null",
+      "country-code":"007",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Sucre",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Sucre",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },
+
+   "8":{
+      "capital":"Tarija",
+      "citizenship":"null",
+      "country-code":"008",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Tarija",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Tarija",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },
+
+   "9":{
+      "capital":"Pando",
+      "citizenship":"null",
+      "country-code":"009",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Pando",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Pando",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   },
+
+   "10":{
+      "capital":"Beni",
+      "citizenship":"null",
+      "country-code":"010",
+      "currency":"null",
+      "currency_code":"null",
+      "currency_sub_unit":"null",
+      "full_name":"Beni",
+      "iso_3166_2":"",
+      "iso_3166_3":"",
+      "name":"Beni",
+      "region-code":"",
+      "sub-region-code":"",
+      "eea":false
+   }
+}
