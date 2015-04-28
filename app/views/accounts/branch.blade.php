@@ -6,7 +6,7 @@
     <div class="alert alert-danger"></div>
 @endif
 
-  {{ Former::open($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
+  {{-- Former::open($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
       'name' => 'required',
       'address1' => 'required',
       'postal_code' => 'required',
@@ -18,8 +18,9 @@
       'key_dosage' => 'required',
       'law' => 'required',
       'state' => 'required'
-  )); }}
+  )); --}}
 
+  {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit'); }}
 
   {{ Former::legend($title) }}
 
@@ -67,7 +68,10 @@
                           {{ Former::text('year')->label('/')->pattern('[0-9]{4}')->length('4')->placeholder('año') }}   
                           </div>
                         </div>
-      {{ Former::textarea('key_dosage')->label('llave dosificación  (*)')->rows(3)}}
+
+      {{ Former::file('key_dosage') }}
+                 
+      {{-- Former::textarea('key_dosage')->label('llave dosificación  (*)')->rows(3) --}}
 
       {{ Former::legend('Leyendas') }}
 

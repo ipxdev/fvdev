@@ -139,8 +139,16 @@ class BranchController extends \BaseController {
         $fecha = $year ."-". $month ."-". $day;
 
         $branch->deadline = DateTime::createFromFormat('Y-m-d', $fecha);
-   
-		    $branch->key_dosage = Input::get('key_dosage');
+
+        $file = Input::file('key_dosage');
+        $name = $file->getRealPath();
+        require_once(app_path().'/includes/parsecsv.lib.php');
+        $csv = new parseCSV();
+        $csv->heading = false;
+        $csv->auto($name);
+        $data = $csv->data;
+
+		    $branch->key_dosage = $data[6][0];
 
 		    $branch->activity_pri = Input::get('activity_pri');      
 		    $branch->activity_sec1 = Input::get('activity_sec1');

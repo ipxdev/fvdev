@@ -9,15 +9,6 @@
 {{ Former::legend('panel_settings') }}
   @parent
 
-	
-	<style type="text/css">
-
-	#logo {
-		padding-top: 6px;
-	}
-
-	</style>
-
 	{{ Former::open_for_files()->addClass('col-md-10 col-md-offset-1 warn-on-exit')->rules(array(
   		'name' => 'required',
   		'email' => 'email|required',
@@ -60,14 +51,6 @@
             {{-- Former::text('vat_number') --}}
 			{{-- Former::text('work_email') --}}
 			{{ Former::text('work_phone')->label('Teléfono (*)') }}
-			{{ Former::file('logo')->label('logo (*)')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
-
-			@if (file_exists($account->getLogoPath()))
-				<center>
-					{{ HTML::image($account->getLogoPath(), "Logo") }} &nbsp;
-					<a href="#" onclick="deleteLogo()">{{ trans('texts.remove_logo') }}</a>
-				</center><br/>
-			@endif
 
 			{{-- Former::select('size_id')->addOption('','')
 				->fromQuery($sizes, 'name', 'id') --}}
@@ -125,12 +108,7 @@
 	</script>	
 	@endif
 
-	
-
 	{{ Former::close() }}
-
-	{{-- Form::open(['url' => 'remove_logo', 'class' => 'removeLogoForm']) --}}	
-	{{-- Form::close() --}}
 
 
 	<script type="text/javascript">
@@ -139,12 +117,6 @@
 			$('#country_id').combobox();
 		});
 		
-		function deleteLogo() {
-			if (confirm("{{ trans('texts.are_you_sure') }}")) {
-				$('.removeLogoForm').submit();
-			}
-		}
-
 	</script>
 
 @stop

@@ -433,6 +433,8 @@
 		@endif
 
 	</div>
+	
+	<p>&nbsp;</p>
 
 	@include('invoices.pdf', ['account' => Auth::user()->account])
 
@@ -730,26 +732,29 @@
     return invoice;
 	}
 
-	function getPDFString() {		
+	function getPDFString() {
+		var invoiceDesigns = {{ $invoiceDesigns }};
 		var invoice = createInvoiceModel();
 		var design  = getDesignJavascript();
-		if (!design) return;
-		var doc = generatePDF(invoice, design);
-		if (!doc) return;
+		var doc = generatePDF(invoice, design, getLogoJavascript(), getLogoXJavascript(), getLogoYJavascript());
 		return doc.output('datauristring');
 	}
 
 	function getDesignJavascript() {
-		// var id = $('#invoice_design_id').val();
-		var id = 1;
-		if (id == '-1') {
-			showMoreDesigns();
-			model.invoice().invoice_design_id(1);
-			return invoiceDesigns[0].javascript;
-		} else {
-			return invoiceDesigns[id-1].javascript;
-		}
+		return invoiceDesigns[0].javascript;
 	}
+
+	function getLogoJavascript() {
+      return invoiceDesigns[0].name; 
+    }
+
+    function getLogoXJavascript() {
+        return invoiceDesigns[0].x;
+      }
+
+    function getLogoYJavascript() {
+        return invoiceDesigns[0].y;
+      }
 
 	function onDownloadClick() {
 		trackUrl('/download_pdf');
@@ -1256,7 +1261,6 @@
 		self.invoice_items = ko.observableArray();
 		self.amount = ko.observable(0);
 		self.balance = ko.observable(0);
-		self.invoice_design_id = 1;
 
 		self.aleguisf = 0;
 

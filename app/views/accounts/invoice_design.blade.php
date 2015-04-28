@@ -5,6 +5,14 @@
 
     <script src="{{ asset('js/pdf_viewer.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/compatibility.js') }}" type="text/javascript"></script>
+    
+    <style type="text/css">
+    #logo {
+        padding-top: 6px;
+    }
+    input.range { -webkit-appearance: slider-horizontal;  }
+    </style>
+
 @stop
 
 @section('content') 
@@ -14,13 +22,31 @@
   <script>
     var invoiceDesigns = {{ $invoiceDesigns }};
     var branches = {{ $branches }};
-    var invoice = {{ json_encode($invoice) }};      
-      
+    var invoice = {{ json_encode($invoice) }};   
+
+    var xd = invoiceDesigns[0].x;   
+    var yd = invoiceDesigns[0].y;
+
     function getDesignJavascript() {
       // var id = $('#invoice_design_id').val();
       return invoiceDesigns[0].javascript;
-
     }
+
+    function getLogoJavascript() {
+      return invoiceDesigns[0].name; 
+    }
+
+    $('#x, #y').change(function() {
+      setTimeout(function() {
+        refreshPDF();
+      }, 1);
+    });
+    function onItemChange()
+      {
+        refreshPDF();  
+      }
+
+
     function getPDFString() {
       var id = $('#branch_id').val();
       // id = id - 1;
@@ -29,6 +55,23 @@
         if(branches[i].public_id == id){
           aux = branches[i].public_id;
         }
+      }
+
+      var x = $('#x').val();
+      var y = $('#y').val();
+
+      $('#x, #y').change(function() {
+
+      xd = x;
+      yd = y;
+      });
+
+      function getLogoXJavascript() {
+        return xd;
+      }
+
+      function getLogoYJavascript() {
+        return yd;
       }
 
       invoice.branch_name = branches[aux-1].name;
@@ -48,7 +91,7 @@
       invoice.account.hide_paid_to_date = $('#hide_paid_to_date').is(":checked");
       NINJA.primaryColor = $('#primary_color').val();
       NINJA.secondaryColor = $('#secondary_color').val();
-      var doc = generatePDF(invoice, getDesignJavascript(), true);
+      var doc = generatePDF(invoice, getDesignJavascript(), getLogoJavascript(), getLogoXJavascript(), getLogoYJavascript(), true);
       if (!doc) {
         return;
       }
@@ -59,36 +102,44 @@
     });
   </script> 
 
+{{ Former::open_for_files()->addClass('warn-on-exit')->onchange('refreshPDF()')->rules(['design' => 'required']) }}
+{{ Former::populate($account) }}
+
+{{ Former::populateField('hide_quantity', intval($account->hide_quantity)) }}
+{{ Former::populateField('x', intval($invoiceDesign->x)) }}
+{{ Former::populateField('y', intval($invoiceDesign->y)) }}
+
+
 
   <div class="row">
     <div class="col-md-6">
 
-      {{ Former::open()->addClass('warn-on-exit')->onchange('refreshPDF()')->rules(['design' => 'required']) }}
-      {{ Former::populate($account) }}
-      {{ Former::populateField('hide_quantity', intval($account->hide_quantity)) }}
-      {{ Former::populateField('hide_paid_to_date', intval($account->hide_paid_to_date)) }}
+      @if (Auth::user()->isPro())
+        {{ Former::legend('Logo') }}
+      @else
+        {{ Former::legend('Logo') }}
+      @endif
 
-      {{ Former::legend('invoice_design') }}
+      {{ Former::file('logo')->label('logo (*)')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
 
-      
-      {{-- Former::select('invoice_design_id')->style('display:inline;width:140px')->fromQuery($invoiceDesigns, 'name', 'id') --}}
-     
-      {{ Former::select('branch_id')->label('Sucursal')->style('display:inline;width:140px')->fromQuery($branches, 'name', 'public_id') }}
+      @if (file_exists($account->getLogoPath()))
+        {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
+        {{ Former::range('y')->label('vertical')->min(0)->max(60)->step(3)->class('range') }}
+       @endif
 
+      {{ Former::legend('Conceptos') }}
 
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
+      {{ Former::checkbox('hide_quantity')->text(trans('texts.hide_quantity_help')) }}
+
 
       @if (Auth::user()->isPro())
-        {{ Former::legend('Guardar Nuevo Diseño') }}
+        {{ Former::legend('Nuevo Diseño') }}
       @else
         {{ Former::legend('modificar Diseño') }}
       @endif
 
-        {{ Form::textarea('design', null, ['size' => '10x16']) }}
+      {{ Form::textarea('design', null, ['size' => '10x5']) }}
 
-      {{-- Former::checkbox('hide_quantity')->text(trans('texts.hide_quantity_help')) --}}
-      {{-- Former::checkbox('hide_paid_to_date')->text(trans('texts.hide_paid_to_date_help')) --}}
 
       <p>&nbsp;</p>
       <p>&nbsp;</p>
@@ -97,17 +148,22 @@
         {{ Former::actions( Button::lg_success_submit(trans('Guardar'))->append_with_icon('floppy-disk') ) }}
       @else
         {{ Former::actions( Button::lg_success_submit(trans('Modificar'))->append_with_icon('floppy-disk') ) }}
-
       @endif
 
-      {{ Former::close() }}
-
     </div>
+
     <div class="col-md-6">
+
+      {{ Former::legend('previsualización ') }}
+
+      {{ Former::select('branch_id')->label('Cambiar Sucursal')->style('display:inline;width:220px')->fromQuery($branches, 'name', 'public_id') }}
 
       @include('invoices.pdfdesign', ['account' => Auth::user()->account, 'pdfHeight' => 800])
 
     </div>
   </div>
+
+{{ Former::close() }}
+
 
 @stop

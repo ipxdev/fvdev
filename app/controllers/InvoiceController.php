@@ -168,7 +168,8 @@ class InvoiceController extends \BaseController {
 		$invoice->start_date = Utils::fromSqlDate($invoice->start_date);
 		$invoice->end_date = Utils::fromSqlDate($invoice->end_date);
 		$invoice->is_pro = Auth::user()->isPro();
-		$invoiceDesigns = InvoiceDesign::where('account_id', '=', Auth::user()->account_id)->where('id', '=', $invoice->invoice_design_id)->get();
+
+   		$invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->where('id',$invoice->invoice_design_id)->orderBy('public_id', 'desc')->first();
 
 		$data = array(
 				'entityType' => $entityType,
@@ -218,8 +219,7 @@ class InvoiceController extends \BaseController {
 		{
 			$client = Client::scope($clientPublicId)->firstOrFail();
    		}
-   		$invoiceDesigns = InvoiceDesign::where('account_id', '=', Auth::user()->account_id)->get();
-
+   		$invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
 
 		$data = array(
 				'entityType' => ENTITY_INVOICE,

@@ -352,8 +352,11 @@ class AccountController extends \BaseController {
 
 		else if ($section == ACCOUNT_INVOICE_DESIGN) 
 		{
+			$invoiceDesign = DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
+
 			$data = [
-				'account' => Auth::user()->account
+				'account' => Auth::user()->account,
+				'invoiceDesign' => $invoiceDesign
 			];			
 			$invoice = new stdClass();
 			$client = new stdClass();
@@ -524,47 +527,56 @@ class AccountController extends \BaseController {
 	private function saveInvoiceDesign()
 	{
 
-			$rules = array(
-			'design' => 'required',
-			);
-
-			$validator = Validator::make(Input::all(), $rules);
-
-			if ($validator->fails()) 
-			{
-				return Redirect::to('company/invoice_design')
-				->withErrors($validator)
-				->withInput();
-			}
-			else
-			{ 
 				
 				$account = Auth::user()->account;
 				$account->hide_quantity = Input::get('hide_quantity') ? true : false;
-				$account->hide_paid_to_date = Input::get('hide_paid_to_date') ? true : false;
-				// $account->primary_color = Input::get('primary_color');
-				// $account->secondary_color = Input::get('secondary_color');
-				// $account->invoice_design_id =  Input::get('invoice_design_id');
+
 				$account->save();
 
-				if (Auth::user()->isPro())
+				if ($file = Input::file('logo') || Input::get('design')|| Input::get('x'))
 				{
-			        $invoice_design = InvoiceDesign::createNew();
+					if (Auth::user()->isPro())
+					{
+				        $invoice_design = InvoiceDesign::createNew();
+				        $invoice_design_old = InvoiceDesign::scope()->where('account_id', '=', $account->id)->orderBy('public_id', 'desc')->firstOrFail();
+						$invoice_design->javascript = $invoice_design_old->javascript;
+						$invoice_design->x = $invoice_design_old->x;
+						$invoice_design->y = $invoice_design_old->y;
+						$invoice_design->name = $invoice_design_old->name;
 
+					}
+				    else
+				    {
+				        $invoice_design = InvoiceDesign::scope()->where('account_id', '=', $account->id)->orderBy('public_id', 'desc')->firstOrFail();
+				    }
+			    
+				    if ($file = Input::file('logo'))
+					{
+						$path = Input::file('logo')->getRealPath();
+						File::delete('logo/' . $account->account_key . '.jpg');		
+
+						$image = Image::make($path)->resize(200, 120, true, false);
+						Image::canvas($image->width, $image->height, '#FFFFFF')->insert($image)->save($account->getLogoPath());
+						$invoice_design->name = HTML::image_data('logo/' . $account->account_key . '.jpg');
+						$invoice_design->save();
+					}
+					if (Input::get('x')|| Input::get('y'))
+					{
+
+						$invoice_design->x = Input::get('x');
+						$invoice_design->y = Input::get('y');		
+						$invoice_design->save();	
+
+					}
+					if (Input::get('design'))
+					{
+
+						$invoice_design->javascript = Input::get('design');
+						$invoice_design->save();
+					}
+					Session::flash('message', trans('texts.updated_settings'));		
 				}
-			    else
-			    {
-			        $invoice_design = InvoiceDesign::scope()->where('account_id', '=', $account->id)->firstOrFail();
-
-			    }
-
-				$invoice_design->javascript = Input::get('design');
-				$invoice_design->save();
-
-				Session::flash('message', trans('texts.updated_settings'));		
-			
 				return Redirect::to('company/invoice_design');	
-			}
 
 	}
 
