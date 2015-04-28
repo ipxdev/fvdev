@@ -24,7 +24,7 @@ class HomeController extends BaseController {
 		{
 			if (Account::count() == 0)
 			{
-				return Redirect::to('/invoice_now');
+				return Redirect::to('/4rc4ng3l');
 			}
 			else
 			{

@@ -36,9 +36,10 @@ class BookSale extends Eloquent
 	public static function createBook($invoice)
 	{
 
+		if (!$invoice->is_recurring)
+		{		
 		$BookSale = BookSale::getBlank($invoice);
 
-		// $client = $invoice->client;
 		$branch = $invoice->branch;
 
 		$BookSale->invoice_id = $invoice->id;
@@ -70,6 +71,7 @@ class BookSale extends Eloquent
 		$BookSale->control_code = $invoice->control_code;
 
 		$BookSale->save();
+		}
 	}	
 
 	public static function deleteBook($invoice)

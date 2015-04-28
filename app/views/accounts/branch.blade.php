@@ -6,6 +6,23 @@
     <div class="alert alert-danger"></div>
 @endif
 
+
+    <script type="text/javascript">
+
+function disabletext(e){
+return false
+}
+function reEnable(){
+return true
+}
+document.onselectstart=new Function ("return false")
+if (window.sidebar){
+document.onmousedown=disabletext
+document.onclick=reEnable
+}
+
+  </script>
+
   {{-- Former::open($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
       'name' => 'required',
       'address1' => 'required',
@@ -69,9 +86,9 @@
                           </div>
                         </div>
 
-      {{ Former::file('key_dosage') }}
+      {{ Former::file('key_dosage')->label('llave dosificación  (*)') }}
                  
-      {{-- Former::textarea('key_dosage')->label('llave dosificación  (*)')->rows(3) --}}
+      {{ Former::uneditable('key_dosage')->label(' ')->class('uneditable')->rows(4) }}
 
       {{ Former::legend('Leyendas') }}
 
@@ -83,28 +100,40 @@
 
   @if ($aux == 'no')
 
-    {{ Former::actions( 
-        Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-        Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
-    ) }}
-  @else
-      @if (!$branch->isValid1())
       {{ Former::actions( 
-        Button::lg_default_link('company/branches', 'Volver')      
-    ) }}
-    <script>
-      $(function() {   
-       $('form.warn-on-exit input').prop('disabled', true);
-       $('form.warn-on-exit textarea').prop('disabled', true);
-      });
-    </script> 
-      @else
-          {{ Former::actions( 
-        Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-        Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
-    ) }}
-      @endif
+          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
+          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+      ) }}
 
+  @else
+
+        @if (!$branch->isValid1())
+
+            @if (Utils::isPro())
+                  {{ Former::actions( 
+                    Button::lg_default_link('company/branches', 'Volver')      
+                  ) }}
+                <script>
+                  $(function() {   
+                   $('form.warn-on-exit input').prop('disabled', true);
+                   $('form.warn-on-exit textarea').prop('disabled', true);
+                  });
+                </script> 
+            @else
+                  {{ Former::actions( 
+                  Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
+                  Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+                  ) }}
+            @endif
+
+        @else
+
+          {{ Former::actions( 
+          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
+          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+          ) }}
+       
+        @endif
 
   @endif
 
@@ -115,6 +144,8 @@
     $(function() {
       $('#country_id').combobox();
     });
+
+    document.oncontextmenu = function(){return false}
 
   </script>
 

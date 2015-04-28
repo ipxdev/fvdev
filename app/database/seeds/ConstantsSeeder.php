@@ -30,9 +30,6 @@ class ConstantsSeeder extends Seeder
 		InvoiceStatus::create(array('name' => 'Pagado'));	
 		InvoiceStatus::create(array('name' => 'Anulado'));
 
-		Frequency::create(array('name' => 'Semanal'));
-		Frequency::create(array('name' => 'Cada 2 Semanas'));
-		Frequency::create(array('name' => 'Cada 4 Semanas'));
 		Frequency::create(array('name' => 'Mensual'));
 		Frequency::create(array('name' => 'Trimestral'));
 		Frequency::create(array('name' => 'Semestral'));

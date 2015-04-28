@@ -31089,8 +31089,10 @@ function GetPdf(invoice, javascript, logo, x, y){
   //set default style for report
   doc.setFont('Helvetica','');
 
-  eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
-
+ 	if(logo)
+	{
+  		eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
+	}
   eval(javascript);
 
   return doc;

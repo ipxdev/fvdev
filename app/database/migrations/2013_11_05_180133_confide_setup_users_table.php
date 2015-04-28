@@ -331,8 +331,10 @@ class ConfideSetupUsersTable extends Migration {
             $t->unsignedInteger('account_id')->index();
             $t->unsignedInteger('branch_id')->nullable();
             $t->unsignedInteger('user_id');
-            $t->string('name');
+            $t->text('name');
             $t->text('javascript')->nullable();
+            $t->string('x');
+            $t->string('y');
 
             $t->foreign('account_id')->references('id')->on('accounts');
             $t->foreign('branch_id')->references('id')->on('branches');
