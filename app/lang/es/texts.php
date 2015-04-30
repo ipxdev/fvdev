@@ -221,6 +221,7 @@ return array(
  'localization' => 'Localización',
  'remove_logo' => 'Eliminar logo',
  'logo_help' => 'Formatos aceptados: JPEG, GIF y PNG. Altura recomendada: 120px',
+ 'dosage_help' => 'Archivo proporcionado por Impuestos Nacionales.',
  'payment_gateway' => 'Pasarela de pago',
  'gateway_id' => 'Proveedor',
  'email_notifications' => 'Notificaciones de email',

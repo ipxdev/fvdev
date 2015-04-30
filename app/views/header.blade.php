@@ -83,7 +83,7 @@
             {{ Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) }} &nbsp;
           @elseif (!Auth::user()->isPro())
             {{ Button::sm_primary('Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
-            {{ Button::sm_success_primary(trans('texts.go_pro'), array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
+            {{ Button::sm_success_primary('Activar', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
           @endif
         @endif
 
@@ -371,7 +371,7 @@
       <div class="modal-content">
         <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="proPlanModalLabel">Confirmar Cuenta</h4>
+          <h4 class="modal-title" id="proPlanModalLabel">Activar Cuenta</h4>
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
@@ -383,8 +383,8 @@
 
                 <ul class="list-group">
                   <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Detalles de la Empresa </b><br> <i> NIT, nombre y dirección.</i></li></a>
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Sucursales</b><br> <i> Dirección, actividades, dosificación.</i></li>
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Diseño</b><br> <i> Diseño de impresión de la factura.</i></li>
+                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Sucursales</b><br> <i> Dirección, actividades, dosificación.</i></li></a>
+                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Diseño</b><br> <i> Diseño de impresión de la factura.</i></li></a>
                 </ul>
 
               </div>

@@ -95,8 +95,7 @@ class BranchController extends \BaseController {
   {
 
   	$rules = array(
-			'name' => 'required',
-      'year' => 'numeric|min:2015'
+			'name' => 'unique'
 		);
 
 		$messages = array(
@@ -131,7 +130,6 @@ class BranchController extends \BaseController {
 		    $branch->country_id = Input::get('country_id') ? Input::get('country_id') : null;  
 		    $branch->industry_id = Input::get('industry_id') ? Input::get('industry_id') : null;
 
-		    $branch->number_autho = Input::get('number_autho');
 
         $day = Input::get('day');
         $month = Input::get('month');
@@ -140,19 +138,38 @@ class BranchController extends \BaseController {
 
         $branch->deadline = DateTime::createFromFormat('Y-m-d', $fecha);
 
-        if(Input::file('key_dosage'))
+        if(Input::file('dosage'))
         {
-          $file = Input::file('key_dosage');
+          $file = Input::file('dosage');
           $name = $file->getRealPath();
         
+          $i = 0;
+          $file = fopen($name, "r");
+          while(!feof($file))
+          {
+            $process1 = fgets($file);
+            if($i =='0')
+            {
+              $process2 = explode(":", $process1);
+              $result1 = $process2[1];
+            }
+            if($i =='2')
+            {
+              $process2 = explode(":", $process1);
+              $result2 = $process2[1];
+            }
+            if($i =='6')
+            {
+              $result3 = $process1;
+            }
+            $i++;
+          }
+          fclose($file);
 
-          require_once(app_path().'/includes/parsecsv.lib.php');
-          $csv = new parseCSV();
-          $csv->heading = false;
-          $csv->auto($name);
-          $data = $csv->data;
+          $branch->aux1 = $result1;
+          $branch->number_autho = $result2;
+          $branch->key_dosage = $result3;
 
-  		    $branch->key_dosage = $data[6][0];
         }
 		    $branch->activity_pri = Input::get('activity_pri');      
 		    $branch->activity_sec1 = Input::get('activity_sec1');
@@ -164,6 +181,8 @@ class BranchController extends \BaseController {
 
 		    $message = $branchPublicId ? trans('texts.updated_branch') : trans('texts.created_branch');
 		    Session::flash('message', $message);
+        
+        Session::flash('message', $message);
 
 		    return Redirect::to('company/branches');    
 		}

@@ -23,21 +23,19 @@ document.onclick=reEnable
 
   </script>
 
-  {{-- Former::open($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
+  {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
       'name' => 'required',
       'address1' => 'required',
       'postal_code' => 'required',
       'address2' => 'required',
       'city' => 'required',
       'activity_pri' => 'required',
-      'number_autho' => 'required',
-      'deadline' => 'required',
-      'key_dosage' => 'required',
+      'dosage' => 'required',
       'law' => 'required',
-      'state' => 'required'
-  )); --}}
+      'state' => 'required',
+       'year' => 'numeric|min:2015'
+  )); }}
 
-  {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit'); }}
 
   {{ Former::legend($title) }}
 
@@ -67,28 +65,34 @@ document.onclick=reEnable
       {{ Former::textarea('activity_pri')->label('actividad Principal  (*)') }}
       {{ Former::textarea('activity_sec1')->label('actividad Secundaria') }}
 
+
       {{ Former::legend('dosificación') }}
 
-      {{ Former::text('number_autho')->label('núm. de autorización  (*)') }}
-                        <div class="row">
+      {{ Former::file('dosage')->label(' ')->inlineHelp(trans('texts.dosage_help')) }}
 
-                          <div class="col-md-3" style="margin-left:64px;">                      
-                           {{Former::label('fecha límite  (*)')}} 
-                          </div>
-                          <div class="col-md-3" style="margin-left:-15px;">                      
-                          {{ Former::text('day')->label('')->pattern('[0-9]{2}')->maxlength('2')->placeholder('día') }} 
-                          </div>
-                          <div class="col-md-3" style="margin-left:-60px;">
-                          {{ Former::text('month')->label('/')->pattern('[0-9]{2}')->maxlength('2')->placeholder('mes') }}   
-                          </div>
-                          <div class="col-md-4" style="margin-left:-38px;">
-                          {{ Former::text('year')->label('/')->pattern('[0-9]{4}')->length('4')->placeholder('año') }}   
-                          </div>
-                        </div>
+      {{ Former::uneditable('aux1')->label('núm. de Trámite ')->class('uneditable') }}
 
-      {{ Former::file('key_dosage')->label('llave dosificación  (*)') }}
+      {{ Former::uneditable('number_autho')->label('núm. de autorización ')->class('uneditable') }}
+
+      {{ Former::uneditable('key_dosage')->label('llave de Dosidicación ')->class('uneditable')->rows(4) }}
+      <br>
+
+        <div class="row">
+
+          <div class="col-md-3" style="margin-left:64px;">                      
+           {{Former::label('fecha límite  (*)')}} 
+          </div>
+          <div class="col-md-3" style="margin-left:-15px;">                      
+          {{ Former::text('day')->label('')->pattern('[0-9]{2}')->maxlength('2')->placeholder('día') }} 
+          </div>
+          <div class="col-md-3" style="margin-left:-60px;">
+          {{ Former::text('month')->label('/')->pattern('[0-9]{2}')->maxlength('2')->placeholder('mes') }}   
+          </div>
+          <div class="col-md-4" style="margin-left:-38px;">
+          {{ Former::text('year')->label('/')->pattern('[0-9]{4}')->length('4')->placeholder('año') }}   
+          </div>
+        </div>
                  
-      {{ Former::uneditable('key_dosage')->label(' ')->class('uneditable')->rows(4) }}
 
       {{ Former::legend('Leyendas') }}
 

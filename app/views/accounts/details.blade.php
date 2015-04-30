@@ -60,8 +60,9 @@
 			{{ Former::legend('address')  }}
 			{{ Former::select('country_id')->addOption('','')->label('ciudad  (*)')
 				->fromQuery($countries, 'name', 'id') }}
-			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
 			{{ Former::text('address2')->label('Dirección (*)') }}
+			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
+			
 			{{-- Former::text('city') --}}
 			{{-- Former::text('state') --}}
 			{{-- Former::text('postal_code') --}}

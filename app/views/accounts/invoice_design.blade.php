@@ -120,7 +120,7 @@
         {{ Former::legend('Logo') }}
       @endif
 
-      {{ Former::file('logo')->label('logo (*)')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
+      {{ Former::file('logo')->label('logo')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
 
       @if (file_exists($account->getLogoPath()))
         {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
