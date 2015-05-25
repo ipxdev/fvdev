@@ -592,7 +592,7 @@ class ConfideSetupUsersTable extends Migration {
             $t->unique( array('account_id','public_id') );
         });
 
-        Schema::create('category', function($t)
+        Schema::create('categories', function($t)
         {
             $t->increments('id');
             $t->unsignedInteger('account_id')->index();
@@ -631,7 +631,7 @@ class ConfideSetupUsersTable extends Migration {
             
             $t->foreign('account_id')->references('id')->on('accounts'); 
             $t->foreign('branch_id')->references('id')->on('branches');            
-            $t->foreign('category_id')->references('id')->on('category');     
+            $t->foreign('category_id')->references('id')->on('categories');     
             $t->foreign('user_id')->references('id')->on('users');
             
             $t->unsignedInteger('public_id');

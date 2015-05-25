@@ -208,6 +208,14 @@ class AccountController extends \BaseController {
 
 			return View::make('accounts.branches', $data);		
 		}
+		else if ($section == ACCOUNT_CATEGORIES)
+		{
+			$data = [
+				'account' => Auth::user()->account
+			];
+
+			return View::make('accounts.categories', $data);		
+		}
 		else if ($section == ACCOUNT_MANUALS)
 		{
 			$data = [

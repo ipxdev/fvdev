@@ -263,6 +263,18 @@ return array(
   'zone_direccion' => 'Dirección, Zona/Barrio',
   'branch_select' => 'Seleccione una Sucursal',
 
+  //categories
+  'category' => 'Categoria',
+  'category_details' => 'Categorias de Productos',
+  'category_library' => 'Lista de Categorias',
+  'create_category' => 'Crear Categoria',
+  'created_category' => 'Categoria creada',
+  'edit_category' => 'Mostrar Categoria',
+  'updated_category' => 'Categoria editada',
+  'archive_category' => 'Archivar Categoria',
+  'archived_category' => 'Categoria archivada',
+
+
  // application messages
  'created_client' => 'cliente creado con éxito',
  'created_clients' => ':count clientes creados con éxito',

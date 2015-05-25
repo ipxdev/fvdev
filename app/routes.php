@@ -111,6 +111,10 @@ Route::group(array('before' => 'auth'), function()
   Route::resource('branches', 'BranchController');
   Route::get('branches/{branch_id}/archive', 'BranchController@archive');
 
+  Route::get('api/categories', array('as'=>'api.categories', 'uses'=>'CategoryController@getDatatable'));
+  Route::resource('categories', 'CategoryController');
+  Route::get('categories/{category_id}/archive', 'CategoryController@archive');
+
   Route::get('api/manuals', array('as'=>'api.manuals', 'uses'=>'ManualController@getDatatable'));
   Route::resource('manuals', 'ManualController');
   Route::get('manuals/{manual_id}/archive', 'ManualController@archive');
@@ -213,6 +217,7 @@ define('ACCOUNT_MAP', 'import_map');
 define('ACCOUNT_MAP_INVOICES', 'import_map_invoice');
 define('ACCOUNT_EXPORT', 'export');
 define('ACCOUNT_EXPORTBOOKSALE', 'booksale');
+define('ACCOUNT_CATEGORIES', 'categories');
 define('ACCOUNT_PRODUCTS', 'products');
 define('ACCOUNT_MANUALS', 'manuals');
 define('ACCOUNT_ADVANCED_SETTINGS', 'advanced_settings');
