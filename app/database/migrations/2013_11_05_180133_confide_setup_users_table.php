@@ -592,11 +592,34 @@ class ConfideSetupUsersTable extends Migration {
             $t->unique( array('account_id','public_id') );
         });
 
+        Schema::create('category', function($t)
+        {
+            $t->increments('id');
+            $t->unsignedInteger('account_id')->index();
+            $t->unsignedInteger('branch_id')->nullable();
+            $t->unsignedInteger('user_id');
+            $t->timestamps();
+            $t->softDeletes();
+
+            $t->string('category_key');
+            $t->text('name');
+            $t->text('description');
+            $t->text('aux');
+         
+            $t->foreign('account_id')->references('id')->on('accounts'); 
+            $t->foreign('branch_id')->references('id')->on('branches');            
+            $t->foreign('user_id')->references('id')->on('users');
+            
+            $t->unsignedInteger('public_id');
+            $t->unique( array('account_id','public_id') );
+        });
+
         Schema::create('products', function($t)
         {
             $t->increments('id');
             $t->unsignedInteger('account_id')->index();
             $t->unsignedInteger('branch_id')->nullable();
+            $t->unsignedInteger('category_id')->nullable();
             $t->unsignedInteger('user_id');
             $t->timestamps();
             $t->softDeletes();
@@ -608,12 +631,12 @@ class ConfideSetupUsersTable extends Migration {
             
             $t->foreign('account_id')->references('id')->on('accounts'); 
             $t->foreign('branch_id')->references('id')->on('branches');            
-            $t->foreign('user_id')->references('id')->on('users');;
+            $t->foreign('category_id')->references('id')->on('category');     
+            $t->foreign('user_id')->references('id')->on('users');
             
             $t->unsignedInteger('public_id');
             $t->unique( array('account_id','public_id') );
         });
-
 
         Schema::create('invoice_items', function($t)
         {

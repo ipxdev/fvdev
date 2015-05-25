@@ -83,6 +83,7 @@
       invoice.number_autho = branches[aux-1].number_autho;
       invoice.deadline = branches[aux-1].deadline;
       invoice.activity_pri = branches[aux-1].activity_pri;
+      invoice.aux1 = branches[aux-1].aux2;
       
 
 
@@ -126,11 +127,6 @@
         {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
         {{ Former::range('y')->label('vertical')->min(0)->max(60)->step(3)->class('range') }}
        @endif
-
-      {{ Former::legend('Conceptos') }}
-
-      {{ Former::checkbox('hide_quantity')->text(trans('texts.hide_quantity_help')) }}
-
 
       @if (Auth::user()->isPro())
         {{ Former::legend('Nuevo Diseño') }}

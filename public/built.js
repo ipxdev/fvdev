@@ -31056,6 +31056,7 @@ function GetPdf(invoice, javascript, logo, x, y){
 	    invoice.number_autho = branches[k].number_autho;
 	    invoice.deadline = branches[k].deadline;
 	    invoice.activity_pri = branches[k].activity_pri;
+	    invoice.aux1 = branches[k].aux2;
 
 	    invoice.account_nit = account.nit;
 	    invoice.invoice_number = '0';

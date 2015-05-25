@@ -36,13 +36,6 @@ class BranchController extends \BaseController {
   public function edit($publicId)
   {
     $branch = Branch::scope($publicId)->firstOrFail();
-    $date = strtotime($branch->deadline);
-    $day = date("d", $date);
-    $month = date("m", $date); 
-    $year = date("Y", $date); 
-    $branch->day = $day;
-    $branch->month = $month;
-    $branch->year = $year;
 
     $data = [
       'showBreadcrumbs' => false,
@@ -94,20 +87,41 @@ class BranchController extends \BaseController {
   private function save($branchPublicId = false)
   {
 
-  	$rules = array(
-			'name' => 'unique'
-		);
+    $error = false;
+    $var1 = 'NÚMERO DE TRAMITE';
+    $var2 = 'NÚMERO DE AUTORIZACIÓN';
 
-		$messages = array(
-    	'unique' => 'El Nombre de Sucursal ya ha sido registrado.',
-		);
-		$validator = Validator::make(Input::all(), $rules, $messages);
-		if ($validator->fails()) 
+    if(Input::file('dosage'))
+    {
+      $file = Input::file('dosage');
+      $name = $file->getRealPath();
+      $i = 0;
+      $file = fopen($name, "r");
+      while(!feof($file))
+      {
+        $process1 = fgets($file);
+        if($i =='0')
+        {
+          $process2 = explode(":", $process1);
+          $result1 = $process2[0];
+          if(strcmp($result1, $var1) !== 0){$error=1;}
+        }
+        if($i =='2')
+        {
+          $process2 = explode(":", $process1);
+          $result2 = $process2[0];
+          if(strcmp($result2, $var2) !== 0){$error=1;}
+        }
+        $i++;
+      }
+      fclose($file);
+    }
+
+		if ($error ==1) 
 		{
-			$url = $branchPublicId ? 'branches/' . $branchPublicId . '/edit' : 'branches/create';
-			return Redirect::to($url)
-				->withErrors($validator);
-				
+          Session::flash('error', 'Arhivo inválido');
+				  $url = $branchPublicId ? 'branches/' . $branchPublicId . '/edit' : 'branches/create';
+          return Redirect::to($url);
 		} 
 		else 
 		{
@@ -122,6 +136,7 @@ class BranchController extends \BaseController {
 		    }
 
 		    $branch->name = trim(Input::get('name'));
+        $branch->aux2 = trim(Input::get('aux2'));
 		    $branch->address1 = trim(Input::get('address1'));
 		    $branch->address2 = trim(Input::get('address2'));
 		    $branch->city = trim(Input::get('city'));
@@ -131,12 +146,9 @@ class BranchController extends \BaseController {
 		    $branch->industry_id = Input::get('industry_id') ? Input::get('industry_id') : null;
 
 
-        $day = Input::get('day');
-        $month = Input::get('month');
-        $year = Input::get('year');
-        $fecha = $year ."-". $month ."-". $day;
+        $deadline = Input::get('deadline');
 
-        $branch->deadline = DateTime::createFromFormat('Y-m-d', $fecha);
+        $branch->deadline = DateTime::createFromFormat('Y-m-d', $deadline);
 
         if(Input::file('dosage'))
         {

@@ -49,7 +49,7 @@ class AccountRepository
 		$InvoiceDesign->name = "";
 		$InvoiceDesign->x = "5";
 		$InvoiceDesign->y = "5";
-		$InvoiceDesign->javascript = "var datos1x = 30;
+		$InvoiceDesign->javascript = "		var datos1x = 30;
 	   	var datos1y = 100;
 	    var datos1xy = 13;
 	   
@@ -125,16 +125,20 @@ class AccountRepository
 	    doc.setFontSize(10);
 	    doc.setFontType('bold');
 
-	    displayInvoiceHeader(doc, invoice, layout);
-	    // displayInvoiceHeader2(doc, invoice, layout);
-
-		var y = displayInvoiceItems(doc, invoice, layout);
-		// var y = displayInvoiceItems2(doc, invoice, layout);
-
-		displayQR(doc, layout, invoice, y);
-		
-		y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
-		// y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
+	    if(invoice.aux1==1)
+	    {
+		    displayInvoiceHeader(doc, invoice, layout);
+		    var y = displayInvoiceItems(doc, invoice, layout);
+			displayQR(doc, layout, invoice, y);
+			y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
+	    }
+	    else
+	    {
+		    displayInvoiceHeader2(doc, invoice, layout);
+			var y = displayInvoiceItems2(doc, invoice, layout);
+			displayQR(doc, layout, invoice, y);
+			y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
+		}
 
 		y -=10;		
 		displayNotesAndTerms(doc, layout, invoice, y);";

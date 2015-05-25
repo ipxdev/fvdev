@@ -2779,11 +2779,18 @@ box-shadow: none;
 -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
-.form-horizontal .control-label, .form-horizontal .radio, .form-horizontal .checkbox, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline {
+.form-horizontal .control-label {
 margin-top: 0;
 margin-bottom: 0;
 padding-top: 10px;
 }
+
+.form-horizontal .radio, .form-horizontal .radio-inline, .form-horizontal .checkbox-inline, .form-horizontal .checkbox, .form-horizontal .checkbox-inline {
+margin-top: 0;
+margin-left: 20px;
+padding-top: 10px;
+}
+
 textarea.form-control {
 /*height: auto !important;*/
 min-height: 40px;
