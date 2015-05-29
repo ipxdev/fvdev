@@ -29,7 +29,8 @@
 
 		</div>
 		<div class="col-md-6">
-
+    	{{ Former::select('category_id')->addOption('','')->label('Categoria')
+          ->fromQuery($categories, 'name', 'id') }}
 
 		</div>
 	</div>

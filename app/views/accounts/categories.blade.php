@@ -1,13 +1,11 @@
-@extends('accounts.nav_advanced')
+@extends('accounts.nav')
 
 @section('content') 
 
-  {{ Former::legend('panel_settings') }}
+  {{ Former::legend('Gestión de Categorias') }}
 
-  @parent
   <div class="row">
     <div class="col-md-6">  
-      {{ Former::legend('Gestión de Categorias') }}
     </div>
     <div class="col-md-3">  
     </div>
@@ -26,7 +24,7 @@
       ->setOptions('bFilter', false)      
       ->setOptions('bAutoWidth', false)      
       ->setOptions('aoColumns', [[ "sWidth"=> "70%" ], ["sWidth"=> "30%" ]])      
-      ->setOptions('aoColumnDefs', [['bSortable'=>false, 'aTargets'=>[2]]])
+      ->setOptions('aoColumnDefs', [['bSortable'=>false, 'aTargets'=>[1]]])
       ->render('datatable') }}
 
   <script>

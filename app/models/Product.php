@@ -40,4 +40,9 @@ class Product extends EntityModel
 			return $this->cost;
 		}
 	}
+
+	public function category()
+	{
+		return $this->belongsTo('Category');
+	}
 }

@@ -1,4 +1,4 @@
-@extends('accounts.nav_advanced')
+@extends('accounts.nav')
 
 @section('content')
 
@@ -9,11 +9,16 @@
 
 
   {{ Former::legend($title) }}
-  @parent
 
     {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
         'name' => 'required'
     )); }}
+
+    @if ($category)
+
+      {{ Former::populate($category) }}
+      
+    @endif
 
   <div class="row">
     <div class="col-md-6">  

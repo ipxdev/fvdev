@@ -100,7 +100,17 @@ class ProductController extends \BaseController {
       'title' => trans('texts.new_product')
     ];
 
+    $data = array_merge($data, self::getViewModel()); 
     return View::make('products.edit', $data);      
+  }
+
+  private static function getViewModel()
+  {
+    return [   
+
+      'categories' => Category::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get()
+      
+    ];
   }
 
   /**
