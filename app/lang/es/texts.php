@@ -390,7 +390,7 @@ return array(
  // product management
    'product_library' => 'Productos',
    'product_libraryt' => 'Gestión de Productos',
-   'product_config' => 'Configuración de Conceptos',
+   'product_config' => 'Configuración de Item de Factura',
 
    'product' => 'Producto',
    'notes' => 'Nombre',
@@ -501,7 +501,7 @@ return array(
  'hide' => 'Ocultar',
  'new_version_available' => 'Una nueva versión de :releases_link disponible. Estás utilizando versión :user_version, la última versión es :latest_version',
  'invoice_settings' => 'Campos Extras',
- 'product_settings' => 'Conceptos',
+ 'product_settings' => 'Config. de Item',
  'invoice_number_prefix' => 'Prefijo de facturación',
  'invoice_number_counter' => 'Numeración de facturación',
  'quote_number_prefix' => 'Prejijo de cotizaciones',

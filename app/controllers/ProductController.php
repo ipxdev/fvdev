@@ -129,7 +129,7 @@ class ProductController extends \BaseController {
         'title' => trans('texts.edit_product')
       ];
 
-    // return Response::json($data);
+      $data = array_merge($data, self::getViewModel()); 
       return View::make('products.edit', $data);   
   }
 

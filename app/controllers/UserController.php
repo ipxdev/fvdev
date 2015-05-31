@@ -127,7 +127,7 @@ class UserController extends BaseController {
         if (!Auth::user()->confirmed)
         {
             Session::flash('error', trans('texts.register_to_add_user'));            
-            return Redirect::to('company/advanced_settings/user_management');
+            return Redirect::to('company/user_management');
         }
 
         if (Utils::isNinja())
@@ -136,7 +136,7 @@ class UserController extends BaseController {
             if ($count >= MAX_NUM_USERS)
             {
                 Session::flash('error', trans('texts.limit_users'));
-                return Redirect::to('company/advanced_settings/user_management');        
+                return Redirect::to('company/user_management');        
             }        
         }
         $b = "";
@@ -170,7 +170,7 @@ class UserController extends BaseController {
         $user->delete();
 
         Session::flash('message', trans('texts.deleted_user'));
-        return Redirect::to('company/advanced_settings/user_management');        
+        return Redirect::to('company/user_management');        
     }
 
     /**
@@ -302,6 +302,33 @@ class UserController extends BaseController {
         }
     }
 
+    public function select_branch()
+    {
+
+        $branches = Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('public_id')->get();
+
+        $data = array(
+            'branches' => $branches
+        );
+
+        return View::make('users.select_branch', $data);
+    }
+
+    public function do_select_branch()
+    {
+
+        if (Input::get('branch_id')) 
+        {            
+            $branch_id = Input::get( 'branch_id' );
+
+            $user = Auth::user();
+            $user->branch_id = $branch_id;
+            $user->save();
+
+            return Redirect::intended('/clients');
+        }
+    }
+
     /**
      * Attempt to do login
      *
@@ -329,7 +356,14 @@ class UserController extends BaseController {
             // caught by the authentication filter IE Redirect::guest('user/login').
             // Otherwise fallback to '/'
             // Fix pull #145
-            return Redirect::intended('/clients'); // change it to '/admin', '/dashboard' or something
+            if (Utils::isAdmin())
+            {
+                return Redirect::intended('/select_branch');
+            }
+            else
+            {
+                return Redirect::intended('/clients');
+            }
         }
         else
         {

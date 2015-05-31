@@ -168,8 +168,9 @@ class InvoiceController extends \BaseController {
 		$invoice->start_date = Utils::fromSqlDate($invoice->start_date);
 		$invoice->end_date = Utils::fromSqlDate($invoice->end_date);
 		$invoice->is_pro = Auth::user()->isPro();
-
-   		$invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->where('id',$invoice->invoice_design_id)->orderBy('public_id', 'desc')->first();
+   		
+   		$invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
+   		// $invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->where('id',$invoice->invoice_design_id)->orderBy('public_id', 'desc')->first();
 
 		$data = array(
 				'entityType' => $entityType,
@@ -333,24 +334,27 @@ class InvoiceController extends \BaseController {
 		{
 
 		$last_invoice = Invoice::where('account_id', '=', Auth::user()->account_id)->first();
+		if ($last_invoice)
+		{
+			$yesterday = $last_invoice->invoice_date;
 
-		$yesterday = $last_invoice->invoice_date;
-		$today = date("Y-m-d", strtotime($invoice->invoice_date));
+			$today = date("Y-m-d", strtotime($invoice->invoice_date));
 
-		$errorD = "La fecha de la factura es incorrecta";
+			$errorD = "La fecha de la factura es incorrecta";
 
-
-		$yesterday = new DateTime($yesterday);
-		$today = new DateTime($today);
+			$yesterday = new DateTime($yesterday);
+			$today = new DateTime($today);
 
 
-		if($yesterday > $today)
-		{			
-			Session::flash('error', $errorD);
-			return Redirect::to("{$entityType}s/create")
-				->withInput();
+			if($yesterday > $today)
+			{			
+				Session::flash('error', $errorD);
+				return Redirect::to("{$entityType}s/create")
+					->withInput();
 
+			}
 		}
+
 
 
 		if ($errors = $this->invoiceRepo->getErrors($invoice))

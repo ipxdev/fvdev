@@ -92,6 +92,8 @@ Route::group(array('before' => 'auth.basic'), function()
 
 Route::group(array('before' => 'auth'), function()
 {   
+  Route::get('select_branch', 'UserController@select_branch');
+  Route::post('select_branch', 'UserController@do_select_branch');
   Route::get('dashboard', 'DashboardController@index');
   Route::get('view_archive/{entity_type}/{visible}', 'AccountController@setTrashVisible');
   Route::get('hide_message', 'HomeController@hideMessage');

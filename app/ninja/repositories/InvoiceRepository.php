@@ -226,7 +226,7 @@ class InvoiceRepository
       }
       else
       {
-        $invoice->invoice_number = 0;
+        $invoice->invoice_number = " ";
       }
 
 
