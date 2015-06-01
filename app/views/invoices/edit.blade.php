@@ -20,22 +20,23 @@
 			</ol> 
 		@endif
 	@else
-		@if (Utils::isAdmin())
-		<ol class="breadcrumb">
+
+<!-- 		<ol class="breadcrumb">
 			<li class='active'>Nueva Factura</li>
 			<li class='active'><span class='ipxtitle' id="createClientLink2" data-bind="click: $root.showClientForm2, text: $root.clientLinkText2"></span>
 			<span class='ipxlittle' data-bind="click: $root.showClientForm2">(Cambiar sucursal)</span></li>
-		</ol>   
-		@else
+		</ol>  -->  
+
 		<ol class="breadcrumb">
 			<li class='active'>Nueva Factura</li>
-			<li class='active'><span  id="createClientLink2" data-bind=" text: $root.clientLinkText2"></span></li>
+			<li class='active'><span  class="ipxtitle">{{ Auth::user()->getDisplayBranch() }}</span></li>
 		</ol>  
-		@endif
+
 	@endif
 
 	{{ Former::open($url)->method($method)->addClass('warn-on-exit')->rules(array(
 		'client' => 'required',
+		'invoice_date' => 'required',
 		'product_key' => 'max:20',
 	)) }}	
 

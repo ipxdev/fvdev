@@ -157,7 +157,7 @@ class ProductController extends \BaseController {
         $product = Product::createNew();
       }
 
-      $product->product_key = trim(Input::get('product_key'));
+      $product->product_key = strtoupper(trim(Input::get('product_key')));
       $product->notes = trim(Input::get('notes'));
       $product->cost = trim(Input::get('cost'));
 

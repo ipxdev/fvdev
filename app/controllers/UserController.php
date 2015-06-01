@@ -86,14 +86,25 @@ class UserController extends BaseController {
                         ->where('public_id', '=', $publicId)->firstOrFail();
 
         $aux = $user->username;
-        if (strpos($aux, "@")) {
+        if (strpos($aux, "@"))
+        {
              $aux2 = explode("@", $aux);
              $user->new_username = $aux2[0];
         }
-        else{
+        else
+        {
              $user->new_username = '';
         }
-        $b = $user->branch_id;
+        
+        if ($user->is_admin)
+        {
+            $b = false;
+        }
+        else
+        {
+            $b = true;
+        }
+        
 
         $data = [
             'showBreadcrumbs' => false,
@@ -281,20 +292,8 @@ class UserController extends BaseController {
             Event::fire('user.login'); 
             Session::reflash();
 
-            return Redirect::to('/clients');
+            return Redirect::to('/dashboard');
             
-            /*
-            $invoice = Invoice::scope()->orderBy('id', 'desc')->first();
-            
-            if ($invoice)
-            {
-                return Redirect::to('/invoices/' . $invoice->public_id);
-            }
-            else
-            {
-                return Redirect::to('/dashboard');
-            }
-            */
         }
         else
         {
@@ -310,8 +309,14 @@ class UserController extends BaseController {
         $data = array(
             'branches' => $branches
         );
-
-        return View::make('users.select_branch', $data);
+        if (Utils::isAdmin())
+        {
+            return View::make('users.select_branch', $data);
+        }
+        else
+        {
+            return Redirect::intended('/');
+        }
     }
 
     public function do_select_branch()
@@ -325,7 +330,7 @@ class UserController extends BaseController {
             $user->branch_id = $branch_id;
             $user->save();
 
-            return Redirect::intended('/clients');
+            return Redirect::intended('/');
         }
     }
 

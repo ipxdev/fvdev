@@ -399,7 +399,7 @@ class InvoiceRepository
           if (!$product)
           {
             $product = Product::createNew();            
-            $product->product_key = trim($item->product_key);
+            $product->product_key = strtoupper(trim($item->product_key));
           }
 
           if (\Auth::user()->account->update_products)

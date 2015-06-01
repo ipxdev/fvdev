@@ -17,7 +17,6 @@
     {{ Former::populate($user) }} 
     {{ Former::populateField('username', $user->new_username) }}   
     {{ Former::populateField('branch_id', $user->branch_id) }}
-    {{ Former::populateField('facturador', $user->branch_id) }}
   @endif
   <div class="row">
       <div class="col-md-6">
@@ -39,7 +38,7 @@
       {{ Former::checkbox('facturador')->label(' ')->text('facturador')->data_bind("checked: displayAdvancedOptions") }}
 
       {{ Former::legend('Sucursal')->data_bind("fadeVisible: displayAdvancedOptions") }}    
-      {{ Former::select('branch_id')->label(' ')->addOption('','')
+      {{ Former::select('branch_id')->label(' ')
       ->data_bind("fadeVisible: displayAdvancedOptions")->fromQuery($branches, 'name', 'id') }}
 
     </div>

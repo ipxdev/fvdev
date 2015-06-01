@@ -125,6 +125,15 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		
 	}
 
+	public function getBranchId()
+	{
+		if ($this->branch_id())
+		{
+			return $this->branch_id();
+		}
+		
+	}
+
 
 	public function getFullName()
 	{

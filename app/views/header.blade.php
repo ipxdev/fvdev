@@ -18,7 +18,6 @@
       padding-top: 56px; 
     }
   }
-
 </style>
 
 @include('script')
@@ -42,9 +41,10 @@
 
 @section('body')
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
 
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -56,9 +56,31 @@
         <img src="{{ asset('images/logo-factura-virtual.png') }}" style="height:25px;margin-top:-5px;width:auto"/>
       </a>      
     </div>
+    
+  <div style="font-size:15px; margin:0 ;color:#fff;text-align:right;">
+
+    {{ Auth::user()->getDisplayName() }} |
+
+    @if (Utils::isAdmin())
+    <a href="{{ URL::to('/select_branch') }}" style="color:#00B0DC!important;">
+    {{ Auth::user()->getDisplayBranch() }}
+    <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
+    </a>
+    @else
+    {{ Auth::user()->getDisplayBranch() }}
+    <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
+    @endif
+
+</div>
+
+   </div>
+
+  <div class="container">
+
+
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
-      <ul class="nav navbar-nav" style="font-weight: bold">
+      <ul class="nav navbar-nav">
 
         {{ HTML::nav_link('dashboard', 'dashboard') }}
 
@@ -67,7 +89,7 @@
         {{ HTML::menu_link('payment') }}  
 
         {{ HTML::menu_link('credit') }}
-        {{ HTML::menu_link('product') }}
+        {{ HTML::menu_linkProduct('product') }}
 
         @if (Utils::isPro())
           {{-- HTML::menu_link('quote') --}}
@@ -75,8 +97,6 @@
       </ul>
 
       <div class="navbar-form navbar-right">
-
-
 
         @if (Auth::check())
           @if (!Auth::user()->registered)
@@ -152,7 +172,7 @@
 
       <ul class="nav navbar-nav navbar-right">        
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ trans('texts.history') }} <b class="caret"></b></a>
+          <a style="line-height: 5px!important" href="#" class="dropdown-toggle" data-toggle="dropdown">{{ trans('texts.history') }} <b class="caret"></b></a>
           <ul class="dropdown-menu">                        
             @if (count(Session::get(RECENTLY_VIEWED)) == 0)
             <li><a href="#">{{ trans('texts.no_items') }}</a></li>
@@ -269,7 +289,7 @@
 </div>
 
 
-@if (!Auth::check() || !Auth::user()->registered) 
+
 <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -363,7 +383,7 @@
     </div>
   </div>
 </div>
-@endif
+
 
 @if (Auth::check() && !Auth::user()->isPro())
   <div class="modal fade" id="proPlanModal" tabindex="-1" role="dialog" aria-labelledby="proPlanModalLabel" aria-hidden="true">

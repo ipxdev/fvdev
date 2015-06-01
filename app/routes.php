@@ -357,6 +357,21 @@ HTML::macro('menu_link', function($type) {
           </li>';
 });
 
+HTML::macro('menu_linkProduct', function($type) {
+  $types = $type.'s';
+  $Type = ucfirst($type);
+  $Types = ucfirst($types);
+  $class = ( Request::is($types) || Request::is('*'.$type.'*')) && !Request::is('*advanced_settings*') ? ' active' : '';
+
+  return '<li class="dropdown '.$class.'">
+           <a href="'.URL::to($types).'" class="dropdown-toggle">'.trans("texts.$types").'</a>
+           <ul class="dropdown-menu" id="menu1">
+             <li><a href="'.URL::to($types.'/create').'">'.trans("texts.new_$type").'</a></li>
+             <li><a href="'.URL::to($types.'/company/categories').'">Categorias</a></li>
+            </ul>
+          </li>';
+});
+
 HTML::macro('image_data', function($imagePath) {
   return 'data:image/jpeg;base64,' . base64_encode(file_get_contents(public_path().'/'.$imagePath));
 });
