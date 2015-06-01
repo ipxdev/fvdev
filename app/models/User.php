@@ -118,13 +118,25 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 
 	public function getDisplayBranch()
 	{
-		if ($this->branch->name())
+		if(!$this->isAdmin())
+		{
+			$branchname = $this->branch->name();
+		}
+		else
+		{
+			$branchname= null;
+		}
+		if ($branchname)
 		{
 			return $this->branch->name();
 		}
+		else
+		{
+			return "ninguna";
+
+		}
 		
 	}
-
 	public function getFullName()
 	{
 		if ($this->first_name || $this->last_name)
