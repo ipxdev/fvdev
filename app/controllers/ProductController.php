@@ -23,7 +23,7 @@ class ProductController extends \BaseController {
     return View::make('list', array(
       'entityType'=>ENTITY_PRODUCT, 
       'title' => trans('texts.products'),
-      'columns'=>Utils::trans(['checkbox', 'product_cod', 'notes','cost', 'action'])
+      'columns'=>Utils::trans(['checkbox', 'product_cod', 'notes', 'cost', 'category', 'action'])
     ));   
   }
   public function getDatatable()
@@ -35,6 +35,8 @@ class ProductController extends \BaseController {
           ->addColumn('product_key', function($model) { return link_to('products/' . $model->public_id, $model->product_key); })
           ->addColumn('notes', function($model) { return nl2br(Str::limit($model->notes, 50)); })
           ->addColumn('cost', function($model) { return Utils::formatMoney($model->cost, 1); })
+          ->addColumn('name', function($model) { return nl2br($model->category_name); })
+
 
           ->addColumn('dropdown', function($model) 
           { 
@@ -160,6 +162,7 @@ class ProductController extends \BaseController {
       $product->product_key = strtoupper(trim(Input::get('product_key')));
       $product->notes = trim(Input::get('notes'));
       $product->cost = trim(Input::get('cost'));
+      $product->category_id = trim(Input::get('category_id'));
 
       $product->save();
 

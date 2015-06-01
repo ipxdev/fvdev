@@ -9,6 +9,8 @@
 <div class="row">
 
 	{{ Former::open($url)->addClass('col-md-12 warn-on-exit')->method($method)->rules(array(
+  		'product_key' => 'required', 
+  		'notes' => 'required', 
   		'cost' => 'cost|required|Numeric', 
   	)); }}
 
@@ -29,7 +31,9 @@
 
 		</div>
 		<div class="col-md-6">
-    	{{ Former::select('category_id')->addOption('','')->label('Categoria')
+
+		{{ Former::legend('Categoria') }}
+    	{{ Former::select('category_id')->addOption('','')->label(' ')
           ->fromQuery($categories, 'name', 'id') }}
 
 		</div>

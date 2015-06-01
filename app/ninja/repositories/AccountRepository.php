@@ -13,6 +13,7 @@ use Invoice;
 use InvoiceItem;
 use AccountGateway;
 use InvoiceDesign;
+use Category;
 
 class AccountRepository
 {
@@ -43,6 +44,11 @@ class AccountRepository
 		$user->username = $random;
 		$user->is_admin = 1;
 		$account->users()->save($user);
+
+		$category = new Category;
+		$category->user_id =$user->getId();
+		$category->name = "General";
+		$account->categories()->save($category);
 
 		$InvoiceDesign = new InvoiceDesign;
 		$InvoiceDesign->user_id =$user->getId();
@@ -213,7 +219,7 @@ class AccountRepository
         $account->pro_plan_paid = date_create()->format('Y-m-d');
         $account->save();
             
-		$ninjaAccount = $this->getNinjaAccount();		
+		// $ninjaAccount = $this->getNinjaAccount();		
 		// $lastInvoice = Invoice::withTrashed()->whereAccountId($ninjaAccount->id)->orderBy('public_id', 'DESC')->first();
 		// $publicId = $lastInvoice ? ($lastInvoice->public_id + 1) : 1;
 		$ninjaClient = $this->getNinjaClient($ninjaAccount);

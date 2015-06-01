@@ -74,6 +74,11 @@ class Account extends Eloquent
 		return $this->belongsTo('Industry');
 	}
 
+	public function categories()
+	{
+		return $this->hasMany('Category');
+	}
+
 	public function isGatewayConfigured($gatewayId = 0)
 	{
 		$this->load('account_gateways');

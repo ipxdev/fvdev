@@ -548,21 +548,21 @@ class UserController extends BaseController {
      */
     public function logout()
     {
-        if (Auth::check())
-        {
-            if (!Auth::user()->registered)
-            {
+        // if (Auth::check())
+        // {
+        //     if (!Auth::user()->registered)
+        //     {
                         
-                $InvoiceDesign = InvoiceDesign::where('user_id', '=', Auth::user()->id)->firstOrFail();
-                $InvoiceDesign->forceDelete();
+        //         $InvoiceDesign = InvoiceDesign::where('user_id', '=', Auth::user()->id)->firstOrFail();
+        //         $InvoiceDesign->forceDelete();
 
-                $user = Auth::user();
-                $user->forceDelete();
+        //         $user = Auth::user();
+        //         $user->forceDelete();
 
-                $account = Auth::user()->account;
-                $account->forceDelete();
-            }
-        }
+        //         $account = Auth::user()->account;
+        //         $account->forceDelete();
+        //     }
+        // }
 
         Session::forget('news_feed_id');
         Session::forget('news_feed_message');

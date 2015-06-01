@@ -7,8 +7,9 @@ class ProductRepository
 	public function find($filter = null)
 	{
     	$query = \DB::table('products')
+    		->join('categories', 'categories.id', '=', 'products.category_id')
 			->where('products.account_id', '=', \Auth::user()->account_id)
-			->select('products.public_id', 'products.product_key', 'products.notes', 'products.cost');
+			->select('products.public_id', 'products.product_key', 'products.notes', 'products.cost','categories.name as category_name');
 
 
     	if (!\Session::get('show_trash:product'))
