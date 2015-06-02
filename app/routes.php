@@ -367,7 +367,7 @@ HTML::macro('menu_linkProduct', function($type) {
            <a href="'.URL::to($types).'" class="dropdown-toggle">'.trans("texts.$types").'</a>
            <ul class="dropdown-menu" id="menu1">
              <li><a href="'.URL::to($types.'/create').'">'.trans("texts.new_$type").'</a></li>
-             <li><a href="'.URL::to($types.'/company/categories').'">Categorias</a></li>
+             <li><a href="'.URL::to('/company/categories').'">Categorias</a></li>
             </ul>
           </li>';
 });

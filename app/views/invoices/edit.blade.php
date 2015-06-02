@@ -794,7 +794,7 @@
 				submitAction('');
 			}			
 		} else {
-			submitAction('');
+			submitAction('save');
 		}
 	}
 

@@ -183,238 +183,246 @@ class AccountController extends \BaseController {
 
 	public function showSection($section = ACCOUNT_DETAILS, $subSection = false)  
 	{
-		if ($section == ACCOUNT_DETAILS)
-		{			
-			$data = [
-				'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
-				'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-				'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
-				'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),				
-				'timezones' => Timezone::remember(DEFAULT_QUERY_CACHE)->orderBy('location')->get(),
-				'dateFormats' => DateFormat::remember(DEFAULT_QUERY_CACHE)->get(),
-				'datetimeFormats' => DatetimeFormat::remember(DEFAULT_QUERY_CACHE)->get(),
-				'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-				'languages' => Language::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-				'showUser' => Auth::user()->id === Auth::user()->account->users()->first()->id,
-			];
-
-			return View::make('accounts.details', $data);
-		}
-		else if ($section == ACCOUNT_BRANCHES)
+		if(Auth::user()->is_admin)
 		{
-			$data = [
-				'account' => Auth::user()->account
-			];
 
-			return View::make('accounts.branches', $data);		
-		}
-		else if ($section == ACCOUNT_CATEGORIES)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
+				if ($section == ACCOUNT_DETAILS)
+				{			
+					$data = [
+						'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
+						'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
+						'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
+						'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),				
+						'timezones' => Timezone::remember(DEFAULT_QUERY_CACHE)->orderBy('location')->get(),
+						'dateFormats' => DateFormat::remember(DEFAULT_QUERY_CACHE)->get(),
+						'datetimeFormats' => DatetimeFormat::remember(DEFAULT_QUERY_CACHE)->get(),
+						'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
+						'languages' => Language::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
+						'showUser' => Auth::user()->id === Auth::user()->account->users()->first()->id,
+					];
 
-			return View::make('accounts.categories', $data);		
-		}
-		else if ($section == ACCOUNT_MANUALS)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
-
-			return View::make('accounts.manuals', $data);		
-		}
-		else if ($section == ACCOUNT_USERS)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
-
-			return View::make('accounts.user_management', $data);		
-		}
-		else if ($section == ACCOUNT_PAYMENTS)
-		{
-			$account = Account::with('account_gateways')->findOrFail(Auth::user()->account_id);
-			$accountGateway = null;
-			$config = null;
-			$configFields = null;
-    		$selectedCards = 0;
-
-			if (count($account->account_gateways) > 0)
-			{
-				$accountGateway = $account->account_gateways[0];
-				$config = $accountGateway->config;
-				$selectedCards = $accountGateway->accepted_credit_cards;
-                
-				$configFields = json_decode($config);
-                
-				foreach($configFields as $configField => $value)
-				{
-					$configFields->$configField = str_repeat('*', strlen($value));
+					return View::make('accounts.details', $data);
 				}
-			} else {
-				$accountGateway = AccountGateway::createNew();
-				$accountGateway->gateway_id = GATEWAY_MOOLAH;				
-			}
-			
-			$recommendedGateways = Gateway::remember(DEFAULT_QUERY_CACHE)
-					->where('recommended', '=', '1')
-					->orderBy('sort_order')
-					->get();
-			$recommendedGatewayArray = array();
-			
-			foreach($recommendedGateways as $recommendedGateway)
-			{
-				$arrayItem = array(
-					'value' => $recommendedGateway->id,
-					'other' => 'false',
-					'data-imageUrl' => asset($recommendedGateway->getLogoUrl()),
-					'data-siteUrl' => $recommendedGateway->site_url
-				);
-				$recommendedGatewayArray[$recommendedGateway->name] = $arrayItem;
-			}      
-
-      $creditCardsArray = unserialize(CREDIT_CARDS);
-      $creditCards = [];
-			foreach($creditCardsArray as $card => $name)
-			{
-        if($selectedCards > 0 && ($selectedCards & $card) == $card)
-            $creditCards[$name['text']] = ['value' => $card, 'data-imageUrl' => asset($name['card']), 'checked' => 'checked'];
-        else
-            $creditCards[$name['text']] = ['value' => $card, 'data-imageUrl' => asset($name['card'])];
-			}
-
-			$otherItem = array(
-				'value' => 1000000,
-				'other' => 'true',
-				'data-imageUrl' => '',
-				'data-siteUrl' => ''
-			);
-			$recommendedGatewayArray['Other Options'] = $otherItem;
-
-			$gateways = Gateway::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get();
-
-			foreach ($gateways as $gateway)
-			{
-				$paymentLibrary = $gateway->paymentlibrary;
-
-				$gateway->fields = $gateway->getFields();	
-	
-				if ($accountGateway && $accountGateway->gateway_id == $gateway->id)
+				else if ($section == ACCOUNT_BRANCHES)
 				{
-					$accountGateway->fields = $gateway->fields;						
+					$data = [
+						'account' => Auth::user()->account
+					];
+
+					return View::make('accounts.branches', $data);		
 				}
-			}	
-      
-      $data = [
-				'account' => $account,
-				'accountGateway' => $accountGateway,
-				'config' => $configFields,
-				'gateways' => $gateways,
-				'dropdownGateways' => Gateway::remember(DEFAULT_QUERY_CACHE)
-					->where('recommended', '=', '0')
-					->orderBy('name')
-					->get(),
-				'recommendedGateways' => $recommendedGatewayArray,
-        'creditCardTypes' => $creditCards, 
-			];
+				else if ($section == ACCOUNT_CATEGORIES)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+
+					return View::make('accounts.categories', $data);		
+				}
+				else if ($section == ACCOUNT_MANUALS)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+
+					return View::make('accounts.manuals', $data);		
+				}
+				else if ($section == ACCOUNT_USERS)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+
+					return View::make('accounts.user_management', $data);		
+				}
+				else if ($section == ACCOUNT_PAYMENTS)
+				{
+					$account = Account::with('account_gateways')->findOrFail(Auth::user()->account_id);
+					$accountGateway = null;
+					$config = null;
+					$configFields = null;
+		    		$selectedCards = 0;
+
+					if (count($account->account_gateways) > 0)
+					{
+						$accountGateway = $account->account_gateways[0];
+						$config = $accountGateway->config;
+						$selectedCards = $accountGateway->accepted_credit_cards;
+		                
+						$configFields = json_decode($config);
+		                
+						foreach($configFields as $configField => $value)
+						{
+							$configFields->$configField = str_repeat('*', strlen($value));
+						}
+					} else {
+						$accountGateway = AccountGateway::createNew();
+						$accountGateway->gateway_id = GATEWAY_MOOLAH;				
+					}
+					
+					$recommendedGateways = Gateway::remember(DEFAULT_QUERY_CACHE)
+							->where('recommended', '=', '1')
+							->orderBy('sort_order')
+							->get();
+					$recommendedGatewayArray = array();
+					
+					foreach($recommendedGateways as $recommendedGateway)
+					{
+						$arrayItem = array(
+							'value' => $recommendedGateway->id,
+							'other' => 'false',
+							'data-imageUrl' => asset($recommendedGateway->getLogoUrl()),
+							'data-siteUrl' => $recommendedGateway->site_url
+						);
+						$recommendedGatewayArray[$recommendedGateway->name] = $arrayItem;
+					}      
+
+		     	$creditCardsArray = unserialize(CREDIT_CARDS);
+		     	$creditCards = [];
+					foreach($creditCardsArray as $card => $name)
+					{
+		        if($selectedCards > 0 && ($selectedCards & $card) == $card)
+		            $creditCards[$name['text']] = ['value' => $card, 'data-imageUrl' => asset($name['card']), 'checked' => 'checked'];
+		        else
+		            $creditCards[$name['text']] = ['value' => $card, 'data-imageUrl' => asset($name['card'])];
+					}
+
+					$otherItem = array(
+						'value' => 1000000,
+						'other' => 'true',
+						'data-imageUrl' => '',
+						'data-siteUrl' => ''
+					);
+					$recommendedGatewayArray['Other Options'] = $otherItem;
+
+					$gateways = Gateway::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get();
+
+					foreach ($gateways as $gateway)
+					{
+						$paymentLibrary = $gateway->paymentlibrary;
+
+						$gateway->fields = $gateway->getFields();	
 			
-			return View::make('accounts.payments', $data);
+						if ($accountGateway && $accountGateway->gateway_id == $gateway->id)
+						{
+							$accountGateway->fields = $gateway->fields;						
+						}
+					}	
+		      
+		      $data = [
+						'account' => $account,
+						'accountGateway' => $accountGateway,
+						'config' => $configFields,
+						'gateways' => $gateways,
+						'dropdownGateways' => Gateway::remember(DEFAULT_QUERY_CACHE)
+							->where('recommended', '=', '0')
+							->orderBy('name')
+							->get(),
+						'recommendedGateways' => $recommendedGatewayArray,
+		        'creditCardTypes' => $creditCards, 
+					];
+					
+					return View::make('accounts.payments', $data);
+				}
+				else if ($section == ACCOUNT_NOTIFICATIONS)
+				{
+					$data = [
+						'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
+					];
+
+					return View::make('accounts.notifications', $data);
+				}
+				else if ($section == ACCOUNT_IMPORT_EXPORT)
+				{
+					return View::make('accounts.import_export');	
+				}
+				else if ($section == ACCOUNT_EXPORT_BOOK)
+				{
+					return View::make('accounts.export_book');	
+				}
+				else if ($section == ACCOUNT_IMPORT_EXPORTC)
+				{
+					return View::make('accounts.import_exportc');	
+				}
+
+				else if ($section == ACCOUNT_INVOICE_SETTINGS)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+					return View::make('accounts.invoice_settings', $data);
+				}
+
+				else if ($section == ACCOUNT_PRODUCT_SETTINGS)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+					return View::make('accounts.product_settings', $data);
+				}
+
+				else if ($section == ACCOUNT_INVOICE_DESIGN) 
+				{
+					$invoiceDesign = DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
+
+					$data = [
+						'account' => Auth::user()->account,
+						'invoiceDesign' => $invoiceDesign
+					];			
+					$invoice = new stdClass();
+					$client = new stdClass();
+					$invoiceItem = new stdClass();				
+					
+					$client->name = 'Sample Client';
+					$client->address1 = '';
+					$client->city = '';
+					$client->state = '';
+					$client->postal_code = '';
+					$client->work_phone = '';
+					$client->work_email = '';
+					$client->custom_value2 = '000';
+				
+					$invoice->account_name = Auth::user()->account->getName();
+					$invoice->account_nit = Auth::user()->account->getNit();
+					$invoice->invoice_number = '0000001';
+
+					$invoice->invoice_date = date_create()->format('M d, Y');
+					$invoice->client_name = 'Cliente';
+					$invoice->client_nit = '123456789';
+
+					$invoice->account = json_decode(Auth::user()->account->toJson());
+					$invoice->amount = $invoice->balance = 5000;	
+					$invoice->control_code = '24-1A-9A-89-9E';
+
+					$invoice->qr = "data:image/jpeg;base64,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";
+
+					$invoiceItem->cost = 5000;
+					$invoiceItem->qty = 1;
+					$invoiceItem->notes = 'Servicios';
+					$invoiceItem->product_key = '100';				
+					$invoice->client = $client;
+					$invoice->invoice_items = [$invoiceItem];			
+					
+					$data['invoice'] = $invoice;
+
+					$data['invoiceDesigns'] = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
+					$data['branches'] = Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('id')->get();
+
+
+					return View::make("accounts.invoice_design", $data);	
+				}
+				else if ($section == ACCOUNT_PRODUCTS)
+				{
+					$data = [
+						'account' => Auth::user()->account
+					];
+
+					return View::make('accounts.products', $data);		
+				}
 		}
-		else if ($section == ACCOUNT_NOTIFICATIONS)
+		else
 		{
-			$data = [
-				'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
-			];
-
-			return View::make('accounts.notifications', $data);
-		}
-		else if ($section == ACCOUNT_IMPORT_EXPORT)
-		{
-			return View::make('accounts.import_export');	
-		}
-		else if ($section == ACCOUNT_EXPORT_BOOK)
-		{
-			return View::make('accounts.export_book');	
-		}
-		else if ($section == ACCOUNT_IMPORT_EXPORTC)
-		{
-			return View::make('accounts.import_exportc');	
-		}
-
-		else if ($section == ACCOUNT_INVOICE_SETTINGS)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
-			return View::make('accounts.invoice_settings', $data);
-		}
-
-		else if ($section == ACCOUNT_PRODUCT_SETTINGS)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
-			return View::make('accounts.product_settings', $data);
-		}
-
-		else if ($section == ACCOUNT_INVOICE_DESIGN) 
-		{
-			$invoiceDesign = DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
-
-			$data = [
-				'account' => Auth::user()->account,
-				'invoiceDesign' => $invoiceDesign
-			];			
-			$invoice = new stdClass();
-			$client = new stdClass();
-			$invoiceItem = new stdClass();				
-			
-			$client->name = 'Sample Client';
-			$client->address1 = '';
-			$client->city = '';
-			$client->state = '';
-			$client->postal_code = '';
-			$client->work_phone = '';
-			$client->work_email = '';
-			$client->custom_value2 = '000';
-		
-			$invoice->account_name = Auth::user()->account->getName();
-			$invoice->account_nit = Auth::user()->account->getNit();
-			$invoice->invoice_number = '0000001';
-
-			$invoice->invoice_date = date_create()->format('M d, Y');
-			$invoice->client_name = 'Cliente';
-			$invoice->client_nit = '123456789';
-
-			$invoice->account = json_decode(Auth::user()->account->toJson());
-			$invoice->amount = $invoice->balance = 5000;	
-			$invoice->control_code = '24-1A-9A-89-9E';
-
-			$invoice->qr = "data:image/jpeg;base64,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";
-
-			$invoiceItem->cost = 5000;
-			$invoiceItem->qty = 1;
-			$invoiceItem->notes = 'Servicios';
-			$invoiceItem->product_key = '100';				
-			$invoice->client = $client;
-			$invoice->invoice_items = [$invoiceItem];			
-			
-			$data['invoice'] = $invoice;
-
-			$data['invoiceDesigns'] = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
-			$data['branches'] = Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('id')->get();
-
-
-			return View::make("accounts.invoice_design", $data);	
-		}
-		else if ($section == ACCOUNT_PRODUCTS)
-		{
-			$data = [
-				'account' => Auth::user()->account
-			];
-
-			return View::make('accounts.products', $data);		
+			return Redirect::to('dashboard');
 		}
 	}
 
@@ -1455,9 +1463,10 @@ class AccountController extends \BaseController {
 		$user->password = trim(Input::get('new_password'));
 		$user->password_confirmation = trim(Input::get('new_password'));
 		$user->registered = true;
+		$user->confirmed = true;
 		$user->amend();
 
-		$this->userMailer->sendConfirmation($user);
+		// $this->userMailer->sendConfirmation($user);
 
 		$account = Auth::user()->account;
 
@@ -1468,7 +1477,7 @@ class AccountController extends \BaseController {
 		$activities = Activity::scope()->get();
 		foreach ($activities as $activity) 
 		{
-			$activity->message = str_replace('Invitado', $user->getFullName(), $activity->message);
+			$activity->message = str_replace('Cliente de FV', $user->getFullName(), $activity->message);
 			$activity->save();
 		}
 

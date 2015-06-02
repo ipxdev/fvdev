@@ -4,6 +4,7 @@
 define("ACTIVITY_TYPE_CREATE_CLIENT", 1);
 define("ACTIVITY_TYPE_ARCHIVE_CLIENT", 2);
 define("ACTIVITY_TYPE_DELETE_CLIENT", 3);
+define("ACTIVITY_TYPE_EDIT_CLIENT", 24);
 
 define("ACTIVITY_TYPE_CREATE_INVOICE", 4);
 define("ACTIVITY_TYPE_UPDATE_INVOICE", 5);
@@ -28,6 +29,7 @@ define("ACTIVITY_TYPE_EMAIL_QUOTE", 20);
 define("ACTIVITY_TYPE_VIEW_QUOTE", 21);
 define("ACTIVITY_TYPE_ARCHIVE_QUOTE", 22);
 define("ACTIVITY_TYPE_DELETE_QUOTE", 23);
+
 
 
 class Activity extends Eloquent
@@ -75,6 +77,20 @@ class Activity extends Eloquent
 		$activity->client_id = $client->id;
 		$activity->activity_type_id = ACTIVITY_TYPE_CREATE_CLIENT;
 		$activity->message = Utils::encodeActivity(Auth::user(), 'creó', $client);
+		$activity->save();		
+
+		if ($notify)
+		{
+			Activity::checkSubscriptions(EVENT_CREATE_CLIENT, $client);
+		}
+	}
+
+	public static function editClient($client, $notify = true)
+	{		
+		$activity = Activity::getBlank();
+		$activity->client_id = $client->id;
+		$activity->activity_type_id = ACTIVITY_TYPE_EDIT_CLIENT;
+		$activity->message = Utils::encodeActivity(Auth::user(), 'editó', $client);
 		$activity->save();		
 
 		if ($notify)

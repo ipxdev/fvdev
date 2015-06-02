@@ -110,7 +110,7 @@ class ProductController extends \BaseController {
   {
     return [   
 
-      'categories' => Category::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get()
+      'categories' => Category::where('account_id',Auth::user()->account_id)->orderBy('public_id')->get()
       
     ];
   }

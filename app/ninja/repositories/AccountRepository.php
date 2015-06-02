@@ -48,6 +48,7 @@ class AccountRepository
 		$category = new Category;
 		$category->user_id =$user->getId();
 		$category->name = "General";
+		$category->public_id = 1;
 		$account->categories()->save($category);
 
 		$InvoiceDesign = new InvoiceDesign;
@@ -219,7 +220,7 @@ class AccountRepository
         $account->pro_plan_paid = date_create()->format('Y-m-d');
         $account->save();
             
-		// $ninjaAccount = $this->getNinjaAccount();		
+		$ninjaAccount = $this->getNinjaAccount();		
 		// $lastInvoice = Invoice::withTrashed()->whereAccountId($ninjaAccount->id)->orderBy('public_id', 'DESC')->first();
 		// $publicId = $lastInvoice ? ($lastInvoice->public_id + 1) : 1;
 		$ninjaClient = $this->getNinjaClient($ninjaAccount);
@@ -272,41 +273,41 @@ class AccountRepository
 		{
 			return $account;	
 		}
-		// else
-		// {
+		else
+		{
 
-		// 	$account = new Account();
-		// 	$account->nit = '3457229010';
-		// 	$account->name = 'FRANKLIN LLANOS SILVA';
-		// 	$account->work_email = 'franklin.llanos@ipxserver.com';
+			$account = new Account();
+			$account->nit = '3457229010';
+			$account->name = 'FRANKLIN LLANOS SILVA';
+			$account->work_email = 'franklin.llanos@ipxserver.com';
 
-		// 	$account->work_phone = '2315725';
-		// 	$account->address1 = 'Central';
-		// 	$account->address2 = 'Av. 16 de Julio 1456 Edif. Caracas Piso: 2';
+			$account->work_phone = '2315725';
+			$account->address1 = 'Central';
+			$account->address2 = 'Av. 16 de Julio 1456 Edif. Caracas Piso: 2';
 			
-		// 	$account->account_key = IPX_ACCOUNT_KEY;
+			$account->account_key = IPX_ACCOUNT_KEY;
 
-		// 	$account->save();	
-		// 	$user = new User();
-		// 	$user->registered = true;
-		// 	$user->confirmed = true;
-		// 	$user->email = 'franklin.llanos@ipxserver.com';
-		// 	$user->password = '4rc4ng3l3$';
-		// 	$user->password_confirmation = '4rc4ng3l3$';			
-		// 	$user->username = 'ipx-server';
-		// 	$user->first_name = 'FRANKLIN';
-		// 	$user->last_name = 'LLANOS SILVA';
-		// 	$user->notify_sent = true;
-		// 	$user->notify_paid = true;
-		// 	$account->users()->save($user);	
+			$account->save();	
+			$user = new User();
+			$user->registered = true;
+			$user->confirmed = true;
+			$user->email = 'franklin.llanos@ipxserver.com';
+			$user->password = '4rc4ng3l3$';
+			$user->password_confirmation = '4rc4ng3l3$';			
+			$user->username = 'ipx-server';
+			$user->first_name = 'FRANKLIN';
+			$user->last_name = 'LLANOS SILVA';
+			$user->notify_sent = true;
+			$user->notify_paid = true;
+			$account->users()->save($user);	
 
-		// 	$InvoiceDesign = new InvoiceDesign;
-		// 	$InvoiceDesign->user_id =$user->getId();
-		// 	$InvoiceDesign->name = "Ipx-Virtual";
-		// 	$InvoiceDesign->javascript = "";
-		// 	$account->invoice_designs()->save($InvoiceDesign);		
+			$InvoiceDesign = new InvoiceDesign;
+			$InvoiceDesign->user_id =$user->getId();
+			$InvoiceDesign->name = "Ipx-Virtual";
+			$InvoiceDesign->javascript = "";
+			$account->invoice_designs()->save($InvoiceDesign);		
 
-		// }
+		}
 
 		return $account;
 	}

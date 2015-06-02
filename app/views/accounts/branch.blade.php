@@ -110,7 +110,7 @@
 
       <br>
 
-      {{ Former::date('deadline')->label('deadline') }}   
+      {{ Former::date('deadline')->label('Fecha Límite') }}   
                  
 
       {{ Former::legend('Leyendas') }}

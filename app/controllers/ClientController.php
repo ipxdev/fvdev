@@ -308,6 +308,7 @@ class ClientController extends \BaseController {
 						
 			if ($publicId) 
 			{
+				Activity::editClient($client);
 				Session::flash('message', trans('texts.updated_client'));
 			} 
 			else 

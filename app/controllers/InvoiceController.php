@@ -242,7 +242,7 @@ class InvoiceController extends \BaseController {
 	{
 		return [
 			'account' => Auth::user()->account,
-			'branches' => Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('public_id')->get(),
+			'branches' => Branch::where('account_id', '=', Auth::user()->account_id)->where('id',Auth::user()->branch_id)->orderBy('public_id')->get(),
 			'products' => Product::scope()->orderBy('id')->get(array('product_key','notes','cost','qty')),
 			'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
 			'clients' => Client::scope()->with('contacts', 'country')->orderBy('name')->get(),
@@ -377,6 +377,8 @@ class InvoiceController extends \BaseController {
 			$invoiceData['client_id'] = $client->id;
 			$invoiceData['client_nit'] = $client->nit;
 			$invoiceData['client_name'] = $client->name;
+			$invoiceData['action'] = $action;
+
 			$invoice = $this->invoiceRepo->save($publicId, $invoiceData, $entityType);
 			
 			$account = Auth::user()->account;

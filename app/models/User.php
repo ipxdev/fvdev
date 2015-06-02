@@ -112,7 +112,7 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		}
 		else
 		{
-			return 'Invitado';
+			return 'Nombre de Usuario';
 		}
 	}
 

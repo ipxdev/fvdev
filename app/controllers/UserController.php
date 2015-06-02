@@ -326,8 +326,10 @@ class UserController extends BaseController {
         {            
             $branch_id = Input::get( 'branch_id' );
 
+            $branch = Branch::where('account_id', '=', Auth::user()->account_id)->where('public_id',$branch_id)->first();
+
             $user = Auth::user();
-            $user->branch_id = $branch_id;
+            $user->branch_id = $branch->id;
             $user->save();
 
             return Redirect::intended('/');

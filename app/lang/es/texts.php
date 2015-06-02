@@ -370,7 +370,7 @@ return array(
   'email_taken' => 'La dirección de correo electrónico ya está registrado',
   'working' => 'Trabajando',
   'success' => 'Éxitoso',
-  'success_message' => 'Has registrado correctamente. Por favor visite el enlace en el correo electrónico de confirmación de cuenta para verificar su dirección de correo electrónico.',
+  'success_message' => 'Registrado correctamente.',
   'erase_data' => 'Esto borrará permanentemente los datos.',
   'password' => 'Contraseña',
 
@@ -402,7 +402,7 @@ return array(
    'update_products' => 'Auto-actualizar productos',
    'update_products_help' => 'Actualizar una factura automáticamente <b>actualizará los productos</b>',
    'create_product' => 'Crear Producto',
-   'new_product' => 'Crear Producto',
+   'new_product' => 'Nuevo Producto',
    'edit_product' => 'Editar Producto',
    'archive_product' => 'Archivar Producto',
    'updated_product' => 'Producto actualizado con éxito',

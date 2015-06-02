@@ -24,7 +24,7 @@
       {{ Former::text('last_name')->label('Apellidos (*)') }}
       {{ Former::text('email')->label('Email (*)') }}
 
-      {{ Former::text('phone')->label('Teléfono/Celuar (*)') }}
+      {{ Former::text('phone')->label('Teléfono/Celular (*)') }}
 
        </div>
     <div class="col-md-6">

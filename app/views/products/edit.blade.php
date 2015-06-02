@@ -33,8 +33,7 @@
 		<div class="col-md-6">
 
 		{{ Former::legend('Categoria') }}
-    	{{ Former::select('category_id')->addOption('','')->label(' ')
-          ->fromQuery($categories, 'name', 'id') }}
+    	{{ Former::select('category_id')->label(' ')->fromQuery($categories, 'name', 'id') }}
 
 		</div>
 	</div>

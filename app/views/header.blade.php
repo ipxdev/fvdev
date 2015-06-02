@@ -133,19 +133,21 @@
             <span class="glyphicon glyphicon-cog"></span>
           </button>     
           <ul class="dropdown-menu fvlink" role="menu">
-            @if (!Utils::isAdmin())
-            <li style="font-size:14px; margin:0 10px;"> <b><center> {{ Auth::user()->getDisplayBranch() }}</center></b></li>
-            <li class="divider"></li>
+            @if (Utils::isAdmin())
+
+              <li style="font-size:14px;">{{ link_to('company/user_management', uctrans('Gestión de Usuarios')) }}</li>
+              <li class="divider"></li>
+
+              <li style="font-size:14px;"><a href="{{ url('company/details') }}">{{ uctrans('texts.advanced_settings') }}</a></li>
+              <li class="divider"></li>
+
             @endif
 
-            <!-- <li style="font-size:15px; margin-left:-5px;">{{ link_to('company/details', uctrans('Administración')) }}</li> -->
 
-            <li style="font-size:14px;">{{ link_to('company/user_management', uctrans('Gestión de Usuarios')) }}</li>
-            <li class="divider"></li>
-            <li style="font-size:14px;"><a href="{{ url('company/details') }}">{{ uctrans('texts.advanced_settings') }}</a></li>
-            <li class="divider"></li>
+
             <li style="font-size:14px;">{{ link_to('company/import_export', uctrans('texts.import_export')) }}</li>
             <li class="divider"></li>
+            
             <li><a href="{{ url('company/chart_builder') }}">{{ uctrans('Gráficas/Reportes') }}</a></li>
             <li class="divider"></li>
 
@@ -332,7 +334,7 @@
         </div>
         {{ Former::text('new_email')->label(trans('texts.email')) }}   
         {{ Former::text('new_username')->label('nombre de Usuario') }}      
-        {{ Former::password('new_password')->label(trans('texts.password')) }}        
+        {{ Former::password('new_password')->label(trans('texts.password'))->placeholder('mínimo seis caracteres') }}        
         {{ Former::close() }}
 
         <center><div id="errorTaken" style="display:none">&nbsp;<br/>{{ trans('texts.email_taken') }}</div></center>
@@ -356,7 +358,7 @@
 
 
       <div class="modal-footer" id="signUpFooter" style="margin-top: 0px">          
-        <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('texts.close') }} <i class="glyphicon glyphicon-remove-circle"></i></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="validateServerSignUp2()">{{ trans('texts.close') }} <i class="glyphicon glyphicon-remove-circle"></i></button>
         <button type="button" class="btn btn-primary" id="saveSignUpButton" onclick="validateServerSignUp()" disabled>{{ trans('texts.save') }} <i class="glyphicon glyphicon-floppy-disk"></i></button>
       </div>
     </div>
@@ -583,6 +585,10 @@
     return isFormValid;
   }
 
+  function validateServerSignUp2()
+  {
+    location.reload();
+  }
   function validateServerSignUp()
   {
     if (!validateSignUp(true)) {
@@ -654,11 +660,12 @@
       NINJA.formIsChanged = false;
     }
 
-    if (force || NINJA.isRegistered) {            
+    // if (force || NINJA.isRegistered) {            
       window.location = '{{ URL::to('logout') }}';
-    } else {
-      $('#logoutModal').modal('show');  
-    }
+    // }
+    // else {
+    //   $('#logoutModal').modal('show');  
+    // }
   }
 
   function showSignUp() {    
@@ -686,6 +693,7 @@
           $('#proPlanSuccess, #proPlanFooter').show();
           $('#proPlanWorking, #proPlanButton').hide();
           $('#proPlanWorking, #proPlanButton2').hide();
+          window.location = '{{ URL::to('logout') }}';
         }
       });     
     } else {

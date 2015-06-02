@@ -67,29 +67,35 @@ class Branch extends EntityModelB
 		}
 		else
 		{
-		$datelimit1 = $this->deadline;	
-		$today = new DateTime('now');
+			if ($this->deadline == '0000-00-00')
+			{
+				return true;
+			}
+			else
+			{
+				$datelimit1 = $this->deadline;	
+				$today = new DateTime('now');
 
-		$today = $today->format('Y-m-d');
-		$datelimit = DateTime::createFromFormat('Y-m-d', $datelimit1);	
-		$datelimit = $datelimit->format('Y-m-d');
+				$today = $today->format('Y-m-d');
+				$datelimit = DateTime::createFromFormat('Y-m-d', $datelimit1);	
+				$datelimit = $datelimit->format('Y-m-d');
 
-		$valoresPrimera = explode ("-", $datelimit); 
-		$valoresSegunda = explode ("-", $today); 
+				$valoresPrimera = explode ("-", $datelimit); 
+				$valoresSegunda = explode ("-", $today); 
 
-		$diaPrimera    = $valoresPrimera[2];  
-		$mesPrimera  = $valoresPrimera[1];  
-		$anyoPrimera   = $valoresPrimera[0]; 
+				$diaPrimera    = $valoresPrimera[2];  
+				$mesPrimera  = $valoresPrimera[1];  
+				$anyoPrimera   = $valoresPrimera[0]; 
 
-		$diaSegunda   = $valoresSegunda[2];  
-		$mesSegunda = $valoresSegunda[1];  
-		$anyoSegunda  = $valoresSegunda[0];
+				$diaSegunda   = $valoresSegunda[2];  
+				$mesSegunda = $valoresSegunda[1];  
+				$anyoSegunda  = $valoresSegunda[0];
 
-		$diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);  
-		$diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);     
+				$diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);  
+				$diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);     
 
-		return  $diasPrimeraJuliano - $diasSegundaJuliano < 0;
-
+				return  $diasPrimeraJuliano - $diasSegundaJuliano < 0;
+			}
 		}
 	}
 

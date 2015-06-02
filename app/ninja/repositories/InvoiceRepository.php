@@ -204,23 +204,9 @@ class InvoiceRepository
 
       $discount_item = Utils::parseFloat($data['discount_item']);
 
+      $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
 
-      if (Utils::isAdmin())
-      {
-
-        $branch_id = trim($data['branch_id']);
-        $branch = \DB::table('branches')->where('id',$branch_id)->first();
-
-        $invoice->branch_id = $branch_id;
-        $invoiceNumber = $branch->invoice_number_counter;
-      }
-      else
-      {
-        $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
-
-      }
-
-      if ($invoice->is_recurring)
+      if (!$invoice->is_recurring)
       {
   		$invoice->invoice_number = $invoiceNumber;
       }
@@ -242,7 +228,18 @@ class InvoiceRepository
       }
       else
       {
-        $invoice->due_date = Utils::toSqlDate($data['due_date']);
+        if($data['action'] == 'save')
+        {
+            $date = date("Y-m-d", strtotime(date("Y-m-d")." +1 month"));
+            $invoice->due_date = $date;
+
+        }
+        else
+        {
+          $invoice->due_date = Utils::toSqlDate($data['due_date']);
+
+        }
+
         $invoice->frequency_id = 0;
         $invoice->start_date = null;
         $invoice->end_date = null;
@@ -337,19 +334,10 @@ class InvoiceRepository
       $invoice->amount = $total;
 
 
+
       $account = \Auth::user()->account;
 
-
-      if (Utils::isAdmin())
-      {
-        $branch_id = trim($data['branch_id']);
-        $branch = \DB::table('branches')->where('id',$branch_id)->first();
-      }
-      else
-      {
-        $branch = \Auth::user()->branch;
-
-      }
+      $branch = \Auth::user()->branch;
 
       $invoice->account_name=$account->name;
       $invoice->account_nit=$account->nit;
