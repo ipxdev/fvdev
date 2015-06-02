@@ -360,6 +360,7 @@ class InvoiceRepository
       $invoice->activity_pri=$branch->activity_pri;
       $invoice->activity_sec1=$branch->activity_sec1;
       $invoice->law=$branch->law;
+      $invoice->aux1=$branch->aux2;
 
       $invoice_dateCC = date("Ymd", strtotime($invoice->invoice_date));
       $invoice_date_limitCC = date("d/m/Y", strtotime($branch->deadline));

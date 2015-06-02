@@ -48,13 +48,7 @@
 
 
     	<div class="col-md-5" id="col_1">
-@if (!$invoice)
 
-			@if (Utils::isAdmin())
-	    	      	{{-- Former::select('branch_id')->label('sucursal')->data_bind("value: branch_id, valueUpdate: 'afterkeydown'")
-				->addGroupClass('client_select2 closer-row')->fromQuery($branches, 'name', 'id') --}}
-			@endif
-@endif
     		@if ($invoice && $invoice->id)
 				<div class="form-group">
 <!-- 					<label for="client" class="control-label col-lg-4 col-sm-4">Razón Social</label>
