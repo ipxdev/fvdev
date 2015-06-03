@@ -148,7 +148,7 @@ class BranchController extends \BaseController {
 
         $deadline = Input::get('deadline');
 
-        $branch->deadline = DateTime::createFromFormat('Y-m-d', $deadline);
+        $branch->deadline = trim(DateTime::createFromFormat('Y-m-d', $deadline));
 
         if(Input::file('dosage'))
         {
@@ -178,14 +178,14 @@ class BranchController extends \BaseController {
           }
           fclose($file);
 
-          $branch->aux1 = $result1;
-          $branch->number_autho = $result2;
-          $branch->key_dosage = $result3;
+          $branch->aux1 = trim($result1);
+          $branch->number_autho = trim($result2);
+          $branch->key_dosage = trim($result3);
 
         }
-		    $branch->activity_pri = Input::get('activity_pri');      
-		    $branch->activity_sec1 = Input::get('activity_sec1');
-		    $branch->law = Input::get('law');
+		    $branch->activity_pri = trim(Input::get('activity_pri'));      
+		    $branch->activity_sec1 = trim(Input::get('activity_sec1'));
+		    $branch->law = trim(Input::get('law'));
 
         $branch->invoice_number_counter = 1;
 
