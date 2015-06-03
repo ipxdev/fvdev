@@ -148,7 +148,7 @@ class BranchController extends \BaseController {
 
         $deadline = Input::get('deadline');
 
-        $branch->deadline = trim(DateTime::createFromFormat('Y-m-d', $deadline));
+        $branch->deadline = DateTime::createFromFormat('Y-m-d', $deadline);
 
         if(Input::file('dosage'))
         {
