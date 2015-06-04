@@ -32262,9 +32262,11 @@ function displayHeader(doc, invoice, layout) {
 }
 
 function getInvoiceDate(invoice) {
-
-	    var miVariable = invoice.invoice_date;
-	    var aleguisf_date = '';
+	
+	var miVariable = invoice.invoice_date;    
+ 	if (invoice.status == 1)
+  	{
+  		var aleguisf_date = '';
 	    var aleguisf_date_month = '';
 	    var aleguisf_date_day = '';
 	    var aleguisf_date_day_new = '';
@@ -32286,7 +32288,33 @@ function getInvoiceDate(invoice) {
 	    aleguisf_date_year = miVariable[2];	    
 	    aleguisf_date = invoice.state +', '+aleguisf_date_day+' de '+aleguisf_date_month+' de '+aleguisf_date_year;
 
-	    return aleguisf_date;
+  	}
+  	else
+  	{
+	    var aleguisf_date = '';
+	    var aleguisf_date_month = '';
+	    var aleguisf_date_day = '';
+	    var aleguisf_date_day_new = '';
+	    var aleguisf_date_year = '';
+	    miVariable = miVariable.split(' ');
+	    if(miVariable[0]=='Jan'){aleguisf_date_month='Enero';}
+	    if(miVariable[0]=='Feb'){aleguisf_date_month='Febrero';}
+	    if(miVariable[0]=='Mar'){aleguisf_date_month='Marzo';}
+	    if(miVariable[0]=='Apr'){aleguisf_date_month='Abril';}
+	    if(miVariable[0]=='May'){aleguisf_date_month='Mayo';}
+	    if(miVariable[0]=='Jun'){aleguisf_date_month='Junio';}
+	    if(miVariable[0]=='Jul'){aleguisf_date_month='Julio';}
+	    if(miVariable[0]=='Aug'){aleguisf_date_month='Agosto';}
+	    if(miVariable[0]=='Sep'){aleguisf_date_month='Septiembre';}
+	    if(miVariable[0]=='Oct'){aleguisf_date_month='Octubre';}
+	    if(miVariable[0]=='Nov'){aleguisf_date_month='Noviembre';}
+	    if(miVariable[0]=='Dec'){aleguisf_date_month='Diciembre';}	    
+	    aleguisf_date_day = parseFloat(miVariable[1]);
+	    aleguisf_date_year = miVariable[2];	    
+	    aleguisf_date = invoice.state +', '+aleguisf_date_day+' de '+aleguisf_date_month+' de '+aleguisf_date_year;
+
+	}
+	return aleguisf_date;
 }
 
 function displayInvoiceHeader(doc, invoice, layout) {

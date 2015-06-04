@@ -104,7 +104,7 @@
             {{ Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) }} &nbsp;
           @elseif (!Auth::user()->isPro())
             {{ Button::sm_primary('Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
-            {{ Button::sm_success_primary('Activar', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
+            {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
           @endif
         @endif
 
@@ -394,7 +394,7 @@
       <div class="modal-content">
         <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="proPlanModalLabel">Activar Cuenta</h4>
+          <h4 class="modal-title" id="proPlanModalLabel">COMENZAR LA CONFIGURACIÓN</h4>
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
@@ -402,12 +402,12 @@
             <div class="row">
               <div class="col-md-12">
                 <HR>
-                <p>Favor revisar los datos insertados antes de confirmar:</p>
-
+                <p>Para configurar tu cuenta, requieres los datos del Padrón Biométrico Digital del NIT, tener habilitada la modalidad de Facturación Computarizada, obtener la  llave de dosificación y el Logo de tu empresa.</p>
+                <br>
                 <ul class="list-group">
-                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Detalles de la Empresa </b><br> <i> NIT, nombre y dirección.</i></li></a>
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Sucursales</b><br> <i> Dirección, actividades, dosificación.</i></li></a>
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b> Diseño</b><br> <i> Diseño de impresión de la factura.</i></li></a>
+                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
+                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>
+                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>
                 </ul>
 
               </div>
@@ -430,8 +430,8 @@
       </div>
 
        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
-          <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('texts.close') }}</button>          
-          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">Confirmar</button>                    
+          <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>          
+          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
        </div>     
       </div>
     </div>

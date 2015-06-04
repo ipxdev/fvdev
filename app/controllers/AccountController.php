@@ -194,7 +194,7 @@ class AccountController extends \BaseController {
 						'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
 						'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),				
 						'timezones' => Timezone::remember(DEFAULT_QUERY_CACHE)->orderBy('location')->get(),
-						'dateFormats' => DateFormat::remember(DEFAULT_QUERY_CACHE)->get(),
+						'dateFormats' => DateFormat::get(),
 						'datetimeFormats' => DatetimeFormat::remember(DEFAULT_QUERY_CACHE)->get(),
 						'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
 						'languages' => Language::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
