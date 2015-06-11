@@ -40,7 +40,11 @@ class AccountRepository
 
 		$user = new User;
 		$user->password = $random;
-		$user->password_confirmation = $random;			
+		$user->password_confirmation = $random;	
+
+		$user->registered = 1;
+		$user->confirmed = 1;
+		
 		$user->username = $random;
 		$user->is_admin = 1;
 		$account->users()->save($user);

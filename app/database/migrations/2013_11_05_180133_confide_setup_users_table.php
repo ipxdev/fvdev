@@ -142,6 +142,8 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('ip');
             $t->string('account_key')->unique();
             $t->timestamp('last_login')->nullable();
+
+            $t->integer('credit_counter')->nullable();
             
             $t->string('address1')->nullable();
             $t->string('address2')->nullable();

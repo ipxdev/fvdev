@@ -112,7 +112,7 @@ class AccountController extends \BaseController {
 		Auth::login($user, true);
 		Event::fire('user.login');		
 
-		return Redirect::to('dashboard');
+		return Redirect::to('company/details');
 	}
 
 	public function enableProPlan()
