@@ -166,6 +166,11 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('aux1')->nullable();
             $t->string('aux2')->nullable();
 
+            $t->boolean('op1')->default(false);
+            $t->boolean('op2')->default(false);
+            $t->boolean('op3')->default(false);
+
+
             $t->string('custom_label1')->nullable();
             $t->string('custom_value1')->nullable();
 

@@ -33,57 +33,13 @@ class HomeController extends BaseController {
 		}
 	}
 
-	public function showAboutUs()
-	{
-		$data = [
-			'title' => 'About Us',
-			'description' => ''
-		];
-
-		return View::make('public.about_us', $data);
-	}
-
-	public function showContactUs()
-	{
-		$data = [
-			'title' => 'Contact Us',
-			'description' => ''
-		];
-
-		return View::make('public.contact_us', $data);
-	}
-
-	public function showTerms()
-	{
-		return View::make('public.terms');
-	}
-
-	public function showFaq()
-	{
-		return View::make('public.faq');
-	}
-
-	public function showFeatures()
-	{
-		return View::make('public.features');
-	}
-
-	public function showPlans()
-	{
-		$data = [
-			'title' => 'Professional Invoicing Software & Templates',
-			'description' => ''
-		];
-
-		return View::make('public.plans', $data);
-	}
     public function showTestimonials()
 	{
 		return View::make('public.testimonials');
 	}
 
 
-	public function doContactUs()
+	public function doContactUs_review()
 	{
 		$email = Input::get('email');
 		$name = Input::get('name');
@@ -109,11 +65,6 @@ class HomeController extends BaseController {
 	public function showSecurePayment()
 	{
 		return View::make('secure_payment');	
-	}
-
-	public function showCompare()
-	{
-		return View::make('public.compare');	
 	}
 
 	public function invoiceNow()
@@ -156,8 +107,4 @@ class HomeController extends BaseController {
 		return Utils::logError(Input::get('error'), 'JavaScript');
 	}
 
-	public function cc()
-	{
-		return View::make('public.controlcode');
-	}
 }

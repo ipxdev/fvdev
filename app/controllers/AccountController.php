@@ -18,68 +18,6 @@ class AccountController extends \BaseController {
 		$this->userMailer = $userMailer;
 		$this->contactMailer = $contactMailer;
 	}	
-
-	// public function install()
-	// {
-	// 	if (!Utils::isNinja() && !Schema::hasTable('accounts')) {
-	// 		try {
-	// 			Artisan::call('migrate');
-	// 			Artisan::call('db:seed');		
-	// 		} catch (Exception $e) {
-	//       Response::make($e->getMessage(), 500);
-	//     }
-	// 	}
-
-	// 	return Redirect::to('/');
-	// }
-
-	// public function update()
-	// {		
-	// 	if (!Utils::isNinja()) {
-	// 		try {
-	// 			Artisan::call('migrate');
-	// 			Cache::flush();
-	// 		} catch (Exception $e) {
-	//       Response::make($e->getMessage(), 500);
-	//     }
-	//   }
-
- //    return Redirect::to('/');
-	// }
-
-	/*
-	public function reset()
-	{
-		if (Utils::isNinjaDev()) {			
-			Confide::logout();
-			try {
-				Artisan::call('migrate:reset');
-				Artisan::call('migrate');				
-				Artisan::call('db:seed');		
-			} catch (Exception $e) {
-	      Response::make($e->getMessage(), 500);
-	    }
-		}
-
-		return Redirect::to('/');
-	}
-	*/
-
-	// public function demo()
-	// {
-	// 	$demoAccountId = Utils::getDemoAccountId();
-
-	// 	if (!$demoAccountId) {
-	// 		return Redirect::to('/');
-	// 	}
-
-	// 	$account = Account::find($demoAccountId);
-	// 	$user = $account->users()->first();		
-
-	// 	Auth::login($user, true);
-
-	// 	return Redirect::to('invoices/create');
-	// }
 	
 	public function getStarted()
 	{	
@@ -126,6 +64,17 @@ class AccountController extends \BaseController {
 	
 	}
 
+	public function enablePlan()
+	{		
+		$user = Auth::user();
+		$user->confirmation_code = '';
+		$user->confirmed = true;
+		$user->amend();
+
+		return RESULT_SUCCESS;	
+	
+	}
+
 	public function enableProPlan2()
 	{		
 		$rules = array(
@@ -150,7 +99,6 @@ class AccountController extends \BaseController {
 		{
 			$nroFactura = Input::get('nroFactura');
 			$nit_ci = Input::get('nit_ci');
-			// date("Ymd", strtotime($invoice->invoice_date))
 			$dia = Input::get('dia');
 			$mes = Input::get('mes');
 			$anio = Input::get('anio');
@@ -161,7 +109,6 @@ class AccountController extends \BaseController {
 
 			require_once(app_path().'/includes/control_code.php');
 	    	$cod_control = codigoControl($nroFactura, $nit_ci, $fecha, $monto, $nroAutorizacion, $llave);
-
 
 				return $cod_control;	
 		}
@@ -191,13 +138,6 @@ class AccountController extends \BaseController {
 					$data = [
 						'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
 						'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-						'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
-						'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),				
-						'timezones' => Timezone::remember(DEFAULT_QUERY_CACHE)->orderBy('location')->get(),
-						'dateFormats' => DateFormat::get(),
-						'datetimeFormats' => DatetimeFormat::remember(DEFAULT_QUERY_CACHE)->get(),
-						'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-						'languages' => Language::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
 						'showUser' => Auth::user()->id === Auth::user()->account->users()->first()->id,
 					];
 
@@ -1375,8 +1315,9 @@ class AccountController extends \BaseController {
 			$account->timezone_id = Input::get('timezone_id') ? Input::get('timezone_id') : null;
 			$account->date_format_id = Input::get('date_format_id') ? Input::get('date_format_id') : null;
 			$account->datetime_format_id = Input::get('datetime_format_id') ? Input::get('datetime_format_id') : null;
-			$account->currency_id = Input::get('currency_id') ? Input::get('currency_id') : 1; // US Dollar
-			$account->language_id = Input::get('language_id') ? Input::get('language_id') : 1; // English
+			$account->currency_id = Input::get('currency_id') ? Input::get('currency_id') : 1;
+			$account->language_id = Input::get('language_id') ? Input::get('language_id') : 1;
+			$account->op1 = true;
 			$account->save();
 
 			if (Auth::user()->id === $user->id)
@@ -1395,16 +1336,6 @@ class AccountController extends \BaseController {
 				$user->email = trim(strtolower(Input::get('email')));
 				$user->phone = trim(Input::get('phone'));				
 				$user->save();
-			}
-
-			/* Logo image file */
-			if ($file = Input::file('logo'))
-			{
-				$path = Input::file('logo')->getRealPath();
-				File::delete('logo/' . $account->account_key . '.jpg');				
-								
-				$image = Image::make($path)->resize(200, 120, true, false);
-				Image::canvas($image->width, $image->height, '#FFFFFF')->insert($image)->save($account->getLogoPath());
 			}
 
 			Event::fire('user.refresh');
@@ -1462,8 +1393,6 @@ class AccountController extends \BaseController {
 		$user->username = trim(Input::get('new_username')).'@'.trim(Input::get('new_nit'));
 		$user->password = trim(Input::get('new_password'));
 		$user->password_confirmation = trim(Input::get('new_password'));
-		$user->registered = true;
-		$user->confirmed = true;
 		$user->amend();
 
 		// $this->userMailer->sendConfirmation($user);
@@ -1491,13 +1420,4 @@ class AccountController extends \BaseController {
 		return "{$user->first_name} {$user->last_name}";
 	}
 
-	public function cancelAccount()
-	{
-		// $account = Auth::user()->account;
-		// $account->forceDelete();
-
-		// Confide::logout();
-
-		// return Redirect::to('/')->with('clearGuestKey', true);
-	}
 }

@@ -6,7 +6,13 @@
 @stop
 
 @section('content') 
+
+@if (Auth::user()->confirmed)
 {{ Former::legend('panel_settings') }}
+@else
+{{ Former::legend('Perfil de la Empresa') }}
+@endif
+
   @parent
 
 	{{ Former::open_for_files()->addClass('col-md-10 col-md-offset-1 warn-on-exit')->rules(array(

@@ -1,6 +1,8 @@
 @extends('header')
 
 @section('content')
+ 
+@if (Auth::user()->confirmed)
 
 <ul class="nav nav-tabs nav nav-justified">
 
@@ -15,6 +17,9 @@
   {{-- HTML::nav_link('company/advanced_settings/chart_builder', 'chart_builder') --}}
 
 </ul>
+
+@endif
+
 <p>&nbsp;</p>
 
 @stop

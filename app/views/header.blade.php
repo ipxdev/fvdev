@@ -1,6 +1,5 @@
 @extends('master')
 
-
 @section('head')
 
 <link href="{{ asset('built.css') }}" rel="stylesheet" type="text/css"/>    
@@ -56,23 +55,27 @@
         <img src="{{ asset('images/logo-factura-virtual.png') }}" style="height:25px;margin-top:-5px;width:auto"/>
       </a>      
     </div>
-    
-  <div style="font-size:15px; margin:0 ;color:#fff;text-align:right;">
+      
+    @if (Auth::user()->confirmed)
 
-    {{ Auth::user()->getDisplayName() }} |
+      <div style="font-size:15px; margin:0 ;color:#fff;text-align:right;">
 
-    @if (Utils::isAdmin())
-    <a href="{{ URL::to('/select_branch') }}" style="color:#00B0DC!important;">
-    
-    {{ Auth::user()->getDisplayBranch() }}
-    <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
-    </a>
-    @else
-    {{ Auth::user()->getDisplayBranch() }}
-    <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
+        {{ Auth::user()->getDisplayName() }} |
+
+        @if (Utils::isAdmin())
+        <a href="{{ URL::to('/select_branch') }}" style="color:#00B0DC!important;">
+        
+        {{ Auth::user()->getDisplayBranch() }}
+        <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
+        </a>
+        @else
+        {{ Auth::user()->getDisplayBranch() }}
+        <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
+        @endif
+
+      </div>
+
     @endif
-
-</div>
 
    </div>
 
@@ -81,6 +84,7 @@
 
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    @if (Auth::user()->confirmed)
       <ul class="nav navbar-nav">
 
         {{ HTML::nav_link('dashboard', 'dashboard') }}
@@ -96,16 +100,18 @@
           {{-- HTML::menu_link('quote') --}}
         @endif
       </ul>
-
+    @endif
       <div class="navbar-form navbar-right">
 
         @if (Auth::check())
-          @if (!Auth::user()->registered)
-            {{ Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) }} &nbsp;
-          @elseif (!Auth::user()->isPro())
-            {{ Button::sm_primary('Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
+          @if (!Auth::user()->confirmed)
+            {{-- Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) --}} &nbsp;
+            {{ Button::sm_primary('Calcular Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
             {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
-          @endif
+
+          @elseif (!Auth::user()->isPro())
+ 
+           @endif
         @endif
 
         @if (Auth::user()->getPopOverText() && !Utils::isRegistered())
@@ -125,6 +131,7 @@
           });
         </script>
         @endif
+    @if (Auth::user()->confirmed)
 
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -162,7 +169,7 @@
         </button>
         @endif
 
-
+@endif
 
       </div>  
 
@@ -431,7 +438,7 @@
 
        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
           <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>          
-          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
+          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
        </div>     
       </div>
     </div>
@@ -669,7 +676,7 @@
   }
 
   function showSignUp() {    
-    $('#signUpModal').modal('show');    
+    // $('#signUpModal').modal('show');    
   }
 
   @if (Auth::check() && !Auth::user()->isPro())
@@ -680,15 +687,38 @@
     trackUrl('/view_pro_plan/' + feature);
   }
 
-  function submitProPlan() {
-    trackUrl('/submit_pro_plan/' + proPlanFeature);
+  //   function submitProPlan() {
+  //   trackUrl('/submit_pro_plan/' + proPlanFeature);
+  //   if (NINJA.isRegistered) {
+  //     $('#proPlanDiv, #proPlanFooter').hide();
+  //     $('#proPlanWorking').show();
+
+  //     $.ajax({
+  //       type: 'POST',
+  //       url: '{{ URL::to('account/go_pro') }}',
+  //       success: function(result) { 
+  //         $('#proPlanSuccess, #proPlanFooter').show();
+  //         $('#proPlanWorking, #proPlanButton').hide();
+  //         $('#proPlanWorking, #proPlanButton2').hide();
+  //         window.location = '{{ URL::to('logout') }}';
+  //       }
+  //     });     
+  //   } else {
+  //     $('#proPlanModal').modal('hide');
+  //     $('#go_pro').val('true');
+  //     showSignUp();
+  //   }
+  // }
+
+  function submitPlan() {
+    trackUrl('/submit_plan/' + proPlanFeature);
     if (NINJA.isRegistered) {
       $('#proPlanDiv, #proPlanFooter').hide();
       $('#proPlanWorking').show();
 
       $.ajax({
         type: 'POST',
-        url: '{{ URL::to('account/go_pro') }}',
+        url: '{{ URL::to('account/go') }}',
         success: function(result) { 
           $('#proPlanSuccess, #proPlanFooter').show();
           $('#proPlanWorking, #proPlanButton').hide();
@@ -702,6 +732,7 @@
       showSignUp();
     }
   }
+
 
   function submitProPlan2() {
     trackUrl('/submit_pro_plan/' + proPlanFeature);

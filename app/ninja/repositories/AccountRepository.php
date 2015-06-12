@@ -42,11 +42,10 @@ class AccountRepository
 		$user->password = $random;
 		$user->password_confirmation = $random;	
 
-		$user->registered = 1;
-		$user->confirmed = 1;
+		$user->registered = true;
 		
 		$user->username = $random;
-		$user->is_admin = 1;
+		$user->is_admin = true;
 		$account->users()->save($user);
 
 		$category = new Category;

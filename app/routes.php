@@ -11,39 +11,16 @@
 |
 */
 
-//apc_clear_cache();
-//Cache::flush();
-
-//dd(DB::getQueryLog());
-//dd(Client::getPrivateId(1));
-//dd(new DateTime());
-//Event::fire('user.signup');
-//dd(App::environment());
-//dd(gethostname());
-//Log::error('test');
-
 Route::get('install', 'AccountController@install');
 Route::get('update', 'AccountController@update');
 Route::get('reset', 'AccountController@reset');
 
 Route::get('/', 'HomeController@showIndex');
-Route::get('/rocksteady', 'HomeController@showIndex');
-Route::get('/about', 'HomeController@showAboutUs');
-Route::get('/terms', 'HomeController@showTerms');
-Route::get('/contact', 'HomeController@showContactUs');
-Route::get('/plans', 'HomeController@showPlans');
 Route::post('/contact_submit', 'HomeController@doContactUs');
-Route::get('/faq', 'HomeController@showFaq');
-Route::get('/features', 'HomeController@showFeatures');
-Route::get('/testimonials', 'HomeController@showTestimonials');
-Route::get('/compare-online-invoicing{sites?}', 'HomeController@showCompare');
 
 Route::get('log_error', 'HomeController@logError');
 Route::get('4rc4ng3l', 'HomeController@invoiceNow');
 Route::post('get_started', 'AccountController@getStarted');
-Route::get('cc', 'HomeController@cc');
-Route::post('getcc', 'AccountController@submitSignup');
-
 
 Route::get('view/{invitation_key}', 'InvoiceController@view');
 Route::get('payment/{invitation_key}', 'PaymentController@show_payment');
@@ -125,14 +102,13 @@ Route::group(array('before' => 'auth'), function()
   Route::get('company/chart_builder', 'ReportController@report');
   Route::post('company/chart_builder', 'ReportController@report');
 
-  Route::post('company/cancel_account', 'AccountController@cancelAccount');
 	Route::get('account/getSearchData', array('as' => 'getSearchData', 'uses' => 'AccountController@getSearchData'));
   Route::get('company/{section?}/{sub_section?}', 'AccountController@showSection');	
 	Route::post('company/{section?}/{sub_section?}', 'AccountController@doSection');
 	Route::post('user/setTheme', 'UserController@setTheme');
   Route::post('remove_logo', 'AccountController@removeLogo');
+  Route::post('account/go', 'AccountController@enablePlan');
   Route::post('account/go_pro', 'AccountController@enableProPlan');
-
   Route::post('account/go_pro2', 'AccountController@enableProPlan2');
 
 
@@ -443,40 +419,5 @@ Validator::extend('has_credit', function($attribute, $value, $parameters)
   
   return $credit >= $amount;
 });
-
-
-/*
-Event::listen('illuminate.query', function($query, $bindings, $time, $name)
-{
-    $data = compact('bindings', 'time', 'name');
-
-    // Format binding data for sql insertion
-    foreach ($bindings as $i => $binding)
-    {   
-        if ($binding instanceof \DateTime)
-        {   
-            $bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
-        }
-        else if (is_string($binding))
-        {   
-            $bindings[$i] = "'$binding'";
-        }   
-    }       
-
-    // Insert bindings into query
-    $query = str_replace(array('%', '?'), array('%%', '%s'), $query);
-    $query = vsprintf($query, $bindings); 
-
-    Log::info($query, $data);
-});
-*/
-
-
-/*
-if (Auth::check() && Auth::user()->id === 1)
-{
-  Auth::loginUsingId(1);
-}
-*/
 
 
