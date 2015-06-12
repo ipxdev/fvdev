@@ -109,6 +109,14 @@ class Account extends Eloquent
 		}
 	}
 
+	public function getOp1()
+	{
+		if ($this->op1) 
+		{
+			return true;
+		}
+	}
+
 	public function getDisplayName()
 	{
 		if ($this->name) 

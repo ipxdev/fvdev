@@ -412,7 +412,11 @@
                 <p>Para configurar tu cuenta, requieres los datos del Padrón Biométrico Digital del NIT, tener habilitada la modalidad de Facturación Computarizada, obtener la  llave de dosificación y el Logo de tu empresa.</p>
                 <br>
                 <ul class="list-group">
+                @if(Auth::user()->account->getOp1())        
+                  <a href="{{ URL::to('company/details') }}" style="color:#000;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
+                @else
                   <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
+                @endif
                   <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>
                   <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>
                 </ul>
