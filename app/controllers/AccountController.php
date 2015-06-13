@@ -530,6 +530,11 @@ class AccountController extends \BaseController {
 						$invoice_design->javascript = Input::get('design');
 						$invoice_design->save();
 					}
+
+					$account = Auth::user()->account;
+			        $account->op3 = true;
+			        $account->save();
+
 					Session::flash('message', trans('texts.updated_settings'));		
 				}
 				return Redirect::to('company/invoice_design');	
@@ -1274,12 +1279,25 @@ class AccountController extends \BaseController {
 		// 	'nit' => 'required',
 		// );
 
+	    $rules = [
+            'password' => 'required|between:4,11|confirmed',
+            'password_confirmation' => 'between:4,11',
+        ];
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails())
+        {
+            return Redirect::to('company/details')->withInput()->withErrors($validator);
+        }
+
+
 		$user = Auth::user()->account->users()->first();
 
 		if (Auth::user()->id === $user->id)		
 		{
 			$rules['email'] = 'email|required|unique:users,email,' . $user->id . ',id';
 			$rules['username'] = 'required|unique:users,username,' . $user->id . ',id';
+
 
 		}
 
@@ -1324,6 +1342,8 @@ class AccountController extends \BaseController {
 			{
 				$user->first_name = trim(Input::get('first_name'));
 				$user->last_name = trim(Input::get('last_name'));
+				$user->password = trim(Input::get('password'));
+				$user->password_confirmation = trim(Input::get('password_confirmation'));
 				
 				if(Input::get('nit'))
 				{

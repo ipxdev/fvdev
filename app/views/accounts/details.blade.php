@@ -26,7 +26,10 @@
   		'country_id' => 'required',
   		'first_name' => 'required',
   		'last_name' => 'required',
-  		'phone' => 'required'
+  		'phone' => 'required',
+  		'password' => 'required',
+  		'password_confirmation' => 'required'
+  		
 	)) }}
 
 	{{ Former::populate($account) }}
@@ -82,9 +85,14 @@
 				{{ Former::legend('Administrador') }}
 				{{ Former::text('first_name')->label('Nombre(s) (*)') }}
 				{{ Former::text('last_name')->label('Apellidos (*)') }}
-				{{ Former::text('email')->label('Correo electrónico (*)') }}
-				{{ Former::text('username')->label('nombre de Usuario (*)') }}
 				{{ Former::text('phone')->label('Celular (*)') }}
+				{{ Former::text('email')->label('Correo electrónico (*)') }}
+
+				{{ Former::legend('Datos de Ingreso') }}
+				{{ Former::text('username')->label('nombre de Usuario (*)') }}
+				{{ Former::password('password')->label('contraseña (*)') }}        
+				{{ Former::password('password_confirmation')->label('Repertir contraseña (*)') }}        
+
 			@endif
 
 			{{-- Former::legend('localization') --}}

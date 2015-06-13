@@ -191,6 +191,10 @@ class BranchController extends \BaseController {
 
 		    $branch->save();
 
+        $account = Auth::user()->account;
+        $account->op2 = true;
+        $account->save();
+
 		    $message = $branchPublicId ? trans('texts.updated_branch') : trans('texts.created_branch');
 		    Session::flash('message', $message);
         

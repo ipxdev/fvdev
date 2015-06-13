@@ -2,7 +2,9 @@
 
 @section('content') 
 
-  {{ Former::legend('panel_settings') }}
+@if (Auth::user()->confirmed)
+{{ Former::legend('panel_settings') }}
+@endif
 
   @parent
   <div class="row">

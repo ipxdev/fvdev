@@ -105,13 +105,18 @@
 
         @if (Auth::check())
           @if (!Auth::user()->confirmed)
+
             {{-- Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) --}} &nbsp;
             {{ Button::sm_primary('Calcular Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
             {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
 
-          @elseif (!Auth::user()->isPro())
- 
-           @endif
+          @else
+
+          <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" data-content="{{ Auth::user()->getDisplayName() }}">
+
+          </button> 
+
+          @endif
         @endif
 
         @if (Auth::user()->getPopOverText() && !Utils::isRegistered())
@@ -412,13 +417,25 @@
                 <p>Para configurar tu cuenta, requieres los datos del Padrón Biométrico Digital del NIT, tener habilitada la modalidad de Facturación Computarizada, obtener la  llave de dosificación y el Logo de tu empresa.</p>
                 <br>
                 <ul class="list-group">
+
                 @if(Auth::user()->account->getOp1())        
-                  <a href="{{ URL::to('company/details') }}" style="color:#000;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
+                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
                 @else
-                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
+                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>               
                 @endif
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>
+
+                @if(Auth::user()->account->getOp2()) 
+                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>
+                @else
+                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>                
+                @endif
+
+                @if(Auth::user()->account->getOp3())  
+                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>
+                @else     
+                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>           
+                @endif
+
                 </ul>
 
               </div>
