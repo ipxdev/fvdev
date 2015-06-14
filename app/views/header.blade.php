@@ -400,7 +400,8 @@
             <div class="row">
               <div class="col-md-12">
                 <HR>
-                <p>Para configurar tu cuenta, requieres los datos del Padrón Biométrico Digital del NIT, tener habilitada la modalidad de Facturación Computarizada, obtener la  llave de dosificación y el Logo de tu empresa.</p>
+                <p>
+                Cuenta con {{ Auth::user()->account->getCreditCounter() }} Facturas Disponibles</p>
                 <br>
                 <ul class="list-group">
 
@@ -427,7 +428,7 @@
       </div>
 
        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
-          <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>          
+          <button type="button" class="btn btn-default" id="proPlanButton" data-dismiss="modal">CERRAR</button>          
           <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">ACEPTAR</button>                    
        </div>     
       </div>

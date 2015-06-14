@@ -211,10 +211,9 @@ class Account extends Eloquent
 
 	public function incrementCounter($isQuote = false) 
 	{
-		if ($isQuote && !$this->share_counter) {
-			$this->quote_number_counter += 1;
-		} else {
-			$this->invoice_number_counter += 1;
+		if (!$isQuote) {
+
+			$this->credit_counter -= 1;
 		}
 
 		$this->save();

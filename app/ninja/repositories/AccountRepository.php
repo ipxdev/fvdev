@@ -212,13 +212,15 @@ class AccountRepository
 
 	public function enableProPlan()
 	{		
-		if (Auth::user()->isPro())
-		{
-			return false;
-		}
+		// if (Auth::user()->isPro())
+		// {
+		// 	return false;
+		// }
 
 
-		$account= Auth::user()->account;
+		$account = Auth::user()->account;
+		$credit = $account->credit_counter;
+		$account->credit_counter = $credit +10;
 
         $account->pro_plan_paid = date_create()->format('Y-m-d');
         $account->save();
