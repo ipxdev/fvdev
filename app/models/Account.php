@@ -146,6 +146,11 @@ class Account extends Eloquent
 		return $user->getDisplayName();
 	}
 
+	public function getCreditCounter()
+	{
+		return $this->credit_counter;
+	}
+
 	public function getTimezone()
 	{
 		if ($this->timezone)
@@ -285,20 +290,32 @@ class Account extends Eloquent
 
 		$datePaid = $this->pro_plan_paid;
 
-		if (!$datePaid || $datePaid == '0000-00-00')
-		{
-			return false;
-		}
-		else if ($datePaid == '2000-01-01')
+		if ($this->credit_counter > 0)
 		{
 			return true;
-		}		
+		}
+		else
 
-		$today = new DateTime('now');
-		$datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
-		$interval = $today->diff($datePaid);
-		
-		return $interval->y == 0;
+		{
+			if (!$datePaid || $datePaid == '0000-00-00')
+			{
+				return false;
+			}
+
+
+			$today = new DateTime('now');
+			$datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
+			$interval = $today->diff($datePaid);
+			
+			if($interval)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 
 	public function getSubscription($eventId) 

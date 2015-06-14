@@ -143,7 +143,7 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('account_key')->unique();
             $t->timestamp('last_login')->nullable();
 
-            $t->integer('credit_counter')->nullable();
+            $t->integer('credit_counter')->default(0);
             
             $t->string('address1')->nullable();
             $t->string('address2')->nullable();

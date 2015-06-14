@@ -108,34 +108,20 @@
 
             {{-- Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) --}} &nbsp;
             {{ Button::sm_primary('Calcular Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
-            {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal')) }} &nbsp;
+            {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#PlanModal')) }} &nbsp;
 
           @else
 
-          <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" data-content="{{ Auth::user()->getDisplayName() }}">
+          <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="modal" data-target="#proPlanModal">
+
+          {{ Auth::user()->account->getCreditCounter() }}
 
           </button> 
 
           @endif
         @endif
 
-        @if (Auth::user()->getPopOverText() && !Utils::isRegistered())
-        <button id="ninjaPopOver" type="button" class="btn btn-default" data-toggle="popover" data-placement="bottom" data-content="{{ Auth::user()->getPopOverText() }}" data-html="true" style="display:none">
-          {{ trans('texts.sign_up') }}
-        </button>
-        @endif
 
-        @if (Auth::user()->getPopOverText())
-        <script>
-          $(function() {
-            if (screen.width < 1170) return;
-            $('#ninjaPopOver').show().popover('show').hide();
-            $('body').click(function() {
-              $('#ninjaPopOver').popover('hide');
-            });    
-          });
-        </script>
-        @endif
     @if (Auth::user()->confirmed)
 
         <div class="btn-group">
@@ -400,13 +386,64 @@
 </div>
 
 
-@if (Auth::check() && !Auth::user()->isPro())
+
   <div class="modal fade" id="proPlanModal" tabindex="-1" role="dialog" aria-labelledby="proPlanModalLabel" aria-hidden="true">
     <div class="modal-dialog medium-dialog">
       <div class="modal-content">
         <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="proPlanModalLabel">COMENZAR LA CONFIGURACIÓN</h4>
+          <h4 class="modal-title" id="proPlanModalLabel">RECARGAR FACTURAS</h4>
+        </div>
+
+        <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
+
+            <div class="row">
+              <div class="col-md-12">
+                <HR>
+                <p>Para configurar tu cuenta, requieres los datos del Padrón Biométrico Digital del NIT, tener habilitada la modalidad de Facturación Computarizada, obtener la  llave de dosificación y el Logo de tu empresa.</p>
+                <br>
+                <ul class="list-group">
+
+
+                </ul>
+
+              </div>
+            </div>              
+
+      </div>
+
+
+      <div style="padding-left:40px;padding-right:40px;display:none;min-height:130px" id="proPlanWorking">
+        <h3>{{ trans('texts.working') }}...</h3>
+        <div class="progress progress-striped active">
+          <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <div style="background-color: #fff; padding-right:20px;padding-left:20px; display:none" id="proPlanSuccess">
+        &nbsp;<br/>
+        {{ trans('texts.pro_plan_success') }}
+        <br/>&nbsp;
+      </div>
+
+       <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
+          <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>          
+          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">ACEPTAR</button>                    
+       </div>     
+      </div>
+    </div>
+  </div>
+
+
+
+
+@if (Auth::check() && !Auth::user()->isPro())
+  <div class="modal fade" id="PlanModal" tabindex="-1" role="dialog" aria-labelledby="PlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog medium-dialog">
+      <div class="modal-content">
+        <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="PlanModalLabel">COMENZAR LA CONFIGURACIÓN</h4>
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
@@ -466,12 +503,12 @@
   </div>
 
 
-<div class="modal fade" id="proPlanModal2" tabindex="-1" role="dialog" aria-labelledby="proPlanModalLabel" aria-hidden="true">
+<div class="modal fade" id="proPlanModal2" tabindex="-1" role="dialog" aria-labelledby="proPlanModalLabel2" aria-hidden="true">
     <div class="modal-dialog medium-dialog">
       <div class="modal-content">
         <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="proPlanModalLabel">Examen de Código de Control</h4>
+          <h4 class="modal-title" id="proPlanModalLabel2">Examen de Código de Control</h4>
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv2">
@@ -700,36 +737,35 @@
     // $('#signUpModal').modal('show');    
   }
 
-  @if (Auth::check() && !Auth::user()->isPro())
+  @if (Auth::check())
   var proPlanFeature = false;
   function showProPlan(feature) {
     proPlanFeature = feature;
-    $('#proPlanModal').modal('show');       
+    $('#PlanModal').modal('show');       
     trackUrl('/view_pro_plan/' + feature);
   }
 
-  //   function submitProPlan() {
-  //   trackUrl('/submit_pro_plan/' + proPlanFeature);
-  //   if (NINJA.isRegistered) {
-  //     $('#proPlanDiv, #proPlanFooter').hide();
-  //     $('#proPlanWorking').show();
+    function submitProPlan() {
+    trackUrl('/submit_pro_plan/' + proPlanFeature);
+    if (NINJA.isRegistered) {
+      $('#proPlanDiv, #proPlanFooter').hide();
+      $('#proPlanWorking').show();
 
-  //     $.ajax({
-  //       type: 'POST',
-  //       url: '{{ URL::to('account/go_pro') }}',
-  //       success: function(result) { 
-  //         $('#proPlanSuccess, #proPlanFooter').show();
-  //         $('#proPlanWorking, #proPlanButton').hide();
-  //         $('#proPlanWorking, #proPlanButton2').hide();
-  //         window.location = '{{ URL::to('logout') }}';
-  //       }
-  //     });     
-  //   } else {
-  //     $('#proPlanModal').modal('hide');
-  //     $('#go_pro').val('true');
-  //     showSignUp();
-  //   }
-  // }
+      $.ajax({
+        type: 'POST',
+        url: '{{ URL::to('account/go_pro') }}',
+        success: function(result) { 
+          $('#proPlanSuccess, #proPlanFooter').show();
+          $('#proPlanWorking, #proPlanButton').hide();
+          $('#proPlanWorking, #proPlanButton2').hide();
+          window.location = '{{ URL::to('logout') }}';
+        }
+      });     
+    } else {
+      $('#proPlanModal').modal('hide');
+      $('#go_pro').val('true');
+    }
+  }
 
   function submitPlan() {
     trackUrl('/submit_plan/' + proPlanFeature);
@@ -748,9 +784,8 @@
         }
       });     
     } else {
-      $('#proPlanModal').modal('hide');
+      $('#PlanModal').modal('hide');
       $('#go_pro').val('true');
-      showSignUp();
     }
   }
 
@@ -799,9 +834,8 @@
         }
       });     
     } else {
-      $('#proPlanModal').modal('hide');
+      $('#PlanModal').modal('hide');
       $('#go_pro').val('true');
-      showSignUp();
     }
   }
 

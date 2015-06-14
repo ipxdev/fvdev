@@ -482,11 +482,9 @@ class AccountController extends \BaseController {
 
 	private function saveInvoiceDesign()
 	{
-
 				
 				$account = Auth::user()->account;
-				$account->hide_quantity = Input::get('hide_quantity') ? true : false;
-
+			    $account->op3 = true;
 				$account->save();
 
 				if ($file = Input::file('logo') || Input::get('design')|| Input::get('x'))
@@ -530,10 +528,6 @@ class AccountController extends \BaseController {
 						$invoice_design->javascript = Input::get('design');
 						$invoice_design->save();
 					}
-
-					$account = Auth::user()->account;
-			        $account->op3 = true;
-			        $account->save();
 
 					Session::flash('message', trans('texts.updated_settings'));		
 				}
