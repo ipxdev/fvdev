@@ -277,43 +277,36 @@ class Account extends Eloquent
 
 	public function isPro()
 	{
-		// if (!Utils::isNinjaProd())
-		// {
-		// 	return true;
-		// }
 
 		if ($this->account_key == IPX_ACCOUNT_KEY)
 		{
 			return true;
 		}
-
+		
 		$datePaid = $this->pro_plan_paid;
+		if (!$datePaid || $datePaid == '0000-00-00')
+		{
+			return false;
+		}
+
+		$today = new DateTime('now');
+		$datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
+		if($datePaid >= $today)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 
 		if ($this->credit_counter > 0)
 		{
 			return true;
 		}
 		else
-
-		{
-			if (!$datePaid || $datePaid == '0000-00-00')
-			{
-				return false;
-			}
-
-
-			$today = new DateTime('now');
-			$datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
-			$interval = $today->diff($datePaid);
-			
-			if($interval)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+		{	
+			return false;
 		}
 	}
 
