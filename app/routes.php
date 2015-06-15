@@ -44,9 +44,7 @@ Route::get('user/reset/{token?}', 'UserController@reset_password');
 Route::post('user/reset', 'UserController@do_reset_password');
 Route::get('logout', 'UserController@logout');
 
-
-
-/*Modificacion David */
+//POS David
 Route::group(array('before' => 'auth.basic'), function()
 {
   Route::get('facturas','InvoiceController@facturas');
@@ -59,13 +57,12 @@ Route::group(array('before' => 'auth.basic'), function()
   Route::post('mensajeInvoice','InvoiceController@mensajeInvoice');
  
   Route::get('obtenerFactura/{public_id}','ClientController@obtenerFactura');
-  //prueba
+
   Route::get('msg','ClientController@mensaje');
   Route::get('mensajeCliente','ClientController@mensajeCliente');
   Route::post('mensajeInvoice','InvoiceController@mensajeInvoice');
 
 });
-/**************************/
 
 Route::group(array('before' => 'auth'), function()
 {   
@@ -148,7 +145,6 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('api/credits/{client_id?}', array('as'=>'api.credits', 'uses'=>'CreditController@getDatatable'));	
 	Route::post('credits/bulk', 'CreditController@bulk');	
     
-    //Route::resource('timesheets', 'TimesheetController');
 });
 
 // Route group for API
