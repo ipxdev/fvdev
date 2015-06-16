@@ -284,21 +284,21 @@ class Account extends Eloquent
 		}
 		
 		$datePaid = $this->pro_plan_paid;
-		if (!$datePaid || $datePaid == '0000-00-00')
-		{
-			return false;
-		}
+		// if (!$datePaid || $datePaid == '0000-00-00')
+		// {
+		// 	return false;
+		// }
 
-		$today = new DateTime('now');
-		$datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
-		if($datePaid >= $today)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		// $today = new DateTime('now');
+		// $datePaid = DateTime::createFromFormat('Y-m-d', $datePaid);		
+		// if($datePaid >= $today)
+		// {
+		// 	return true;
+		// }
+		// else
+		// {
+		// 	return false;
+		// }
 
 		if ($this->credit_counter > 0)
 		{
