@@ -7,6 +7,62 @@
 
 @section('content') 
 
+@if (!Auth::user()->confirmed)
+
+<hr>
+<div class="btn-group btn-group-justified" role="group" >
+  <div class="btn-group" role="group">
+        @if(Auth::user()->account->getOp1())
+       	  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;">
+          <button type="button" class="btn btn-default ipxhover2" >              
+          <b>Paso 1 </b><br> Perfil de la Empresa
+          <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button></a>
+        @else          
+          <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;">
+          <button type="button" class="btn btn-default ipxhover1" >  
+          <b>Paso 1 </b></span><br> Perfil de la Empresa
+          <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button> </a>             
+        @endif
+    
+  </div>
+  <div class="btn-group" role="group">
+	    @if(Auth::user()->account->getOp2()) 
+	      <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
+		  <button type="button" class="btn btn-default ipxhover2">
+	      <b>Paso 2 </b><br>  Datos de Sucursal
+	      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button></a>
+	    @else	     
+	      <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
+	      <button type="button" class="btn btn-default ipxhover1">
+	      <b>Paso 2 </b><br> Datos de Sucursal
+	      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button></a>              
+	    @endif
+    </button>
+  </div>
+  <div class="btn-group" role="group">
+        @if(Auth::user()->account->getOp3())
+          <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
+          <button type="button" class="btn btn-default ipxhover2">
+		  <b>Paso 3 </b><br> Cargado del Logo
+          <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button></a> 
+        @else
+          <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
+          <button type="button" class="btn btn-default ipxhover1">     
+          <b>Paso 3 </b><br> Cargado del Logo
+          <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+          </button></a>             
+        @endif
+  </div>
+</div>
+<hr>
+
+@endif
+
 @if (Auth::user()->confirmed)
 {{ Former::legend('panel_settings') }}
 @else
@@ -15,7 +71,7 @@
 
   @parent
 
-	{{ Former::open_for_files()->addClass('col-md-10 col-md-offset-1 warn-on-exit')->rules(array(
+	{{ Former::open_for_files()->addClass('col-md-12 warn-on-exit')->rules(array(
   		'name' => 'required',
   		'email' => 'email|required',
   		'nit' => 'required|Numeric',
@@ -79,7 +135,7 @@
 
 		</div>
 	
-		<div class="col-md-5 col-md-offset-1">		
+		<div class="col-md-6">		
 
 			@if ($showUser)
 				{{ Former::legend('Administrador') }}

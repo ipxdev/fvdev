@@ -13,16 +13,22 @@
 	float:left;
 }
 
+.ipxhover1 {
+
+	background-color:#DBD9D7!important;
+	color:#333333!important;
+}
+
 .ipxhover1:hover {
 
 	background-color:#ff9148!important;
-	color:#fff;
+	color:#fff!important;
 }
 
 .ipxhover2 {
 
 	background-color:#36C157!important;
-	color:#fff;
+	color:#fff!important;
 }
 
  .popover {	

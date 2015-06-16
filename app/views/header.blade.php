@@ -456,23 +456,14 @@
                 <br>
                 <ul class="list-group">
 
-                @if(Auth::user()->account->getOp1())        
-                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>
-                @else
-                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></li></a>               
-                @endif
-
-                @if(Auth::user()->account->getOp2()) 
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>
-                @else
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></li></a>                
-                @endif
-
-                @if(Auth::user()->account->getOp3())  
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover2"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>
-                @else     
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;"><li class="list-group-item ipxhover1"><b>3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></li></a>           
-                @endif
+                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;">
+                  <b>Paso 1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></a><br>               
+<br>
+                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
+                  <b>Paso 2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></a> <br>               
+   <br>
+                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
+                  <b>Paso 3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></a> <br>         
 
                 </ul>
 
@@ -496,8 +487,15 @@
       </div>
 
        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
-          <button type="button" class="btn btn-default" data-dismiss="modal">CERRAR</button>          
-          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
+          <button type="button" class="btn btn-default" data-dismiss="modal">Volver</button>          
+          
+          @if(Auth::user()->account->getOp1() && Auth::user()->account->getOp2() && Auth::user()->account->getOp3())        
+              <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
+          @else
+              <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()" disabled>ACEPTA QUE REVISO LOS DATOS</button>                    
+          @endif
+
+
        </div>     
       </div>
     </div>
