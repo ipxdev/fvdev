@@ -30,6 +30,8 @@ define("ACTIVITY_TYPE_VIEW_QUOTE", 21);
 define("ACTIVITY_TYPE_ARCHIVE_QUOTE", 22);
 define("ACTIVITY_TYPE_DELETE_QUOTE", 23);
 
+define("ACTIVITY_TYPE_ADD_CREDIT_INVOICE", 25);
+
 
 
 class Activity extends Eloquent
@@ -69,6 +71,16 @@ class Activity extends Eloquent
 		}
 
 		return $activity;
+	}
+
+	public static function addCredit($credit_invoice, $month)
+	{		
+		$activity = Activity::getBlank();
+		$activity->activity_type_id = ACTIVITY_TYPE_ADD_CREDIT_INVOICE;
+		$activity->message = "Se añadió " . $credit_invoice. " Facturas a su cuenta por " . $month . "Meses.";
+		$activity->save();		
+		$activity->save();
+
 	}
 
 	public static function createClient($client, $notify = true)

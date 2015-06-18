@@ -396,6 +396,7 @@
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
+                {{ Former::open('account/go_pro')->addClass('proPlanForm') }}
 
             <div class="row">
               <div class="col-md-12">
@@ -403,16 +404,18 @@
                 <p>
                 Cuenta con {{ Auth::user()->account->getCreditCounter() }} Facturas Disponibles</p>
                 <br>
-                <ul class="list-group">
 
-
-                </ul>
+                <div style="display:none">
+                  {{ Former::text('path')->value(Request::path()) }}
+                  {{ Former::text('go_pro') }}
+                </div>
+                  {{ Former::text('code')->label('Código') }}
+                  {{ Former::close() }}
 
               </div>
             </div>              
 
       </div>
-
 
       <div style="padding-left:40px;padding-right:40px;display:none;min-height:130px" id="proPlanWorking">
         <h3>{{ trans('texts.working') }}...</h3>
@@ -423,9 +426,16 @@
 
       <div style="background-color: #fff; padding-right:20px;padding-left:20px; display:none" id="proPlanSuccess">
         &nbsp;<br/>
-        {{ trans('texts.pro_plan_success') }}
+        Recarga Exitosa
         <br/>&nbsp;
       </div>
+      <div class="modal-footer" style="margin-top: 0px; display:none" id="proPlanFooterError">
+              &nbsp;<br/>
+        Código Incorrecto
+        <br/>&nbsp;
+        <button type="button" class="btn btn-default" id="proPlanButton" data-dismiss="modal">CERRAR</button>          
+      </div>
+
 
        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
           <button type="button" class="btn btn-default" id="proPlanButton" data-dismiss="modal">CERRAR</button>          
@@ -456,14 +466,14 @@
                 <br>
                 <ul class="list-group">
 
-                  <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;">
-                  <b>Paso 1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></a><br>               
-<br>
-                  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
-                  <b>Paso 2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></a> <br>               
-   <br>
-                  <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
-                  <b>Paso 3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></a> <br>         
+                  <div style="color:#333333;text-decoration:none;">
+                  <b>Paso 1. Perfil de la Empresa</b><br> <i>Registra el NIT y nombre de tu empresa. Establece los datos del administrador y otros ajustes que no podrán ser modificados.</i></div>               
+                  <hr>
+                  <div style="color:#333333;text-decoration:none;">
+                  <b>Paso 2. Datos de Sucursal</b><br> <i>Impuestos Nacionales proporciona el archivo con las llaves de dosificación para activar la facturación computarizada por sucursal. Los datos adicionales deben ser exactamente los que fueron registrados en el PBD.</i></div>               
+                  <hr>
+                  <div style="color:#333333;text-decoration:none;">
+                  <b>Paso 3. Cargado del Logo</b><br> <i>Se requiere tu logo en formato JPEG, GIF o PNG con una altura recomendada de 120 pixeles, luego podras centrearlo en el diseño de factura usando las flechas del teclado (no use el mouse)</i></div> <br>         
 
                 </ul>
 
@@ -753,11 +763,23 @@
       $.ajax({
         type: 'POST',
         url: '{{ URL::to('account/go_pro') }}',
+        data: 'code=' + encodeURIComponent($('form.proPlanForm #code').val()) + 
+      '&go_pro=' + $('#go_pro').val(),
         success: function(result) { 
-          $('#proPlanSuccess, #proPlanFooter').show();
-          $('#proPlanWorking, #proPlanButton').hide();
-          $('#proPlanWorking, #proPlanButton2').hide();
-          window.location = '{{ URL::to('logout') }}';
+          if (result == 'success')
+          { 
+            $('#proPlanSuccess, #proPlanFooter').show();
+            $('#proPlanWorking, #proPlanButton').hide();
+            $('#proPlanWorking, #proPlanButton2').hide();
+            location.reload();
+          }
+          else
+          {
+            $('#proPlanSuccess').show();
+            $('#proPlanFooterError').show();
+            $('#proPlanWorking').hide();
+          }
+
         }
       });     
     } else {

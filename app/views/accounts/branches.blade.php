@@ -31,7 +31,7 @@
           </button></a>
       @else      
         <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
-        <button type="button" class="btn btn-default ipxhover1">
+        <button type="button" class="btn btn-default ipxhover3">
         <b>Paso 2 </b><br> Datos de Sucursal
         <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
           </button></a>              
@@ -46,11 +46,19 @@
           <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
           </button></a> 
         @else
-          <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
-          <button type="button" class="btn btn-default ipxhover1">     
-          <b>Paso 3 </b><br> Cargado del Logo
-          <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
-          </button></a>             
+            @if(Auth::user()->account->getOp2())
+              <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
+              <button type="button" class="btn btn-default ipxhover3">     
+              <b>Paso 3 </b><br> Cargado del Logo
+              <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+              </button></a>  
+            @else 
+              <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
+              <button type="button" class="btn btn-default ipxhover1" disabled>     
+              <b>Paso 3 </b><br> Cargado del Logo
+              <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+              </button></a> 
+            @endif           
         @endif
   </div>
 </div>
@@ -101,7 +109,24 @@
       }     
     });
   } 
-  </script>  
+  </script> 
 
 
+  <center>
+  @if (!Auth::user()->confirmed)
+    @if(Auth::user()->account->getOp2()) 
+    <a href="{{ URL::to('company/invoice_design') }}">
+    <button type="button" class="btn lg-success-submit ipxhover2" >              
+    Siguiente<span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+    </button>
+    </a>
+    @else
+    <a href="{{ URL::to('company/invoice_design') }}">
+    <button type="button" class="btn lg-success-submit ipxhover2" disabled>              
+    Siguiente<span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+    </button>
+    </a>
+    @endif
+  @endif 
+  </center>
 @stop

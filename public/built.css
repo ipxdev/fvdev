@@ -15,7 +15,7 @@
 
 .ipxhover1 {
 
-	background-color:#DBD9D7!important;
+	background-color:#c4c4c4!important;
 	color:#333333!important;
 }
 
@@ -28,6 +28,12 @@
 .ipxhover2 {
 
 	background-color:#36C157!important;
+	color:#fff!important;
+}
+
+.ipxhover3 {
+
+	background-color:#FF9148!important;
 	color:#fff!important;
 }
 

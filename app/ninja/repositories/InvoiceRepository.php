@@ -393,6 +393,10 @@ class InvoiceRepository
 
           if (\Auth::user()->account->update_products)
           {
+
+            $categories = \DB::table('categories')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
+
+            $product->category_id = $categories->id;
             $product->notes = $item->notes;
             $product->cost = $item->cost;
             //$product->qty = $item->qty;

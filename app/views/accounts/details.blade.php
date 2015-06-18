@@ -20,7 +20,7 @@
           </button></a>
         @else          
           <a href="{{ URL::to('company/details') }}" style="color:#333333;text-decoration:none;">
-          <button type="button" class="btn btn-default ipxhover1" >  
+          <button type="button" class="btn btn-default ipxhover3">  
           <b>Paso 1 </b></span><br> Perfil de la Empresa
           <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
           </button> </a>             
@@ -34,28 +34,33 @@
 	      <b>Paso 2 </b><br>  Datos de Sucursal
 	      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
           </button></a>
-	    @else	     
-	      <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">
-	      <button type="button" class="btn btn-default ipxhover1">
-	      <b>Paso 2 </b><br> Datos de Sucursal
-	      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
-          </button></a>              
+	    @else
+	    	@if(Auth::user()->account->getOp1())
+	    	  <a href="{{ URL::to('company/branches') }}" style="color:#333333;text-decoration:none;">	     
+		      <button type="button" class="btn btn-default ipxhover1">
+		      <b>Paso 2 </b><br> Datos de Sucursal
+		      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+	          </button></a>
+         	@else 
+	          <button type="button" class="btn btn-default ipxhover1" disabled>
+		      <b>Paso 2 </b><br> Datos de Sucursal
+		      <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
+	          </button> 
+          	@endif             
 	    @endif
     </button>
   </div>
   <div class="btn-group" role="group">
         @if(Auth::user()->account->getOp3())
-          <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
           <button type="button" class="btn btn-default ipxhover2">
 		  <b>Paso 3 </b><br> Cargado del Logo
           <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
-          </button></a> 
+          </button> 
         @else
-          <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
-          <button type="button" class="btn btn-default ipxhover1">     
+          <button type="button" class="btn btn-default ipxhover1" disabled>     
           <b>Paso 3 </b><br> Cargado del Logo
           <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
-          </button></a>             
+          </button>             
         @endif
   </div>
 </div>
@@ -144,10 +149,15 @@
 				{{ Former::text('phone')->label('Celular (*)') }}
 				{{ Former::text('email')->label('Correo electrónico (*)') }}
 
+
 				{{ Former::legend('Datos de Ingreso') }}
 				{{ Former::text('username')->label('nombre de Usuario (*)') }}
-				{{ Former::password('password')->label('contraseña (*)') }}        
-				{{ Former::password('password_confirmation')->label('Repertir contraseña (*)') }}        
+
+				@if (!Auth::user()->confirmed)
+					{{ Former::password('password')->label('contraseña (*)') }}        
+					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)') }}      
+
+				@endif 
 
 			@endif
 
@@ -168,8 +178,14 @@
 	</div>
 	
 	<center>
+
+	@if (Auth::user()->confirmed)
 		{{ Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk') }}
+	@else
+		{{ Button::lg_success_submit('Siguiente')->append_with_icon('chevron-right') }}
+	@endif	
 	</center>
+
 	@if (Auth::user()->isPro())
 	<script>
     $(function() {   

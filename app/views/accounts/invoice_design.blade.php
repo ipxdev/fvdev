@@ -62,7 +62,7 @@
           </button></a> 
         @else
           <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
-          <button type="button" class="btn btn-default ipxhover1">     
+          <button type="button" class="btn btn-default ipxhover3">     
           <b>Paso 3 </b><br> Cargado del Logo
           <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
           </button></a>             
@@ -203,9 +203,15 @@
       <p>&nbsp;</p>
 
       @if (Auth::user()->isPro())
-        {{ Former::actions( Button::lg_success_submit(trans('Guardar'))->append_with_icon('floppy-disk') ) }}
+        {{ Former::actions( Button::lg_success_submit(trans('Guardar Nuevo'))->append_with_icon('floppy-disk') ) }}
       @else
-        {{ Former::actions( Button::lg_success_submit(trans('Modificar'))->append_with_icon('floppy-disk') ) }}
+
+          @if (Auth::user()->confirmed)
+            {{ Former::actions( Button::lg_success_submit(trans('Modificar Diseño'))->append_with_icon('floppy-disk') ) }}
+          @else
+            {{ Former::actions( Button::lg_success_submit(trans('Guardar'))->append_with_icon('floppy-disk') ) }}
+          @endif
+
       @endif
 
     </div>

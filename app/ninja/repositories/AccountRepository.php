@@ -209,66 +209,37 @@ class AccountRepository
     	return $data;
 	}
 
-
-	public function enableProPlan()
+	public function enablePlan()
 	{		
-		// if (Auth::user()->isPro())
-		// {
-		// 	return false;
-		// }
-
-
-		$account = Auth::user()->account;
-		$credit = $account->credit_counter;
-		$account->credit_counter = $credit +10;
-
-        $account->pro_plan_paid = date_create()->format('Y-m-d');
-        $account->save();
-            
+           
 		$ninjaAccount = $this->getNinjaAccount();		
-		// $lastInvoice = Invoice::withTrashed()->whereAccountId($ninjaAccount->id)->orderBy('public_id', 'DESC')->first();
-		// $publicId = $lastInvoice ? ($lastInvoice->public_id + 1) : 1;
 		$ninjaClient = $this->getNinjaClient($ninjaAccount);
 
-		// $invoice = $this->createNinjaInvoice($publicId, $ninjaAccount, $ninjaClient);
 		$result = 1;
 		return $result;
 	}
 
-	// private function createNinjaInvoice($publicId, $account, $client)
-	// {
-	// 	$invoice = new Invoice();
-	// 	$invoice->account_id = $account->id;
-	// 	$invoice->user_id = $account->users()->first()->id;
-	// 	$invoice->public_id = $publicId;
-	// 	$invoice->client_id = $client->id;
-	// 	$invoice->invoice_number = $account->getNextInvoiceNumber();
-	// 	$invoice->invoice_date = date_create()->format('Y-m-d');
-	// 	$invoice->amount = PRO_PLAN_PRICE;
-	// 	$invoice->balance = PRO_PLAN_PRICE;
-	// 	$invoice->save();
 
-	// 	$item = new InvoiceItem();
-	// 	$item->account_id = $account->id;
-	// 	$item->user_id = $account->users()->first()->id;
-	// 	$item->public_id = $publicId;
-	// 	$item->qty = 1;
-	// 	$item->cost = PRO_PLAN_PRICE;
-	// 	$item->notes = trans('texts.pro_plan_description');
-	// 	$item->product_key = trans('texts.pro_plan_product');				
-	// 	$invoice->invoice_items()->save($item);
+	public function enableProPlan()
+	{		
+		if (Auth::user()->isPro())
+		{
+			return false;
+		}
 
-	// 	$invitation = new Invitation();
-	// 	$invitation->account_id = $account->id;
-	// 	$invitation->user_id = $account->users()->first()->id;
-	// 	$invitation->public_id = $publicId;
-	// 	$invitation->invoice_id = $invoice->id;
-	// 	$invitation->contact_id = $client->contacts()->first()->id;
-	// 	$invitation->invitation_key = str_random(RANDOM_KEY_LENGTH);
-	// 	$invitation->save();
+		$account = Auth::user()->account;
+		$credit = $account->credit_counter;
+		$account->credit_counter = $credit +100;
 
-	// 	return $invoice;
-	// }
+        $date = date("Y-m-d", strtotime(date_create()->format('Y-m-d')." +3 month"));
+
+        $account->pro_plan_paid = $date;
+        $account->save();
+            
+		$result = 1;
+		return $result;
+	}
+
 
 	public function getNinjaAccount()
 	{

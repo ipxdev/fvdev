@@ -55,9 +55,12 @@ class AccountController extends \BaseController {
 
 	public function enableProPlan()
 	{		
+		
+		$code = Input::get('code');
+
 		$result = $this->accountRepo->enableProPlan();
 
-		if ($result)
+		if ($code == "123")
 		{
 			return RESULT_SUCCESS;	
 		}
@@ -71,7 +74,12 @@ class AccountController extends \BaseController {
 		$user->confirmed = true;
 		$user->amend();
 
-		return RESULT_SUCCESS;	
+		$result = $this->accountRepo->enablePlan();
+
+		if ($result)
+		{
+			return RESULT_SUCCESS;	
+		}
 	
 	}
 
@@ -1354,8 +1362,16 @@ class AccountController extends \BaseController {
 
 			Event::fire('user.refresh');
 
+			if (Auth::user()->confirmed)
+			{
 			Session::flash('message', trans('texts.updated_settings'));
 			return Redirect::to('company/details');
+			}
+			else
+			{
+				Session::flash('message', trans('texts.updated_settings'));
+				return Redirect::to('company/branches');	
+			}
 		}
 	}
 
