@@ -9,7 +9,7 @@
 
 @if (!Auth::user()->confirmed)
 
-<hr>
+<br>
 <div class="btn-group btn-group-justified" role="group" >
   <div class="btn-group" role="group">
         @if(Auth::user()->account->getOp1())
@@ -98,16 +98,15 @@
 		{{ Former::populateField('first_name', $account->users()->first()->first_name) }}
 		{{ Former::populateField('last_name', $account->users()->first()->last_name) }}
 		{{ Former::populateField('email', $account->users()->first()->email) }}	
-		{{-- Former::populateField('username', $account->users()->first()->username) --}}
-<?php     
-	$aux = $account->users()->first()->username;
-	if (strpos($aux, "@")) {
-   	 $aux2 = explode("@", $aux);
-	}
-	else{
-		$aux2[0]='';
-	}
-?>
+		<?php     
+			$aux = $account->users()->first()->username;
+			if (strpos($aux, "@")) {
+		   	 $aux2 = explode("@", $aux);
+			}
+			else{
+				$aux2[0]='';
+			}
+		?>
 		{{ Former::populateField('username', $aux2[0]) }}		
 		{{ Former::populateField('phone', $account->users()->first()->phone) }}
 	@endif
@@ -118,8 +117,7 @@
 			{{ Former::legend('details') }}
 			{{ Former::text('nit')->label('NIT (*)') }}
 			{{ Former::text('name')->label('EMPRESA (*)') }}
-            {{-- Former::text('vat_number') --}}
-			{{-- Former::text('work_email') --}}
+
 
 			{{ Former::checkbox('unipersonal')->label(' ')->text('unipersonal')->data_bind("checked: displayAdvancedOptions") }}
 
@@ -127,24 +125,12 @@
 		    {{ Former::text('uniper')->label(' ')->data_bind("Visible:none,fadeVisible: displayAdvancedOptions") }}    
 
 
-			
-
-			{{-- Former::select('size_id')->addOption('','')
-				->fromQuery($sizes, 'name', 'id') --}}
-			{{-- Former::select('industry_id')->addOption('','')
-				->fromQuery($industries, 'name', 'id') --}}
-
 			{{ Former::legend('address')  }}
 			{{ Former::select('country_id')->addOption('','')->label('ciudad  (*)')
 				->fromQuery($countries, 'name', 'id') }}
 			{{ Former::text('address2')->label('Dirección (*)') }}
 			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
-			{{ Former::text('work_phone')->label('Teléfono (*)') }}
-			
-			{{-- Former::text('city') --}}
-			{{-- Former::text('state') --}}
-			{{-- Former::text('postal_code') --}}
-
+			{{ Former::text('work_phone')->label('Teléfono (*)') }}			
 
 		</div>
 	
@@ -168,19 +154,6 @@
 				@endif 
 
 			@endif
-
-			{{-- Former::legend('localization') --}}
-			{{-- Former::select('language_id')->addOption('','')
-				->fromQuery($languages, 'name', 'id') --}}			
-			{{-- Former::select('currency_id')->addOption('','')
-				->fromQuery($currencies, 'name', 'id') --}}			
-			{{-- Former::select('timezone_id')->addOption('','')
-				->fromQuery($timezones, 'location', 'id') --}}
-			{{-- Former::select('date_format_id')->addOption('','')
-				->fromQuery($dateFormats, 'label', 'id') --}}
-			{{-- Former::select('datetime_format_id')->addOption('','')
-				->fromQuery($datetimeFormats, 'label', 'id') --}}
-
 
 		</div>
 	</div>
@@ -226,12 +199,16 @@
   </script>
 
 
-	@if (Auth::user()->isPro())
+	@if (Auth::user()->confirmed)
 	<script>
 
     $(function() {   
     	 $( "#nit" ).prop( "disabled", true );
     	 $( "#name" ).prop( "disabled", true );
+    	 $( "#unipersonal" ).prop( "disabled", true );
+    	 $( "#uniper" ).prop( "disabled", true );
+
+    	 
     });
 	</script>	
 	@endif

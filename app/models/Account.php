@@ -109,6 +109,14 @@ class Account extends Eloquent
 		}
 	}
 
+	public function getUniper()
+	{
+		if ($this->uniper) 
+		{
+			return $this->uniper;
+		}
+	}
+
 	public function getOp1()
 	{
 		if ($this->op1) 

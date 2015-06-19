@@ -496,7 +496,8 @@ class ConfideSetupUsersTable extends Migration {
             
             $t->string('branch_name');
 
-
+            $t->boolean('third')->default(false);
+            
             $t->string('address1');
             $t->string('address2');
             $t->string('phone');

@@ -31035,6 +31035,7 @@ function GetPdf(invoice, javascript, logo, x, y){
 		var branches = invoice.branches;
 		var client = invoice.client;
   		invoice.account_name = account.name;
+  		invoice.account_uniper = account.uniper;
 
 		invoice.branch_name = invoice.branch_id;
 		invoice.branch_name = invoice.ale;
@@ -32225,18 +32226,20 @@ function displaytittle(doc, invoice, layout) {
 	   	var datos1y = 100;
 	    var datos1xy = 13;
 
-	    var account = invoice.account;
-
-	    if(account.is_uniper)
+	    if(invoice.account_uniper)
 	    {
+	    	var datos1y = 90;
 	    	doc.setFontType('bold');
 		    doc.setFontSize(11); 
 		    doc.text(datos1x, datos1y, invoice.account_name);  
+		    datos1xy -= 2;
 		    datos1y += datos1xy;
-		    datos1xy -= 4;
-		    doc.text(datos1x, datos1y, invoice.account_name+' - Bolivia');  
+			
+		   	doc.setFontSize(10);
+		    doc.text(datos1x, datos1y, 'de ' + invoice.account_uniper);  
 		    datos1y += datos1xy;
-		    datos1xy -= 4;
+		    datos1xy -= 2;
+		    
 	    } 
 	    else
 	    {

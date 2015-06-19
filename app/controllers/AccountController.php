@@ -333,6 +333,7 @@ class AccountController extends \BaseController {
 				
 					$invoice->account_name = Auth::user()->account->getName();
 					$invoice->account_nit = Auth::user()->account->getNit();
+					$invoice->account_uniper = Auth::user()->account->getUniper();
 					$invoice->invoice_number = '0000001';
 
 					$invoice->invoice_date = date_create()->format('M d, Y');

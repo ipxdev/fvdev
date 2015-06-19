@@ -111,7 +111,9 @@
       <br>
 
       {{ Former::date('deadline')->label('Fecha Límite') }}   
-                 
+      
+      {{ Former::checkbox('third')->label(' ')->text('Facturación por Terceros') }}
+            
 
       {{ Former::legend('Leyendas') }}
 
@@ -120,7 +122,7 @@
     
     </div>
   </div>
-
+<br>
   @if ($aux == 'no')
 
       {{ Former::actions( 
@@ -133,7 +135,7 @@
 
         @if (!$branch->isValid1())
 
-            @if (Utils::isPro())
+            @if (Utils::isConfirmed())
                   {{ Former::actions( 
                     Button::lg_default_link('company/branches', 'Volver')      
                   ) }}

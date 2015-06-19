@@ -48,7 +48,7 @@
         @else
             @if(Auth::user()->account->getOp2())
               <a href="{{ URL::to('company/invoice_design') }}" style="color:#333333;text-decoration:none;">
-              <button type="button" class="btn btn-default ipxhover3">     
+              <button type="button" class="btn btn-default ipxhover1">     
               <b>Paso 3 </b><br> Cargado del Logo
               <span style="margin:3px 0" class="glyphicon glyphicon-chevron-right"> 
               </button></a>  
