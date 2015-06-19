@@ -658,37 +658,30 @@ class InvoiceController extends \BaseController {
    		
    		$categories = DB::table('categories')->where('account_id',Auth::user()->account_id)->get(array('name'));
 
-   		$cats = $categories;
-
-
-    	$products = DB::table('products')->where('account_id','=',Auth::user()->account_id)->get(array('id','product_key','notes','cost'));
+   		$cats = $categories;    	
     	
-    	
-   		$categories2 = DB::table('categories')->where('account_id',Auth::user()->account_id)->get(array('id','name'));
-    	$products2 = DB::table('products')->where('account_id','=',Auth::user()->account_id)->get(array('id','product_key','notes','cost','category_id'));
+   		$categories2 = DB::table('categories')->where('account_id',Auth::user()->account_id)->get();
+    	$products2 = DB::table('products')->where('account_id','=',Auth::user()->account_id)->get();
 
-    	$cate = array();
+		$aux=array();
+
     	foreach ($categories2 as $category) 
     	{
-			$cat = $category->name;
-	
-			$prod = array($cat);
-	    	foreach ($products2 as $product) 
-	    	{	
-	    		if($category->id== $product->category_id)
-	    		{
-	    			$products = DB::table('products')->where('id',$product->id)->where('account_id','=',Auth::user()->account_id)->get(array('id','product_key','notes','cost'));
-	    			array_push($prod, $products);
-				}
+    		foreach ($products2 as $product) 
+	    	{		
+
+				$pts = DB::table('products')->where('category_id',$category->id)->where('account_id','=',Auth::user()->account_id)->get(array('id','product_key','notes','cost'));
+				$prod = array($category->name => $pts);	
 	    	}
-	    	array_push($cate, $prod);
-	    }
+			$aux += $prod;
+    	}
 
     	$mensaje = array(
-    			//'clientes' => $clients,
-    			'productos'=> $cate,
+    			'products'=> $aux,
     			'categorias' => $categories,
-    			'user'=>$user
+    			'first_name'=>$user->first_name,
+    			'last_name'=>$user->last_name,
+    			'branch'=>$user->branch
     		);
 
     	return Response::json($mensaje);
