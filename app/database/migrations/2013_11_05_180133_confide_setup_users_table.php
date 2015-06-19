@@ -170,6 +170,9 @@ class ConfideSetupUsersTable extends Migration {
             $t->boolean('op2')->default(false);
             $t->boolean('op3')->default(false);
 
+            $t->boolean('is_uniper')->default(false);
+            $t->string('uniper')->nullable();
+
 
             $t->string('custom_label1')->nullable();
             $t->string('custom_value1')->nullable();
@@ -264,6 +267,8 @@ class ConfideSetupUsersTable extends Migration {
             $t->text('quote_number_prefix')->nullable();
             $t->integer('quote_number_counter')->default(1)->nullable();
             $t->boolean('share_counter')->default(false);
+
+            $t->boolean('third')->default(false);
 
             $t->string('aux1')->nullable();
             $t->string('aux2')->nullable();
@@ -487,7 +492,10 @@ class ConfideSetupUsersTable extends Migration {
 
             $t->string('account_name');
             $t->string('account_nit');
+            $t->string('account_uniper');
+            
             $t->string('branch_name');
+
 
             $t->string('address1');
             $t->string('address2');

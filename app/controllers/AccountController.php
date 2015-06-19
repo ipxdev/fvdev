@@ -147,6 +147,7 @@ class AccountController extends \BaseController {
 						'account' => Account::with('users')->findOrFail(Auth::user()->account_id),
 						'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
 						'showUser' => Auth::user()->id === Auth::user()->account->users()->first()->id,
+						'b' => '',
 					];
 
 					return View::make('accounts.details', $data);
@@ -1338,6 +1339,19 @@ class AccountController extends \BaseController {
 			$account->currency_id = Input::get('currency_id') ? Input::get('currency_id') : 1;
 			$account->language_id = Input::get('language_id') ? Input::get('language_id') : 1;
 			$account->op1 = true;
+
+            if(Input::get('unipersonal'))
+            {
+		        $account->is_uniper = 1;
+		        $account->uniper = Input::get('uniper');
+            }
+            else
+            {
+            	$account->is_uniper = 0;
+            	$account->uniper = '';
+            }
+
+
 			$account->save();
 
 			if (Auth::user()->id === $user->id)

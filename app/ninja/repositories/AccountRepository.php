@@ -59,99 +59,73 @@ class AccountRepository
 		$InvoiceDesign->name = "";
 		$InvoiceDesign->x = "5";
 		$InvoiceDesign->y = "5";
-		$InvoiceDesign->javascript = "		var datos1x = 30;
-	   	var datos1y = 100;
-	    var datos1xy = 13;
-	   
-	    doc.setFontType('bold');
-	    doc.setFontSize(11); 
-	    doc.text(datos1x, datos1y, invoice.account_name);  
-	    datos1y += datos1xy;
-	    datos1xy -= 4;
+		$InvoiceDesign->javascript = "displaytittle(doc, invoice, layout);
 
-	    doc.setFontType('normal');
-	   	doc.setFontSize(10);
-	    doc.text(datos1x, datos1y, invoice.branch_name);    
-	    datos1y += datos1xy;
+displayHeader(doc, invoice, layout);
 
-	    doc.setFontSize(9);	 
-	    doc.text(datos1x, datos1y, invoice.address2);
-	    datos1y += datos1xy;
+doc.setFontSize(11);
+doc.setFontType('normal');
 
-	    var zone = 'Zona/Barrio: ' + invoice.address1;
+var activi = invoice.activity_pri;
+var activityX = 565 - (doc.getStringUnitWidth(activi) * doc.internal.getFontSize());
+doc.text(activityX, layout.headerTop+45, activi);
 
-	    var phone = 'Teléfono: '+invoice.phone;
-	    doc.text(datos1x, datos1y, zone+' '+phone);
-	    datos1y += datos1xy;
+var aleguisf_date = getInvoiceDate(invoice);
 
-	    var city = invoice.city+' - Bolivia';
-	    doc.text(datos1x, datos1y, city);
+layout.headerTop = 50;
+layout.tableTop = 190;
+doc.setLineWidth(0.8);        
+doc.setFillColor(255, 255, 255);
+doc.roundedRect(layout.marginLeft - layout.tablePadding, layout.headerTop+95, 572, 35, 2, 2, 'FD');
 
-	    displayHeader(doc, invoice, layout);
+var marginLeft1=30;
+var marginLeft2=80;
+var marginLeft3=180;
+var marginLeft4=220;
 
-	    doc.setFontSize(11);
-	    doc.setFontType('normal');
+datos1y = 160;
+datos1xy = 15;
+doc.setFontSize(11);
+doc.setFontType('bold');
+doc.text(marginLeft1, datos1y, 'Fecha : ');
+doc.setFontType('normal');
 
-	    var activi = invoice.activity_pri;
-    	var activityX = 565 - (doc.getStringUnitWidth(activi) * doc.internal.getFontSize());
-    	doc.text(activityX, layout.headerTop+45, activi);
+doc.text(marginLeft2-5, datos1y, aleguisf_date);
 
-		var aleguisf_date = getInvoiceDate(invoice);
+doc.setFontType('bold');
+doc.text(marginLeft1, datos1y+datos1xy, 'Señor(es) :');
+doc.setFontType('normal');
+doc.text(marginLeft2+15, datos1y+datos1xy, invoice.client_name);
 
-		layout.headerTop = 50;
-		layout.tableTop = 190;
-	    doc.setLineWidth(0.8);        
-	    doc.setFillColor(255, 255, 255);
-	    doc.roundedRect(layout.marginLeft - layout.tablePadding, layout.headerTop+95, 572, 35, 2, 2, 'FD');
+doc.setFontType('bold');
+doc.text(marginLeft3+240, datos1y+datos1xy, 'NIT/CI :');
+doc.setFontType('normal');
+doc.text(marginLeft4+245, datos1y+datos1xy, invoice.client_nit);
 
-	    var marginLeft1=30;
-	    var marginLeft2=80;
-	    var marginLeft3=180;
-	    var marginLeft4=220;
+doc.setDrawColor(241,241,241);
+doc.setFillColor(241,241,241);
+doc.rect(layout.marginLeft - layout.tablePadding, layout.headerTop+140, 572, 20, 'FD');
 
-	    datos1y = 160;
-	    datos1xy = 15;
-	    doc.setFontSize(11);
-	    doc.setFontType('bold');
-	    doc.text(marginLeft1, datos1y, 'Fecha : ');
-	    doc.setFontType('normal');
-	    
-	    doc.text(marginLeft2-5, datos1y, aleguisf_date);
+doc.setFontSize(10);
+doc.setFontType('bold');
 
-	    doc.setFontType('bold');
-	    doc.text(marginLeft1, datos1y+datos1xy, 'Señor(es) :');
-	    doc.setFontType('normal');
-	    doc.text(marginLeft2+15, datos1y+datos1xy, invoice.client_name);
+if(invoice.aux1==1)
+{
+    displayInvoiceHeader(doc, invoice, layout);
+    var y = displayInvoiceItems(doc, invoice, layout);
+	displayQR(doc, layout, invoice, y);
+	y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
+}
+else
+{
+    displayInvoiceHeader2(doc, invoice, layout);
+	var y = displayInvoiceItems2(doc, invoice, layout);
+	displayQR(doc, layout, invoice, y);
+	y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
+}
 
-	    doc.setFontType('bold');
-	    doc.text(marginLeft3+240, datos1y+datos1xy, 'NIT/CI :');
-	    doc.setFontType('normal');
-	    doc.text(marginLeft4+245, datos1y+datos1xy, invoice.client_nit);
-
-	    doc.setDrawColor(241,241,241);
-	    doc.setFillColor(241,241,241);
-	    doc.rect(layout.marginLeft - layout.tablePadding, layout.headerTop+140, 572, 20, 'FD');
-
-	    doc.setFontSize(10);
-	    doc.setFontType('bold');
-
-	    if(invoice.aux1==1)
-	    {
-		    displayInvoiceHeader(doc, invoice, layout);
-		    var y = displayInvoiceItems(doc, invoice, layout);
-			displayQR(doc, layout, invoice, y);
-			y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
-	    }
-	    else
-	    {
-		    displayInvoiceHeader2(doc, invoice, layout);
-			var y = displayInvoiceItems2(doc, invoice, layout);
-			displayQR(doc, layout, invoice, y);
-			y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
-		}
-
-		y -=10;		
-		displayNotesAndTerms(doc, layout, invoice, y);";
+y -=10;		
+displayNotesAndTerms(doc, layout, invoice, y);";
 		$account->invoice_designs()->save($InvoiceDesign);
 
 		

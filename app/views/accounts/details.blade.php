@@ -120,7 +120,14 @@
 			{{ Former::text('name')->label('EMPRESA (*)') }}
             {{-- Former::text('vat_number') --}}
 			{{-- Former::text('work_email') --}}
-			{{ Former::text('work_phone')->label('Teléfono (*)') }}
+
+			{{ Former::checkbox('unipersonal')->label(' ')->text('unipersonal')->data_bind("checked: displayAdvancedOptions") }}
+
+			{{ Former::legend('nombre de Contribuyente')->data_bind("fadeVisible: displayAdvancedOptions") }}
+		    {{ Former::text('uniper')->label(' ')->data_bind("Visible:none,fadeVisible: displayAdvancedOptions") }}    
+
+
+			
 
 			{{-- Former::select('size_id')->addOption('','')
 				->fromQuery($sizes, 'name', 'id') --}}
@@ -132,6 +139,7 @@
 				->fromQuery($countries, 'name', 'id') }}
 			{{ Former::text('address2')->label('Dirección (*)') }}
 			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
+			{{ Former::text('work_phone')->label('Teléfono (*)') }}
 			
 			{{-- Former::text('city') --}}
 			{{-- Former::text('state') --}}
@@ -186,8 +194,41 @@
 	@endif	
 	</center>
 
+
+  <script type="text/javascript">
+
+  var PlanetsModel = function() {
+      
+      this.displayAdvancedOptions = ko.observable({{ $account->is_uniper ? 'true' : 'false' }});
+   
+      // Animation callbacks for the planets list
+      this.showPlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
+      this.hidePlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove(); }) }
+  };
+   
+  // Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
+  // Could be stored in a separate utility library
+  ko.bindingHandlers.fadeVisible = {
+      init: function(element, valueAccessor) {
+          // Initially set the element to be instantly visible/hidden depending on the value
+          var value = valueAccessor();
+          $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+      },
+      update: function(element, valueAccessor) {
+          // Whenever the value subsequently changes, slowly fade the element in or out
+          var value = valueAccessor();
+          ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
+      }
+  };
+   
+  ko.applyBindings(new PlanetsModel());
+
+  </script>
+
+
 	@if (Auth::user()->isPro())
 	<script>
+
     $(function() {   
     	 $( "#nit" ).prop( "disabled", true );
     	 $( "#name" ).prop( "disabled", true );

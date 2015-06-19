@@ -32219,6 +32219,53 @@ function getInvoiceTaxRate(invoice) {
   return tax;
 }
 
+function displaytittle(doc, invoice, layout) {
+
+		var datos1x = 30;
+	   	var datos1y = 100;
+	    var datos1xy = 13;
+
+	    var account = invoice.account;
+
+	    if(account.is_uniper)
+	    {
+	    	doc.setFontType('bold');
+		    doc.setFontSize(11); 
+		    doc.text(datos1x, datos1y, invoice.account_name);  
+		    datos1y += datos1xy;
+		    datos1xy -= 4;
+		    doc.text(datos1x, datos1y, invoice.account_name+' - Bolivia');  
+		    datos1y += datos1xy;
+		    datos1xy -= 4;
+	    } 
+	    else
+	    {
+		    doc.setFontType('bold');
+		    doc.setFontSize(11); 
+		    doc.text(datos1x, datos1y, invoice.account_name);  
+		    datos1y += datos1xy;
+		    datos1xy -= 4;
+	    }
+
+	    doc.setFontType('normal');
+	   	doc.setFontSize(10);
+	    doc.text(datos1x, datos1y, invoice.branch_name);    
+	    datos1y += datos1xy;
+
+	    doc.setFontSize(9);	 
+	    doc.text(datos1x, datos1y, invoice.address2);
+	    datos1y += datos1xy;
+
+	    var zone = 'Zona/Barrio: ' + invoice.address1;
+
+	    var phone = 'Teléfono: '+invoice.phone;
+	    doc.text(datos1x, datos1y, zone+' '+phone);
+	    datos1y += datos1xy;
+
+	    var city = invoice.city+' - Bolivia';
+	    doc.text(datos1x, datos1y, city);
+}
+
 function displayHeader(doc, invoice, layout) {
 
 	    datos1x = 395;

@@ -124,8 +124,9 @@
   @if ($aux == 'no')
 
       {{ Former::actions( 
-          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle'),
+          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk')
+      
       ) }}
 
   @else
@@ -144,16 +145,16 @@
                 </script> 
             @else
                   {{ Former::actions( 
-                  Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-                  Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+                  Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle'),      
+                  Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk')
                   ) }}
             @endif
 
         @else
 
           {{ Former::actions( 
-          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle')      
+          Button::lg_default_link('company/branches', 'Cancelar')->append_with_icon('remove-circle'), 
+          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk')
           ) }}
        
         @endif

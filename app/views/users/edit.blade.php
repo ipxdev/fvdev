@@ -78,8 +78,8 @@
   </script>
 
   {{ Former::actions( 
-      Button::lg_success_submit(trans($user && $user->confirmed ? 'texts.save' : 'texts.send_invite'))->append_with_icon($user && $user->confirmed ? 'floppy-disk' : 'send'),
-      Button::lg_default_link('company/user_management', 'Cancel')->append_with_icon('remove-circle')      
+      Button::lg_default_link('company/user_management', 'Cancel')->append_with_icon('remove-circle'),     
+      Button::lg_success_submit(trans($user && $user->confirmed ? 'texts.save' : 'texts.send_invite'))->append_with_icon($user && $user->confirmed ? 'floppy-disk' : 'send')
   ) }}
 
   {{ Former::close() }}
