@@ -81,13 +81,13 @@
   		'email' => 'email|required',
   		'nit' => 'required|Numeric',
   		'username' => 'required',
-  		'work_phone' => 'required',
+  		'work_phone' => 'required|match:/[0-9.-]+/',
   		'address1' => 'required',
   		'address2' => 'required',
   		'country_id' => 'required',
-  		'first_name' => 'required',
-  		'last_name' => 'required',
-  		'phone' => 'required',
+  		'first_name' => 'required|match:/[a-z A-Z. ]+/',
+  		'last_name' => 'required|match:/[a-z A-Z. ]+/',
+  		'phone' => 'required|Numeric|match:/[0-9.-]+/',
   		'password' => 'required',
   		'password_confirmation' => 'required'
   		
@@ -148,8 +148,8 @@
 				{{ Former::text('username')->label('nombre de Usuario (*)') }}
 
 				@if (!Auth::user()->confirmed)
-					{{ Former::password('password')->label('contraseña (*)') }}        
-					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)') }}      
+					{{ Former::password('password')->label('contraseña (*)')->placeholder('Mínimo cuatro caracteres') }}        
+					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)')->placeholder('Mínimo cuatro caracteres') }}      
 
 				@endif 
 

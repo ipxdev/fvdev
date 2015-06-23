@@ -677,7 +677,7 @@ class InvoiceController extends \BaseController {
     	}
 
     	$mensaje = array(
-    			'products'=> $aux,
+    			'productos'=> $aux,
     			'categorias' => $categories,
     			'first_name'=>$user->first_name,
     			'last_name'=>$user->last_name,

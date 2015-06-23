@@ -32,13 +32,14 @@
   @if ($branch)
 
     {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
-        'name' => 'required',
+        'name' => 'required|match:/[a-z A-Z0-9. º°]+/',
         'aux2' => 'required',
         'address1' => 'required',
-        'postal_code' => 'required',
+        'postal_code' => 'required|Numeric|match:/[0-9.-]+/',
         'address2' => 'required',
         'city' => 'required',
-        'activity_pri' => 'required',
+        'activity_pri' => 'required|match:/[a-z A-Z]+/',
+        'activity_sec1' => 'match:/[a-z A-Z]+/',
         'law' => 'required',
         'state' => 'required',
         'aux2' => 'required',
@@ -47,13 +48,14 @@
     {{ Former::populate($branch) }}
   @else
       {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
-        'name' => 'required',
+        'name' => 'required|match:/[a-z A-Z0-9. º°]+/',
         'aux2' => 'required',
         'address1' => 'required',
-        'postal_code' => 'required',
+        'postal_code' => 'required|Numeric|match:/[0-9.-]+/',
         'address2' => 'required',
         'city' => 'required',
-        'activity_pri' => 'required',
+        'activity_pri' => 'required|match:/[a-z A-Z]+/',
+        'activity_sec1' => 'match:/[a-z A-Z]+/',
         'law' => 'required',
         'state' => 'required',
         'aux2' => 'required',
@@ -79,7 +81,7 @@
     {{ Former::textarea('address2')->label('Dirección (*)') }}
     {{ Former::textarea('address1')->label('Zona/Barrio (*)') }}
     {{ Former::text('postal_code')->label('teléfono (*)') }}
-    {{ Former::text('city')->label('departamento (*)') }}
+    {{ Former::text('city')->label('ciudad (*)') }}
     {{ Former::text('state')->label('municipio (*)') }}
 
     {{-- Former::select('country_id')->addOption('','')->label('Departamento')
@@ -95,6 +97,10 @@
 
 
       {{ Former::legend('dosificación') }}
+
+      {{ Former::text('aux1')->label('núm. de Trámite ') }}
+
+      {{ Former::text('number_authofisrt')->label('núm. de autorización ') }}
 
       {{ Former::file('dosage')->label(' ')->inlineHelp(trans('texts.dosage_help')) }}
 

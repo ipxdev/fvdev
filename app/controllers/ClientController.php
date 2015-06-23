@@ -337,7 +337,7 @@ class ClientController extends \BaseController {
     {
      	$user_id = Auth::user()->getAuthIdentifier();
     	$user = DB::table('users')->select('account_id')->where('id',$user_id)->first();
-    	$client =  DB::table('clients')->select('id','name','nit','vat_number')->where('account_id',$user->account_id)->where('public_id',$public_id)->first();
+    	$client =  DB::table('clients')->select('id','name','nit','vat_number')->where('account_id',$user->account_id)->where('nit',$public_id)->first();
     	
     	if($client!=null)
     	{
