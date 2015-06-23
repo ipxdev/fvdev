@@ -5,4 +5,3 @@ app/storage/meta/*
 app/storage/sessions/*
 app/storage/views/*
 public/logo/*
-public/qr/*
