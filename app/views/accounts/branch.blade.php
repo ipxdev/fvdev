@@ -43,7 +43,7 @@
         'law' => 'required',
         'state' => 'required',
         'aux2' => 'required',
-        'deadline' => 'required|after:2015-05-10'
+        'deadline' => 'required|after:2015-12-19'
     )); }}
     {{ Former::populate($branch) }}
   @else
@@ -59,7 +59,7 @@
         'law' => 'required',
         'state' => 'required',
         'aux2' => 'required',
-        'deadline' => 'required|after:2015-05-11',
+        'deadline' => 'required|after:2015-12-19',
         'dosage' => 'required',
 
     )); }}

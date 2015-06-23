@@ -44,9 +44,11 @@ Route::get('user/reset/{token?}', 'UserController@reset_password');
 Route::post('user/reset', 'UserController@do_reset_password');
 Route::get('logout', 'UserController@logout');
 
-//POS David
+// API POS
 Route::group(array('before' => 'auth.basic'), function()
 {
+  Route::post('saveclient','ClientController@saveclient');
+
   Route::get('facturas','InvoiceController@facturas');
   Route::get('factura/{numeroFactura}','InvoiceController@factura');
   Route::get('printFactura/{numeroFactura}','InvoiceController@printFactura');

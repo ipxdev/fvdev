@@ -646,6 +646,7 @@ class InvoiceController extends \BaseController {
 
 		return self::edit($publicId, true);
 	}
+	
 	public function listasCuenta()
     {	
     	$user_id = Auth::user()->getAuthIdentifier();

@@ -332,6 +332,13 @@ class ClientController extends \BaseController {
 
 		return Redirect::to('clients');
 	}
+
+	public function saveclient()
+	{
+		return ClientController::save($entityType);
+	}
+
+
 	//modulos david
 	public function cliente($public_id)
     {
