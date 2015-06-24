@@ -115,7 +115,7 @@
 		<div class="col-md-6">
 
 			{{ Former::legend('details') }}
-			{{ Former::text('nit')->label('NIT (*)') }}
+			{{ Former::text('nit')->label('NIT (*)')->title('Solo se acepta Números') }}
 			{{ Former::text('name')->label('EMPRESA (*)') }}
 
 
@@ -130,7 +130,7 @@
 				->fromQuery($countries, 'name', 'id') }}
 			{{ Former::text('address2')->label('Dirección (*)') }}
 			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
-			{{ Former::text('work_phone')->label('Teléfono (*)') }}			
+			{{ Former::text('work_phone')->label('Teléfono (*)')->title('Solo se acepta Número Telefónico') }}			
 
 		</div>
 	
@@ -138,9 +138,9 @@
 
 			@if ($showUser)
 				{{ Former::legend('Administrador') }}
-				{{ Former::text('first_name')->label('Nombre(s) (*)') }}
-				{{ Former::text('last_name')->label('Apellidos (*)') }}
-				{{ Former::text('phone')->label('Celular (*)') }}
+				{{ Former::text('first_name')->label('Nombre(s) (*)')->title('Solo se acepta Letras') }}
+				{{ Former::text('last_name')->label('Apellidos (*)')->title('Solo se acepta Letras') }}
+				{{ Former::text('phone')->label('Celular (*)')->title('Solo se acepta Número Telefónico') }}
 				{{ Former::text('email')->label('Correo electrónico (*)') }}
 
 
@@ -148,8 +148,8 @@
 				{{ Former::text('username')->label('nombre de Usuario (*)') }}
 
 				@if (!Auth::user()->confirmed)
-					{{ Former::password('password')->label('contraseña (*)')->placeholder('Mínimo cuatro caracteres') }}        
-					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)')->placeholder('Mínimo cuatro caracteres') }}      
+					{{ Former::password('password')->label('contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}        
+					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}      
 
 				@endif 
 
