@@ -77,17 +77,18 @@
   @parent
 
 	{{ Former::open_for_files()->addClass('col-md-12 warn-on-exit')->rules(array(
-  		'name' => 'required',
+  		'name' => 'required|min:4',
   		'email' => 'email|required',
-  		'nit' => 'required|Numeric',
+  		'nit' => 'required|Numeric|min:7',
   		'username' => 'required',
+  		'uniper' => 'min:4',
   		'work_phone' => 'required|match:/[0-9.-]+/',
-  		'address1' => 'required',
-  		'address2' => 'required',
+  		'address1' => 'required|min:4',
+  		'address2' => 'required|min:4',
   		'country_id' => 'required',
-  		'first_name' => 'required|match:/[a-z A-Z. ]+/',
-  		'last_name' => 'required|match:/[a-z A-Z. ]+/',
-  		'phone' => 'required|Numeric|match:/[0-9.-]+/',
+  		'first_name' => 'required|match:/[a-zA-Z. ]+/|min:3',
+  		'last_name' => 'required|match:/[a-zA-Z. ]+/|min:3',
+  		'phone' => 'required|Numeric|match:/[0-9.-]+/|min:8',
   		'password' => 'required',
   		'password_confirmation' => 'required'
   		

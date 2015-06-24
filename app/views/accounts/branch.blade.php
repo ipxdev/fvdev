@@ -32,36 +32,39 @@
   @if ($branch)
 
     {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
-        'name' => 'required|match:/[a-z A-Z0-9. º°]+/',
+
+        'branch_name' => 'required|match:/[a-zA-Z0-9. º°]+/|min:8',
         'aux2' => 'required',
         'address1' => 'required',
-        'postal_code' => 'required|Numeric|match:/[0-9.-]+/',
-        'address2' => 'required',
-        'city' => 'required',
-        'activity_pri' => 'required|match:/[a-z A-Z]+/',
-        'activity_sec1' => 'match:/[a-z A-Z]+/',
-        'law' => 'required',
-        'state' => 'required',
-        'aux2' => 'required',
-        'deadline' => 'required|after:2015-12-19'
+        'postal_code' => 'required|Numeric|match:/[0-9.-]+/|min:7',
+        'address2' => 'required|min:4',
+        'city' => 'required|min:4',
+        'activity_pri' => 'required|match:/[a-zA-Z]+/|min:4',
+        'activity_sec1' => 'match:/[a-z A-Z]+/|min:4',
+        'state' => 'required|min:4',
+        'deadline' => 'required|after:2015-12-19',
+        'aux1' => 'required|match:/[0-9]+/|min:8',
+        'number_autho' => 'required|match:/[0-9]+/|min:10'      
     )); }}
     {{ Former::populate($branch) }}
+    {{ Former::populateField('branch_name', $branch->name()) }}
   @else
       {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
-        'name' => 'required|match:/[a-z A-Z0-9. º°]+/',
+
+        'branch_name' => 'required|match:/[a-zA-Z0-9. º°]+/|min:8',
         'aux2' => 'required',
         'address1' => 'required',
-        'postal_code' => 'required|Numeric|match:/[0-9.-]+/',
-        'address2' => 'required',
-        'city' => 'required',
-        'activity_pri' => 'required|match:/[a-z A-Z]+/',
-        'activity_sec1' => 'match:/[a-z A-Z]+/',
-        'law' => 'required',
-        'state' => 'required',
-        'aux2' => 'required',
+        'postal_code' => 'required|Numeric|match:/[0-9.-]+/|min:7',
+        'address2' => 'required|min:4',
+        'city' => 'required|min:4',
+        'activity_pri' => 'required|match:/[a-zA-Z]+/|min:4',
+        'activity_sec1' => 'match:/[a-z A-Z]+/|min:4',
+        'state' => 'required|min:4',
         'deadline' => 'required|after:2015-12-19',
-        'dosage' => 'required',
+        'aux1' => 'required|match:/[0-9]+/|min:8',
+        'number_autho' => 'required|match:/[0-9]+/|min:10',  
 
+        'dosage' => 'required'
     )); }}
   @endif
   <div class="row">
@@ -69,7 +72,9 @@
 
     {{ Former::legend('branch') }}
 
-    {{ Former::text('name')->label('Nombre (*)') }}
+    {{ Former::text('branch_name')->label('Nombre (*)')->title('Ejem. Casa Matriz o Sucursal 1') }}
+
+    {{ Former::textarea('activity_pri')->label('Actividad Económica  (*)') }}
 
     {{ Former::radios('aux2')->label('tipo (*)')
          ->radios(array(
@@ -86,45 +91,41 @@
 
     {{-- Former::select('country_id')->addOption('','')->label('Departamento')
           ->fromQuery($countries, 'name', 'id') --}}
+          
     </div>
 
     <div class="col-md-6">    
 
-      {{ Former::legend('Actividad Económica') }}
-
-      {{ Former::textarea('activity_pri')->label('actividad Principal  (*)') }}
-      {{ Former::textarea('activity_sec1')->label('actividad Secundaria')->rows(1) }}
-
 
       {{ Former::legend('dosificación') }}
 
-      {{ Former::text('aux1')->label('núm. de Trámite ') }}
+      {{ Former::text('aux1')->label('núm. de Trámite (*)') }}
 
-      {{ Former::text('number_authofisrt')->label('núm. de autorización ') }}
+      {{ Former::text('number_autho')->label('núm. de Autorización (*)') }}
 
-      {{ Former::file('dosage')->label(' ')->inlineHelp(trans('texts.dosage_help')) }}
+      {{ Former::date('deadline')->label('Fecha Límite Emisión (*)') }} 
+      
+
+      {{ Former::file('dosage')->label('Archivo con la Llave (*)')->inlineHelp(trans('texts.dosage_help')) }}
+      
+
 
       @if ($branch)
 
-        {{ Former::uneditable('aux1')->label('núm. de Trámite ')->class('uneditable') }}
-
-        {{ Former::uneditable('number_autho')->label('núm. de autorización ')->class('uneditable') }}
-
-        {{ Former::uneditable('key_dosage')->label('llave de Dosidicación ')->class('uneditable')->rows(4) }}
+        {{ Former::uneditable('key_dosage')->label('llave de Dosificación ')->class('uneditable')->rows(4) }}
       
       @endif
-
-      <br>
-
-      {{ Former::date('deadline')->label('Fecha Límite') }}   
       
-      {{ Former::checkbox('third')->label(' ')->text('Facturación por Terceros') }}
-            
+      <hr>
+      {{ Former::legend('información Adicional') }}
 
-      {{ Former::legend('Leyendas') }}
+      {{ Former::checkbox('third')->label('Facturación por Terceros')->text('Seleccione si fuera el caso') }}
 
-      {{ Former::textarea('law')->label('leyenda Genérica  (*)') }}
+      {{-- Former::textarea('activity_sec1')->label('actividad Secundaria')->rows(1) --}}
 
+      {{-- Former::legend('Leyendas') --}}
+
+      {{-- Former::textarea('law')->label('leyenda Genérica  (*)') --}}
     
     </div>
   </div>

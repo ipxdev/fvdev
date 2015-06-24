@@ -91,6 +91,9 @@ class BranchController extends \BaseController {
     $var1 = 'NÚMERO DE TRAMITE';
     $var2 = 'NÚMERO DE AUTORIZACIÓN';
 
+    $number_tramit = trim(Input::get('aux1'));
+    $number_autho = trim(Input::get('number_autho'));
+
     if(Input::file('dosage'))
     {
       $file = Input::file('dosage');
@@ -105,12 +108,16 @@ class BranchController extends \BaseController {
           $process2 = explode(":", $process1);
           $result1 = $process2[0];
           if(strcmp($result1, $var1) !== 0){$error=1;}
+          $result1 = $process2[1];
+          if(strcmp($result1, $number_tramit) !== 0){$error=1;}
         }
         if($i =='2')
         {
           $process2 = explode(":", $process1);
           $result2 = $process2[0];
           if(strcmp($result2, $var2) !== 0){$error=1;}
+          $result1 = $process2[1];
+          if(strcmp($result1, $number_autho) !== 0){$error=1;}
         }
         $i++;
       }
@@ -135,7 +142,7 @@ class BranchController extends \BaseController {
 		      $branch = Branch::createNew();
 		    }
 
-		    $branch->name = trim(Input::get('name'));
+		    $branch->name = trim(Input::get('branch_name'));
         $branch->aux2 = trim(Input::get('aux2'));
 		    $branch->address1 = trim(Input::get('address1'));
 		    $branch->address2 = trim(Input::get('address2'));
