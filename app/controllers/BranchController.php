@@ -193,7 +193,8 @@ class BranchController extends \BaseController {
 		    $branch->activity_pri = trim(Input::get('activity_pri'));      
 		    $branch->activity_sec1 = trim(Input::get('activity_sec1'));
 		    $branch->law = trim(Input::get('law'));
-
+        $branch->third = trim(Input::get('third_view'));
+        
         $branch->invoice_number_counter = 1;
 
 		    $branch->save();

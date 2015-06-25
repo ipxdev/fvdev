@@ -38,6 +38,11 @@ class Branch extends EntityModelB
 		return $this->name;
 	}
 
+	public function isThird()
+	{
+		return $this->third;
+	}
+	
 	public function getNextInvoiceNumber($isQuote = false)
 	{
 		$counter = $isQuote ? $this->quote_number_counter : $this->invoice_number_counter;

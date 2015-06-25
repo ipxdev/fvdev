@@ -118,7 +118,7 @@
       <hr>
       {{ Former::legend('información Adicional') }}
 
-      {{ Former::checkbox('third')->label('Facturación por Terceros')->text('Seleccione si fuera el caso') }}
+      {{ Former::checkbox('third_view')->label('Facturación por Terceros')->text('Seleccione si fuera el caso')->data_bind("checked: displayAdvancedOptions") }}
 
       {{-- Former::textarea('activity_sec1')->label('actividad Secundaria')->rows(1) --}}
 
@@ -177,8 +177,15 @@
       $('#country_id').combobox();
     });
 
+    var PlanetsModel = function() {
+        
+        this.displayAdvancedOptions = ko.observable({{ $branch->third ? 'true' : 'false' }});
+    };
+     
+    ko.applyBindings(new PlanetsModel());
+
     document.oncontextmenu = function(){return false}
 
-  </script>
+    </script>
 
 @stop

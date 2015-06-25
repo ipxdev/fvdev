@@ -208,15 +208,15 @@ class ClientController extends \BaseController {
 	 */
 	public function update($publicId)
 	{
-		return $this->save($publicId);
+		return $this->save($publicId,null);
 	}
 
-	private function save($publicId = null)
+	private function save($publicId = null, $isPos = null)
 	{
+
 		$rules = array(
 			
 			'nit' => 'required'
-
 		);
 		$validator = Validator::make(Input::all(), $rules);
 
@@ -237,10 +237,16 @@ class ClientController extends \BaseController {
 			{
 				$client = Client::createNew();
 			}
+
 			$client->nit = trim(Input::get('nit'));
 			$client->name = trim(Input::get('name'));
-            $client->vat_number = trim(Input::get('vat_number'));
-			$client->work_phone = trim(Input::get('work_phone'));
+			$client->vat_number = trim(Input::get('vat_number'));
+            $client->work_phone = trim(Input::get('work_phone'));
+
+            if($isPos)
+            {
+			$client->vat_number = trim(Input::get('name'));
+            }
 
 			$client->custom_value1 = trim(Input::get('custom_value1'));
 			$client->custom_value2 = trim(Input::get('custom_value2'));
@@ -270,54 +276,76 @@ class ClientController extends \BaseController {
 
 			$client->save();
 
-			$data = json_decode(Input::get('data'));
-			$contactIds = [];
-			$isPrimary = true;
-			
-			foreach ($data->contacts as $contact)
+			if(!$isPos)
 			{
-				if (isset($contact->public_id) && $contact->public_id)
+				$data = json_decode(Input::get('data'));
+				$contactIds = [];
+				$isPrimary = true;
+				
+				foreach ($data->contacts as $contact)
 				{
-					$record = Contact::scope($contact->public_id)->firstOrFail();
-				}
-				else
-				{
-					$record = Contact::createNew();
+					if (isset($contact->public_id) && $contact->public_id)
+					{
+						$record = Contact::scope($contact->public_id)->firstOrFail();
+					}
+					else
+					{
+						$record = Contact::createNew();
+					}
+
+					$record->email = trim(strtolower($contact->email));
+					$record->first_name = trim($contact->first_name);
+					$record->last_name = trim($contact->last_name);
+					$record->phone = trim($contact->phone);
+					$record->aux1 = trim($contact->aux1);
+					$record->aux2 = trim($contact->aux2);
+					$record->is_primary = $isPrimary;
+					$isPrimary = false;
+
+					$client->contacts()->save($record);
+					$contactIds[] = $record->public_id;					
 				}
 
-				$record->email = trim(strtolower($contact->email));
-				$record->first_name = trim($contact->first_name);
-				$record->last_name = trim($contact->last_name);
-				$record->phone = trim($contact->phone);
-				$record->aux1 = trim($contact->aux1);
-				$record->aux2 = trim($contact->aux2);
-				$record->is_primary = $isPrimary;
-				$isPrimary = false;
+				foreach ($client->contacts as $contact)
+				{
+					if (!in_array($contact->public_id, $contactIds))
+					{	
+						$contact->delete();
+					}
+				}
+							
+				if ($publicId) 
+				{
+					Activity::editClient($client);
+					Session::flash('message', trans('texts.updated_client'));
+				} 
+				else 
+				{
+					Activity::createClient($client);
+					Session::flash('message', trans('texts.created_client'));
+				}
 
+				return Redirect::to('clients/' . $client->public_id);
+			}
+			else
+			{
+				$record = Contact::createNew();
+				$record->is_primary = true;				
 				$client->contacts()->save($record);
-				$contactIds[] = $record->public_id;					
-			}
 
-			foreach ($client->contacts as $contact)
-			{
-				if (!in_array($contact->public_id, $contactIds))
-				{	
-					$contact->delete();
-				}
-			}
-						
-			if ($publicId) 
-			{
-				Activity::editClient($client);
-				Session::flash('message', trans('texts.updated_client'));
-			} 
-			else 
-			{
-				Activity::createClient($client);
-				Session::flash('message', trans('texts.created_client'));
-			}
+				$clientPOS = array(
+				'id'=>$client->id,
+				'name'=>$client->name,
+				'nit'=>$client->nit,
+				'vat_number'=>$client->vat_number
+				);
 
-			return Redirect::to('clients/' . $client->public_id);
+				$datos = array(
+    			'resultado' => 1,
+    			'cliente' => $clientPOS
+				);
+    			return Response::json($datos);	
+			}			
 		}
 	}
 
@@ -334,8 +362,8 @@ class ClientController extends \BaseController {
 	}
 
 	public function saveclient()
-	{
-		return ClientController::save($entityType);
+	{	
+		return ClientController::save(null,true);
 	}
 
 
