@@ -108,7 +108,7 @@ class BranchController extends \BaseController {
           $process2 = explode(":", $process1);
           $result1 = $process2[0];
           if(strcmp($result1, $var1) !== 0){$error=1;}
-          $result1 = $process2[1];
+          $result1 = trim($process2[1]);
           if(strcmp($result1, $number_tramit) !== 0){$error=1;}
         }
         if($i =='2')
@@ -116,7 +116,7 @@ class BranchController extends \BaseController {
           $process2 = explode(":", $process1);
           $result2 = $process2[0];
           if(strcmp($result2, $var2) !== 0){$error=1;}
-          $result1 = $process2[1];
+          $result1 = trim($process2[1]);
           if(strcmp($result1, $number_autho) !== 0){$error=1;}
         }
         $i++;
@@ -128,7 +128,7 @@ class BranchController extends \BaseController {
 		{
           Session::flash('error', 'Arhivo inválido');
 				  $url = $branchPublicId ? 'branches/' . $branchPublicId . '/edit' : 'branches/create';
-          return Redirect::to($url);
+          return Redirect::to('company/branches');
 		} 
 		else 
 		{
@@ -203,7 +203,6 @@ class BranchController extends \BaseController {
         $account->save();
 
 		    $message = $branchPublicId ? trans('texts.updated_branch') : trans('texts.created_branch');
-		    Session::flash('message', $message);
         
         Session::flash('message', $message);
 

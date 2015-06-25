@@ -77,12 +77,12 @@
   @parent
 
 	{{ Former::open_for_files()->addClass('col-md-12 warn-on-exit')->rules(array(
-  		'name' => 'required|min:4',
+  		'name' => 'required|min:3',
   		'email' => 'email|required',
   		'nit' => 'required|Numeric|min:7',
-  		'username' => 'required',
+  		'username' => 'required|min:4',
   		'uniper' => 'min:4',
-  		'work_phone' => 'required|match:/[0-9.-]+/',
+  		'work_phone' => 'required|match:/[0-9.-]+/|min:7',
   		'address1' => 'required|min:4',
   		'address2' => 'required|min:4',
   		'country_id' => 'required',

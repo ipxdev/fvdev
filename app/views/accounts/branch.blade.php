@@ -33,16 +33,16 @@
 
     {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
 
-        'branch_name' => 'required|match:/[a-zA-Z0-9. º°]+/|min:8',
+        'branch_name' => 'required|match:/[a-zA-Z0-9. º° ]+/|min:8',
         'aux2' => 'required',
-        'address1' => 'required',
+        'address1' => 'required|min:4',
         'postal_code' => 'required|Numeric|match:/[0-9.-]+/|min:7',
         'address2' => 'required|min:4',
         'city' => 'required|min:4',
         'activity_pri' => 'required|match:/[a-zA-Z]+/|min:4',
         'activity_sec1' => 'match:/[a-z A-Z]+/|min:4',
         'state' => 'required|min:4',
-        'deadline' => 'required|after:2015-12-19',
+        'deadline' => 'required|after:2015-12-23',
         'aux1' => 'required|match:/[0-9]+/|min:8',
         'number_autho' => 'required|match:/[0-9]+/|min:10'      
     )); }}
@@ -51,19 +51,18 @@
   @else
       {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
 
-        'branch_name' => 'required|match:/[a-zA-Z0-9. º°]+/|min:8',
+        'branch_name' => 'required|match:/[a-z A-Z0-9. º°]+/|min:8',
         'aux2' => 'required',
-        'address1' => 'required',
+        'address1' => 'required|min:4',
         'postal_code' => 'required|Numeric|match:/[0-9.-]+/|min:7',
         'address2' => 'required|min:4',
         'city' => 'required|min:4',
         'activity_pri' => 'required|match:/[a-zA-Z]+/|min:4',
         'activity_sec1' => 'match:/[a-z A-Z]+/|min:4',
         'state' => 'required|min:4',
-        'deadline' => 'required|after:2015-12-19',
+        'deadline' => 'required|after:2015-12-23',
         'aux1' => 'required|match:/[0-9]+/|min:8',
         'number_autho' => 'required|match:/[0-9]+/|min:10',  
-
         'dosage' => 'required'
     )); }}
   @endif
@@ -83,8 +82,8 @@
     )) }}
 
     {{ Former::legend('address') }} 
-    {{ Former::textarea('address2')->label('Dirección (*)') }}
-    {{ Former::textarea('address1')->label('Zona/Barrio (*)') }}
+    {{ Former::text('address2')->label('Dirección (*)') }}
+    {{ Former::text('address1')->label('Zona/Barrio (*)') }}
     {{ Former::text('postal_code')->label('teléfono (*)') }}
     {{ Former::text('city')->label('ciudad (*)') }}
     {{ Former::text('state')->label('municipio (*)') }}

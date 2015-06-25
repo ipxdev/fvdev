@@ -177,41 +177,34 @@
   <div class="row">
     <div class="col-md-6">
 
-      @if (Auth::user()->isPro())
-        {{ Former::legend('Logo') }}
-      @else
-        {{ Former::legend('Logo') }}
-      @endif
+      {{ Former::legend('Logo') }}
 
       {{ Former::file('logo')->label('logo')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
 
       @if (file_exists($account->getLogoPath()))
         {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
         {{ Former::range('y')->label('vertical')->min(0)->max(60)->step(3)->class('range') }}
-       @endif
-
-      @if (Auth::user()->isPro())
-        {{ Former::legend('Nuevo Diseño') }}
+        {{ Former::actions( Button::lg_success_submit(trans('Modificar logo'))->append_with_icon('floppy-disk') ) }}
       @else
-        {{ Former::legend('modificar Diseño') }}
+        {{ Former::actions( Button::lg_success_submit(trans('Guardar logo'))->append_with_icon('floppy-disk') ) }}
       @endif
 
-      {{ Form::textarea('design', null, ['size' => '10x5']) }}
 
-
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-
-      @if (Auth::user()->isPro())
-        {{ Former::actions( Button::lg_success_submit(trans('Guardar Nuevo'))->append_with_icon('floppy-disk') ) }}
+      @if (Utils::isConfirmed())
+        {{ Former::legend('Nuevo Diseño') }}
       @else
+        {{ Former::legend('Cambiar Diseño') }}
+      @endif
 
-          @if (Auth::user()->confirmed)
-            {{ Former::actions( Button::lg_success_submit(trans('Modificar Diseño'))->append_with_icon('floppy-disk') ) }}
-          @else
-            {{ Former::actions( Button::lg_success_submit(trans('Guardar'))->append_with_icon('floppy-disk') ) }}
-          @endif
+      {{ Form::textarea('design', null, ['size' => '6x2']) }}
 
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+
+      @if (Auth::user()->confirmed)
+        {{ Former::actions( Button::lg_success_submit(trans('Modificar Diseño'))->append_with_icon('floppy-disk') ) }}
+      @else
+        {{ Former::actions( Button::lg_success_submit(trans('Guardar Diseño'))->append_with_icon('floppy-disk') ) }}
       @endif
 
     </div>
