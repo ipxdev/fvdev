@@ -1,3 +1,4 @@
+app/config/*
 app/storage/cache/*
 app/storage/debugbar/*
 app/storage/logs/*
