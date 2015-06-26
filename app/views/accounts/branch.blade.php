@@ -179,7 +179,7 @@
 
     var PlanetsModel = function() {
         
-        this.displayAdvancedOptions = ko.observable({{ $branch->third ? 'true' : 'false' }});
+        this.displayAdvancedOptions = ko.observable({{ $third ? 'true' : 'false' }});
     };
      
     ko.applyBindings(new PlanetsModel());

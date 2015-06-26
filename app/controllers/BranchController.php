@@ -40,6 +40,7 @@ class BranchController extends \BaseController {
     $data = [
       'showBreadcrumbs' => false,
       'branch' => $branch,
+      'third' => $branch->third,
       'method' => 'PUT', 
       'aux' => 'yes',
       'url' => 'branches/' . $publicId, 
@@ -55,6 +56,7 @@ class BranchController extends \BaseController {
     $data = [
       'showBreadcrumbs' => false,
       'branch' => null,
+      'third' => null,
       'method' => 'POST',
       'aux' => 'no',
       'url' => 'branches', 
@@ -194,7 +196,7 @@ class BranchController extends \BaseController {
 		    $branch->activity_sec1 = trim(Input::get('activity_sec1'));
 		    $branch->law = trim(Input::get('law'));
         $branch->third = trim(Input::get('third_view'));
-        
+
         $branch->invoice_number_counter = 1;
 
 		    $branch->save();

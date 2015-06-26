@@ -351,6 +351,7 @@ class ClientController extends \BaseController {
 
 				$clientPOS = array(
 				'id'=>$client->id,
+				'public_id'=>$client->public_id,
 				'name'=>$client->name,
 				'nit'=>$client->nit,
 				'vat_number'=>$client->vat_number
