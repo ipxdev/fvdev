@@ -19,7 +19,7 @@ Route::get('/', 'HomeController@showIndex');
 Route::post('/contact_submit', 'HomeController@doContactUs');
 
 Route::get('log_error', 'HomeController@logError');
-Route::get('4rc4ng3l', 'HomeController@invoiceNow');
+Route::get('crear', 'HomeController@invoiceNow');
 Route::post('get_started', 'AccountController@getStarted');
 
 Route::get('view/{invitation_key}', 'InvoiceController@view');

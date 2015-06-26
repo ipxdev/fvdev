@@ -214,18 +214,34 @@ class ClientController extends \BaseController {
 	private function save($publicId = null, $isPos = null)
 	{
 
-		$rules = array(
+		// $rules = array(
 			
-			'nit' => 'required'
-		);
+		// 	'nit' => 'required'
+		// );
+
+  	$invoiceId = null;
+  	$rules = ['nit' => 'unique:clients,nit,' . $invoiceId . ',id,account_id,' . \Auth::user()->account_id];    	
+
 		$validator = Validator::make(Input::all(), $rules);
 
 		if ($validator->fails()) 
 		{
-			$url = $publicId ? 'clients/' . $publicId . '/edit' : 'clients/create';
+			
+			if($isPos)
+            {
+				$datos = array(
+    			'resultado' => 1,
+    			'mensaje' =>'Nit ya ha sido registrado.'
+				);
+    			return Response::json($datos);	
+            }
+            else
+            {
+            $url = $publicId ? 'clients/' . $publicId . '/edit' : 'clients/create';
 			return Redirect::to($url)
 				->withErrors($validator)
 				->withInput(Input::except('password'));
+			}
 		} 
 		else 
 		{			
@@ -341,7 +357,7 @@ class ClientController extends \BaseController {
 				);
 
 				$datos = array(
-    			'resultado' => 1,
+    			'resultado' => 0,
     			'cliente' => $clientPOS
 				);
     			return Response::json($datos);	
