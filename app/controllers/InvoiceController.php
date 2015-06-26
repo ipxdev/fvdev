@@ -1077,7 +1077,7 @@ class InvoiceController extends \BaseController {
 
 		$client_id = $input['client_id'];
 
-		$clientF = Client::scope($client_id)->where('account_id',\Auth::user()->account_id)->firstOrFail();
+		$clientF = Client::scope($client_id)->firstOrFail();
 
 		$client= (object)array();
 		$client->id = $clientF->id;
@@ -1179,7 +1179,7 @@ class InvoiceController extends \BaseController {
 	 //     // creando invoice
 	     $invoice = Invoice::createNew();
 	     $invoice->invoice_number=$invoice_number;
-	     $invoice->client_id=$client_id;
+	     $invoice->client_id=$client->id;
 	     $invoice->user_id=$user_id;
 	     $invoice->account_id = $user->account_id;
 	     $invoice->branch_id= $user->branch_id;
