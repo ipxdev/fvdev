@@ -1077,7 +1077,7 @@ class InvoiceController extends \BaseController {
 
 		$client_id = $input['client_id'];
 
-		$clientF = Client::scope($client_id)->firstOrFail();
+		$clientF = Client::scope($client_id)->where('account_id',\Auth::user()->account_id)->firstOrFail();
 
 		$client= (object)array();
 		$client->id = $clientF->id;
