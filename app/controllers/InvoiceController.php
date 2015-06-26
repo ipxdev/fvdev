@@ -1075,13 +1075,13 @@ class InvoiceController extends \BaseController {
 		$invoice_number = Auth::user()->branch->getNextInvoiceNumber();
 
 
-		$client_id = $input['client_id'];
-		$client = DB::table('clients')->select('id','nit','name','public_id')->where('id',$input['client_id'])->first();
-		DB::table('clients')
-				->where('id',$input['client_id'])
-				->update(array('nit' => $input['nit'],'name'=>$input['name']));
+		$publicId = $input['client_id'];
 
-		//
+		$client = Client::scope($publicId)->with('contacts')->firstOrFail();
+
+		DB::table('clients')
+				->where('id',$client->id)
+				->update(array('nit' => $input['nit'],'name'=>$input['name']));
 
 		$user_id = Auth::user()->getAuthIdentifier();
 		$user  = DB::table('users')->select('account_id','branch_id','public_id')->where('id',$user_id)->first();
