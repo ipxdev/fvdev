@@ -173,10 +173,6 @@
 
     <script type="text/javascript">
 
-    $(function() {
-      $('#country_id').combobox();
-    });
-
     var PlanetsModel = function() {
         
         this.displayAdvancedOptions = ko.observable({{ $third ? 'true' : 'false' }});

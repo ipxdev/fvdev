@@ -1077,7 +1077,7 @@ class InvoiceController extends \BaseController {
 
 		$client_id = $input['client_id'];
 
-		$client = Client::scope($client_id)->with('contacts')->firstOrFail();
+		$client = Client::scope($client_id)->with('contacts')->get(array('id,public_id,name,nit'));
 
 		DB::table('clients')
 				->where('id',$client->id)
