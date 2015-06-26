@@ -219,8 +219,8 @@ class ClientController extends \BaseController {
 		// 	'nit' => 'required'
 		// );
 
-  	$invoiceId = null;
-  	$rules = ['nit' => 'unique:clients,nit,' . $invoiceId . ',id,account_id,' . \Auth::user()->account_id];    	
+		$clientId =  $publicId ? Client::getPrivateId($publicId) : null;
+  		$rules = ['nit' => 'unique:clients,nit,' . $clientId . ',id,account_id,' . Auth::user()->account_id];    	
 
 		$validator = Validator::make(Input::all(), $rules);
 
