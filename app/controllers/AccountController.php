@@ -34,20 +34,20 @@ class AccountController extends \BaseController {
 
     	$account = DB::table('accounts')->select('pro_plan_paid')->orderBy('id', 'desc')->first();
 
-		$datePaid = $account->pro_plan_paid;
-		if (!$datePaid || $datePaid == '0000-00-00')
-		{
-			return 'false';
+    	if($account)
+    	{
+			$datePaid = $account->pro_plan_paid;
+			if (!$datePaid || $datePaid == '0000-00-00')
+			{
+				return 'false';
+			}
 		}
 
+		$account = $this->accountRepo->create();
+		$user = $account->users()->first();
+		
+		Session::forget(RECENTLY_VIEWED);
 
-		if (!$user)
-		{
-			$account = $this->accountRepo->create();
-			$user = $account->users()->first();
-			
-			Session::forget(RECENTLY_VIEWED);
-		}
 
 		Auth::login($user, true);
 		Event::fire('user.login');		
