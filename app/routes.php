@@ -19,7 +19,8 @@ Route::get('/', 'HomeController@showIndex');
 Route::post('/contact_submit', 'HomeController@doContactUs');
 
 Route::get('log_error', 'HomeController@logError');
-Route::get('crear', 'HomeController@invoiceNow');
+Route::get('crear', 'HomeController@createAccount');
+Route::get('s1ng4pur', 'HomeController@invoiceNow');
 Route::post('get_started', 'AccountController@getStarted');
 
 Route::get('view/{invitation_key}', 'InvoiceController@view');
@@ -281,6 +282,8 @@ define('DESIGNS_AFFILIATE_KEY', 'T3RS74');
 define('USER_TYPE_SELF_HOST', 'SELF_HOST');
 define('USER_TYPE_CLOUD_HOST', 'CLOUD_HOST');
 define('NEW_VERSION_AVAILABLE', 'NEW_VERSION_AVAILABLE');
+
+define('IPX_KEY', 'IPXSERVER');
 
 /*
 define('GATEWAY_AMAZON', 30);

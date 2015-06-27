@@ -45,35 +45,19 @@
 {{ Form::close() }}
 
 <script>
-  if (isStorageSupported()) {
-    $('[name="guest_key"]').val(localStorage.getItem('guest_key'));          
-  }
+
 
   @if (isset($invoiceNow) && $invoiceNow)
   getStarted();
   @endif
 
-  function isStorageSupported() {
-    if ('localStorage' in window && window['localStorage'] !== null) {
-      var storage = window.localStorage;
-    } else {
-      return false;
-    }
-    var testKey = 'test';
-    try {
-      storage.setItem(testKey, '1');
-      storage.removeItem(testKey);
-      return true;
-    } catch (error) {
-      return false;
-    }    
-  }
 
   function getStarted() {
     $('#startForm').submit();
     return false;
   }
 </script>
+
 @if (!isset($hideHeader) || !$hideHeader)
 
 @else

@@ -16,62 +16,39 @@ class HomeController extends BaseController {
 
 	public function showIndex()
 	{
-		if (Utils::isNinja())
+		if (Account::count() == 0)
 		{
-			return View::make('public.splash');
+			return View::make('public.welcome');
 		}
 		else
 		{
-			if (Account::count() == 0)
-			{
-				return Redirect::to('/4rc4ng3l');
-			}
-			else
-			{
-				return Redirect::to('/login');
-			}
+			return Redirect::to('/login');
 		}
 	}
 
-    public function showTestimonials()
-	{
-		return View::make('public.testimonials');
-	}
-
-
-	public function doContactUs_review()
-	{
-		$email = Input::get('email');
-		$name = Input::get('name');
-		$message = Input::get('message');
-
-		$data = [		
-			'text' => $message
-		];
-
-		$this->mailer->sendTo(CONTACT_EMAIL, $email, $name, 'Factura Virtual Cobra Feedback', 'contact', $data);
-
-		$message = trans('texts.sent_message');
-		Session::flash('message', $message);
-
-		return View::make('public.contact_us');
-	}
-
-	public function showComingSoon()
-	{
-		return View::make('coming_soon');	
-	}
 
 	public function showSecurePayment()
 	{
 		return View::make('secure_payment');	
 	}
 
+	public function createAccount()
+	{
+		if (Auth::check())
+		{
+			return Redirect::to('dashboard');				
+		}
+		else
+		{
+			return View::make('public.welcome');
+		}
+	}
+
 	public function invoiceNow()
 	{
 		if (Auth::check())
 		{
-			return Redirect::to('invoices/create');				
+			return Redirect::to('dashboard');				
 		}
 		else
 		{

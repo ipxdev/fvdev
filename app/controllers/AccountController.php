@@ -20,24 +20,26 @@ class AccountController extends \BaseController {
 	}	
 	
 	public function getStarted()
-	{	
+	{
+
+	$code = Input::get('code');
+
+	if ($code == IPX_KEY)
+	{
+		
 		if (Auth::check())
 		{
 			return Redirect::to('dashboard');	
 		}
 
-		$user = false;	
-		$guestKey = Input::get('guest_key');
+    	$account = DB::table('accounts')->select('pro_plan_paid')->orderBy('id', 'desc')->first();
 
-		if ($guestKey) 
+		$datePaid = $account->pro_plan_paid;
+		if (!$datePaid || $datePaid == '0000-00-00')
 		{
-			$user = User::where('password', '=', $guestKey)->first();
-
-			if ($user && $user->registered)
-			{
-				return Redirect::to('/');				
-			}
+			return 'false';
 		}
+
 
 		if (!$user)
 		{
@@ -50,7 +52,9 @@ class AccountController extends \BaseController {
 		Auth::login($user, true);
 		Event::fire('user.login');		
 
-		return Redirect::to('company/details');
+		return RESULT_SUCCESS;	
+
+		}
 	}
 
 	public function enableProPlan()
