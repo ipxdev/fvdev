@@ -756,8 +756,8 @@
 		var invoice = createInvoiceModel();
 		var design  = getDesignJavascript();
 		if (!design) return;
-		var doc = generatePDF(invoice, design, true);
-		doc.save('Factura-' + $('#invoice_number').val() + '.pdf');
+		var doc = generatePDF(invoice, design, getLogoJavascript(), getLogoXJavascript(), getLogoYJavascript());
+		doc.save('Factura Num: ' + invoice.invoice_number +', '+ invoice.invoice_date + '.pdf');
 	}
 
 	function onSaveEmailClick() {

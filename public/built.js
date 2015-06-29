@@ -31058,7 +31058,7 @@ function GetPdf(invoice, javascript, logo, x, y){
 	    invoice.deadline = branches[k].deadline;
 	    invoice.activity_pri = branches[k].activity_pri;
 	    invoice.aux1 = branches[k].aux2;
-
+		invoice.third = branches[k].third;
 	    invoice.account_nit = account.nit;
 	    invoice.invoice_number = '0';
 
@@ -31091,10 +31091,20 @@ function GetPdf(invoice, javascript, logo, x, y){
   //set default style for report
   doc.setFont('Helvetica','');
 
- 	if(logo)
+
+	if(invoice.third)
 	{
-  		eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
+		doc.addImage(logoImages.imageLogo1, 'JPEG', 20, 20);
 	}
+	else
+	{
+	 	if(logo)
+		{
+	  		eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
+		}
+	}
+
+
   eval(javascript);
 
   return doc;
@@ -32305,9 +32315,23 @@ function displayHeader(doc, invoice, layout) {
 	    doc.setFontType('bold');
 	    doc.text(465, datos1y+10, 'ORIGINAL');
 
-	    doc.setFontSize(20);
-	    doc.setFontType('bold');
-		doc.text(258, 72, 'FACTURA');
+		if(invoice.third)
+		{
+		    doc.setFontSize(18);
+		    doc.setFontType('bold');
+			doc.text(258, 65, 'FACTURA');
+			doc.setFontSize(18);
+		    doc.setFontType('bold');
+			doc.text(230, 85, 'POR TERCEROS');
+		}
+		else
+		{
+		    doc.setFontSize(20);
+		    doc.setFontType('bold');
+			doc.text(258, 72, 'FACTURA');
+		}
+
+
 
 }
 

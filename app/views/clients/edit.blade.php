@@ -9,6 +9,7 @@
   		'name' => 'required',
   		'vat_number' => 'required',
   		'phone' => 'Numeric',
+  		'email' => 'email'
 	)); }}
 
 	@if ($client)
@@ -22,40 +23,33 @@
 			{{ Former::text('vat_number')->label('Nombre (*)')->data_bind("value: vat_number, valueUpdate: 'afterkeydown'") }}     
 			{{ Former::text('work_phone') }}
 
-	
-			@if (Auth::user()->isPro())	
-		
-
-				@if ($customLabel2)
-					{{ Former::text('custom_value2')->label($customLabel2) }}
-				@endif
-				@if ($customLabel3)
-					{{ Former::text('custom_value3')->label($customLabel3) }}
-				@endif
-				@if ($customLabel1)
-					{{ Former::text('custom_value1')->label($customLabel1) }}
-				@endif
-				@if ($customLabel4)
-					{{ Former::text('custom_value4')->label($customLabel4) }}
-				@endif
-				@if ($customLabel5)
-					{{ Former::text('custom_value5')->label($customLabel5) }}
-				@endif
-				@if ($customLabel6)
-					{{ Former::text('custom_value6')->label($customLabel6) }}
-				@endif
-				@if ($customLabel7)
-					{{ Former::text('custom_value7')->label($customLabel7) }}
-				@endif
-				@if ($customLabel8)
-					{{ Former::text('custom_value8')->label($customLabel8) }}
-				@endif
-				
+			@if ($customLabel2)
+				{{ Former::text('custom_value2')->label($customLabel2) }}
 			@endif
-
+			@if ($customLabel3)
+				{{ Former::text('custom_value3')->label($customLabel3) }}
+			@endif
+			@if ($customLabel1)
+				{{ Former::text('custom_value1')->label($customLabel1) }}
+			@endif
+			@if ($customLabel4)
+				{{ Former::text('custom_value4')->label($customLabel4) }}
+			@endif
+			@if ($customLabel5)
+				{{ Former::text('custom_value5')->label($customLabel5) }}
+			@endif
+			@if ($customLabel6)
+				{{ Former::text('custom_value6')->label($customLabel6) }}
+			@endif
+			@if ($customLabel7)
+				{{ Former::text('custom_value7')->label($customLabel7) }}
+			@endif
+			@if ($customLabel8)
+				{{ Former::text('custom_value8')->label($customLabel8) }}
+			@endif
+			
 			{{ Former::legend('Datos para Facturar') }}
 
-			{{-- Former::text('name')->label('name_client')->data_bind("attr { value: placeholderName }") --}}
 			{{ Former::text('name')->label('razón Social (*)') }}
 
 			{{ Former::text('nit')->label('NIT/CI (*)') }}

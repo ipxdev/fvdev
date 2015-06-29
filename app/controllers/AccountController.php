@@ -1287,19 +1287,29 @@ class AccountController extends \BaseController {
 		// 	'nit' => 'required',
 		// );
 
-	    $rules = [
-            'password' => 'required|between:4,11|confirmed',
-            'password_confirmation' => 'between:4,11',
-        ];
-        $validator = Validator::make(Input::all(), $rules);
+		if (Input::get('password') && Input::get('password_confirmation'))		
+		{
+		    $rules = [
+	            'password' => 'required|between:4,11|confirmed',
+	            'password_confirmation' => 'between:4,11',
+	        ];
+	        $validator = Validator::make(Input::all(), $rules);
+	        
+	        if ($validator->fails())
+	        {
+				return Redirect::to('company/details')
+					->withErrors($validator)
+					->withInput();
+	        }
 
-        if ($validator->fails())
-        {
-            return Redirect::to('company/details')->withInput()->withErrors($validator);
-        }
-
+    	}
 
 		$user = Auth::user()->account->users()->first();
+
+		if (Input::get('nit'))		
+		{
+			$rules['nit'] = 'required|unique:accounts,nit';
+		}
 
 		if (Auth::user()->id === $user->id)		
 		{
