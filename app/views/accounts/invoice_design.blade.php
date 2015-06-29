@@ -146,8 +146,8 @@
       invoice.deadline = branches[aux-1].deadline;
       invoice.activity_pri = branches[aux-1].activity_pri;
       invoice.aux1 = branches[aux-1].aux2;
-      
-
+      invoice.third = branches[aux-1].third;
+  
 
       invoice.is_pro = {{ Auth::user()->isPro() ? 'true' : 'false' }};
       invoice.account.hide_quantity = $('#hide_quantity').is(":checked");

@@ -31092,18 +31092,10 @@ function GetPdf(invoice, javascript, logo, x, y){
   doc.setFont('Helvetica','');
 
 
-	if(invoice.third)
+ 	if(logo)
 	{
-		doc.addImage(logoImages.imageLogo1, 'JPEG', 20, 20);
+  		eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
 	}
-	else
-	{
-	 	if(logo)
-		{
-	  		eval("doc.addImage('" + logo + "', 'JPEG', " + x + ", " + y + ");");
-		}
-	}
-
 
   eval(javascript);
 
@@ -32315,7 +32307,7 @@ function displayHeader(doc, invoice, layout) {
 	    doc.setFontType('bold');
 	    doc.text(465, datos1y+10, 'ORIGINAL');
 
-		if(invoice.third)
+		if(invoice.third == 1)
 		{
 		    doc.setFontSize(18);
 		    doc.setFontType('bold');

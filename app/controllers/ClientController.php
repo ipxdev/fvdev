@@ -43,20 +43,26 @@ class ClientController extends \BaseController {
     	    ->addColumn('paid_to_date', function($model) { return Utils::formatMoney($model->paid_to_date, $model->currency_id); })    	    
     	    ->addColumn('dropdown', function($model) 
     	    { 
-    	    	return '<div class="btn-group tr-action" style="visibility:hidden;">
+    	    	 $str = '<div class="btn-group tr-action" style="visibility:hidden;">
   							<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
     							'.trans('texts.select').' <span class="caret"></span>
   							</button>
-  							<ul class="dropdown-menu" role="menu">
-  							<li><a href="' . URL::to('clients/'.$model->public_id.'/edit') . '">'.trans('texts.edit_client').'</a></li>
+  							<ul class="dropdown-menu" role="menu">';
+                if (!$model->deleted_at || $model->deleted_at == '0000-00-00') {               
+  				   $str .= '<li><a href="' . URL::to('clients/'.$model->public_id.'/edit') . '">'.trans('texts.edit_client').'</a></li>
 						    <li class="divider"></li>
 						    <li><a href="' . URL::to('invoices/create/'.$model->public_id) . '">'.trans('texts.new_invoice').'</a></li>						    
 						    <li><a href="' . URL::to('payments/create/'.$model->public_id) . '">'.trans('texts.new_payment').'</a></li>						    
 						    <li><a href="' . URL::to('credits/create/'.$model->public_id) . '">'.trans('texts.new_credit').'</a></li>						    
 						    <li class="divider"></li>
-						    <li><a href="javascript:archiveEntity(' . $model->public_id. ')">'.trans('texts.archive_client').'</a></li>
-						  </ul>
-						</div>';
+						    <li><a href="javascript:archiveEntity(' . $model->public_id. ')">'.trans('texts.archive_client').'</a></li>';
+
+                }else {
+                   $str .= '<li><a href="javascript:restoreEntity(' . $model->public_id. ')">'.trans('texts.restore_client').'</a></li>';
+                    }
+                        $str .= '</ul></div>';
+				
+				return $str;
     	    })    	   
     	    ->make();
         }
@@ -214,11 +220,10 @@ class ClientController extends \BaseController {
 	private function save($publicId = null, $isPos = null)
 	{
 
-		// $rules = array(
+		$rules = array(
 			
-		// 	'nit' => 'required'
-		// );
-
+			'nit' => 'required'
+		);
 
 		// $clientId =  $publicId ? Client::getPrivateId($publicId) : null;
   // 		$rules = ['nit' => 'unique:clients,nit,' . $clientId . ',id,account_id,' . Auth::user()->account_id];    	

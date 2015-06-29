@@ -11,7 +11,8 @@ class ClientRepository
     				->join('contacts', 'contacts.client_id', '=', 'clients.id')
     				->where('clients.account_id', '=', \Auth::user()->account_id)
     				->where('contacts.is_primary', '=', true)
-    				->select('clients.public_id','clients.nit','clients.vat_number', 'clients.name','contacts.first_name','contacts.last_name','contacts.phone','clients.balance','clients.paid_to_date', 'clients.work_phone','contacts.email','clients.currency_id','custom_value1');
+    				->where('contacts.deleted_at', '=', null)
+    				->select('clients.public_id','clients.nit','clients.vat_number', 'clients.name','contacts.first_name','contacts.last_name','contacts.phone','clients.balance','clients.paid_to_date', 'clients.work_phone','contacts.email','clients.currency_id','custom_value1','clients.deleted_at');
 
     	if (!\Session::get('show_trash:client'))
     	{
@@ -235,13 +236,17 @@ class ClientRepository
 
 		foreach ($clients as $client) 
 		{			
-			if ($action == 'delete') 
-			{
-				$client->is_deleted = true;
-				$client->save();
-			} 
-			
-			$client->delete();			
+            if ($action == 'restore') {
+                $client->restore();
+                $client->is_deleted = false;
+                $client->save();
+            } else {
+                if ($action == 'delete') {
+                    $client->is_deleted = true;
+                    $client->save();
+                }
+                $client->delete();
+            }			
 		}
 
 		return count($clients);

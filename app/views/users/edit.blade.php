@@ -3,14 +3,16 @@
 @section('content') 
 
 
-  {{ Former::open($url)->method($method)->addClass('col-md-10 col-md-offset-1 warn-on-exit')->rules(array(
+  {{ Former::open($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array(
       'first_name' => 'required',
       'last_name' => 'required',
       'email' => 'required|email',
       'username' => 'required',
+      'password' => 'required',
+      'password_confirmation' => 'required',
       'phone' => 'required',
   )); }}
-
+<hr>
   {{ Former::legend($title) }}
 
   @if ($user)
@@ -29,9 +31,13 @@
        </div>
     <div class="col-md-6">
 
-      {{ Former::legend('Nombre de Usuario') }}
+      {{ Former::legend('Datos de Ingreso') }}
 
       {{ Former::text('username')->label('usuario (*)') }}
+
+      {{ Former::password('password')->label('contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}        
+      {{ Former::password('password_confirmation')->label('Repertir contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}      
+
 
       {{ Former::legend('Tipo de Usuario') }}
 

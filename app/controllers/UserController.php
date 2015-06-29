@@ -190,6 +190,24 @@ class UserController extends BaseController {
      */
     public function save($userPublicId = false)
     {
+       
+        if (Input::get('password') && Input::get('password_confirmation'))      
+        {
+            $rules = [
+                'password' => 'required|between:4,11|confirmed',
+                'password_confirmation' => 'between:4,11',
+            ];
+            $validator = Validator::make(Input::all(), $rules);
+            
+            if ($validator->fails())
+            {
+                return Redirect::to('company/details')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+        }
+
         $rules = [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -218,7 +236,11 @@ class UserController extends BaseController {
         {
             $user->first_name = trim(Input::get('first_name'));
             $user->last_name = trim(Input::get('last_name'));
+
             $user->username = trim(Input::get('username'))."@".Auth::user()->account->getNit();
+            $user->password = trim(Input::get('password'));
+            $user->password_confirmation = trim(Input::get('password_confirmation'));
+
             $user->is_admin = trim(Input::get('is_admin'));
             $user->email = trim(Input::get('email'));
             $user->phone = trim(Input::get('phone'));
@@ -244,6 +266,9 @@ class UserController extends BaseController {
             $user->first_name = trim(Input::get('first_name'));
             $user->last_name = trim(Input::get('last_name'));
             $user->username = trim(Input::get('username'))."@".Auth::user()->account->getNit();
+            $user->password = trim(Input::get('password'));
+            $user->password_confirmation = trim(Input::get('password_confirmation'));
+
             $user->email = trim(Input::get('email'));
             $user->phone = trim(Input::get('phone'));
             $user->registered = true;
@@ -264,10 +289,10 @@ class UserController extends BaseController {
 
         $user->save();
 
-        if (!$user->confirmed)
+        if ($userPublicId)
         {
-            $this->userMailer->sendConfirmation($user, Auth::user());        
-            $message = trans('texts.sent_invite');
+            // $this->userMailer->sendConfirmation($user, Auth::user());                 
+            $message = trans('texts.created_user');
         }
         else
         {
