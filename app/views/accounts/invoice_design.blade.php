@@ -149,9 +149,6 @@
       invoice.branch_type_id = branches[aux].branch_type_id;
       invoice.type_third = branches[aux].type_third;
 
-      invoice.is_pro = {{ Auth::user()->isPro() ? 'true' : 'false' }};
-      NINJA.primaryColor = $('#primary_color').val();
-      NINJA.secondaryColor = $('#secondary_color').val();
       var doc = generatePDF(invoice, getDesignJavascript(), getLogoJavascript(), getLogoXJavascript(), getLogoYJavascript(), true);
       if (!doc) {
         return;
@@ -163,12 +160,10 @@
     });
   </script> 
 
-{{ Former::open_for_files()->addClass('warn-on-exit')->onchange('refreshPDF()')->rules(['design' => 'required']) }}
+{{ Former::open_for_files()->addClass('warn-on-exit')->onchange('refreshPDF()') }}
 
 {{ Former::populateField('x', intval($invoiceDesign->x)) }}
 {{ Former::populateField('y', intval($invoiceDesign->y)) }}
-
-
 
   <div class="row">
     <div class="col-md-6">
@@ -184,7 +179,6 @@
       @else
         {{ Former::actions( Button::lg_success_submit(trans('Guardar logo'))->append_with_icon('floppy-disk') ) }}
       @endif
-
 
       @if (Utils::isConfirmed())
         {{ Former::legend('Nuevo Diseño') }}
