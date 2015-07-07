@@ -5,11 +5,18 @@
 	<!--<h3>{{ $title }} Client</h3>-->
 
 	{{ Former::open($url)->addClass('col-md-12 warn-on-exit')->method($method)->rules(array(
-  		'nit' => 'required|Numeric',		
-  		'name' => 'required',
-  		'vat_number' => 'required',
+  		'nit' => 'required|Numeric|min:5',		
+  		'name' => 'required|min:3',
+  		'vat_number' => 'required|min:3',
   		'phone' => 'Numeric',
-  		'email' => 'email'
+  		'work_phone' => 'Numeric',
+  		'email' => 'email',
+  		'address1' => 'min:4',
+  		'address2' => 'min:4',
+  		'private_notes' => 'min:4',
+  		'first_name' => 'match:/[a-zA-Z. ]+/|min:3',
+  		'last_name' => 'match:/[a-zA-Z. ]+/|min:3',
+  		
 	)); }}
 
 	@if ($client)
@@ -21,7 +28,7 @@
 			
 			{{ Former::legend('organization') }}
 			{{ Former::text('vat_number')->label('Nombre (*)')->data_bind("value: vat_number, valueUpdate: 'afterkeydown'") }}     
-			{{ Former::text('work_phone') }}
+			{{ Former::text('work_phone')->title('Solo se acepta Número Telefónico') }}
 
 			@if ($customLabel2)
 				{{ Former::text('custom_value2')->label($customLabel2) }}
@@ -72,7 +79,7 @@
 				{{ Former::text('first_name')->data_bind("value: first_name, valueUpdate: 'afterkeydown'") }}
 				{{ Former::text('last_name')->data_bind("value: last_name, valueUpdate: 'afterkeydown'") }}
 				{{ Former::text('email')->data_bind('value: email, valueUpdate: \'afterkeydown\', attr: {id:\'email\'+$index()}') }}
-				{{ Former::text('phone')->data_bind("value: phone, valueUpdate: 'afterkeydown'") }}	
+				{{ Former::text('phone')->data_bind("value: phone, valueUpdate: 'afterkeydown'")->title('Solo se acepta Número Telefónico') }}	
 
 				<div class="form-group">
 					<div class="col-lg-8 col-lg-offset-4 bold">
@@ -110,12 +117,8 @@
 				->fromQuery($industries, 'name', 'id') }}
 			{{ Former::textarea('private_notes') }}
 
-
-
-
 		</div>
 	</div>
-
 
 	{{ Former::hidden('data')->data_bind("value: ko.toJSON(model)") }}	
 
@@ -188,9 +191,14 @@
 
 	</script>
 
+<hr>
+
 	<center class="buttons">
-		{{ Button::lg_primary_submit_success(trans('texts.save'))->append_with_icon('floppy-disk') }}
+
     {{ Button::lg_default_link('clients/' . ($client ? $client->public_id : ''), trans('texts.cancel'))->append_with_icon('remove-circle'); }}
+	
+	{{ Button::lg_primary_submit_success(trans('texts.save'))->append_with_icon('floppy-disk') }}
+
 	</center>
 
 	{{ Former::close() }}

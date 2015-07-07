@@ -13,14 +13,8 @@ class DatabaseSeeder extends Seeder {
 
 		Eloquent::unguard();
 
-		$this->call('UserTableSeeder');
 		$this->call('ConstantsSeeder');
-
-		$this->call('CountriesSeeder');
-		$this->command->info('Seeded the countries!'); 
-
-		$this->call('PaymentLibrariesSeeder');
-		$this->command->info('Seeded the Payment Libraries!'); 
+		$this->command->info('Seeded Finish!'); 
 	}
 
 }

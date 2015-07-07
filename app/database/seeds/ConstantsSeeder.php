@@ -6,22 +6,15 @@ class ConstantsSeeder extends Seeder
 	public function run()
 	{
 
+		Language::create(array('name' => 'Español', 'locale' => 'es'));
+
+		BranchType::create(array('name' => 'Productos'));
+		BranchType::create(array('name' => 'Servicios'));
+
 		PaymentType::create(array('name' => 'Efectivo'));
 		PaymentType::create(array('name' => 'Aplicar Crédito'));
 		PaymentType::create(array('name' => 'Transferencia Bancaria'));
-
-		Theme::create(array('name' => 'amelia'));
-		Theme::create(array('name' => 'cerulean'));
-		Theme::create(array('name' => 'cosmo'));
-		Theme::create(array('name' => 'cyborg'));
-		Theme::create(array('name' => 'flatly'));
-		Theme::create(array('name' => 'journal'));
-		Theme::create(array('name' => 'readable'));
-		Theme::create(array('name' => 'simplex'));
-		Theme::create(array('name' => 'slate'));
-		Theme::create(array('name' => 'spacelab'));
-		Theme::create(array('name' => 'united'));
-		Theme::create(array('name' => 'yeti'));
+		PaymentType::create(array('name' => 'cheque'));
 
 		InvoiceStatus::create(array('name' => 'Emitido'));
 		InvoiceStatus::create(array('name' => 'Enviado'));
@@ -33,26 +26,10 @@ class ConstantsSeeder extends Seeder
 		Frequency::create(array('name' => 'Mensual'));
 		Frequency::create(array('name' => 'Trimestral'));
 		Frequency::create(array('name' => 'Semestral'));
-		Frequency::create(array('name' => 'Anual'));
-
-
-		Size::create(array('name' => '1 - 3'));
-		Size::create(array('name' => '4 - 10'));
-		Size::create(array('name' => '11 - 50'));
-		Size::create(array('name' => '51 - 100'));
-		Size::create(array('name' => '101 - 500'));
-		Size::create(array('name' => '500+'));		
-
-		PaymentTerm::create(array('num_days' => 7, 'name' => 'Net 7'));
-		PaymentTerm::create(array('num_days' => 10, 'name' => 'Net 10'));
-		PaymentTerm::create(array('num_days' => 14, 'name' => 'Net 14'));
-		PaymentTerm::create(array('num_days' => 15, 'name' => 'Net 15'));
-		PaymentTerm::create(array('num_days' => 30, 'name' => 'Net 30'));
-		PaymentTerm::create(array('num_days' => 60, 'name' => 'Net 60'));
-		PaymentTerm::create(array('num_days' => 90, 'name' => 'Net 90'));
+		Frequency::create(array('name' => 'Anual'));	
 
 		Currency::create(array('name' => 'Bolivianos', 'code' => 'BS', 'symbol' => 'Bs', 'precision' => '2', 'thousand_separator' => ',', 'decimal_separator' => '.'));
-		Currency::create(array('name' => 'US Dollar', 'code' => 'USD', 'symbol' => '', 'precision' => '2', 'thousand_separator' => ',', 'decimal_separator' => '.'));
+		
 
 		DatetimeFormat::create(array('format' => 'd/M/Y g:i a', 'label' => '10/Mar/2013'));
 		DatetimeFormat::create(array('format' => 'd-M-Yk g:i a', 'label' => '10-Mar-2013'));
@@ -68,11 +45,7 @@ class ConstantsSeeder extends Seeder
 		DateFormat::create(array('format' => 'd-F-Y', 'picker_format' => 'dd-MM-yyyy', 'label' => '10-March-2013'));
 		DateFormat::create(array('format' => 'M j, Y', 'picker_format' => 'M d, yyyy', 'label' => 'Mar 10, 2013'));
 		DateFormat::create(array('format' => 'F j, Y', 'picker_format' => 'MM d, yyyy', 'label' => 'March 10, 2013'));
-		DateFormat::create(array('format' => 'D M j, Y', 'picker_format' => 'D MM d, yyyy', 'label' => 'Mon March 10, 2013'));			
-		
-		PaymentLibrary::create(['name' => 'Omnipay']);
-		PaymentLibrary::create(['name' => 'PHP-Payments']);
-
+		DateFormat::create(array('format' => 'D M j, Y', 'picker_format' => 'D MM d, yyyy', 'label' => 'Mon March 10, 2013'));	
 		/*	
 		d, dd: Numeric date, no leading zero and leading zero, respectively. Eg, 5, 05.
 		D, DD: Abbreviated and full weekday names, respectively. Eg, Mon, Monday.
@@ -80,42 +53,6 @@ class ConstantsSeeder extends Seeder
 		M, MM: Abbreviated and full month names, respectively. Eg, Jan, January
 		yy, yyyy: 2- and 4-digit years, respectively. Eg, 12, 2012.)
 		*/
-
-		$gateways = [
-			array('name'=>'Authorize.Net AIM', 'provider'=>'AuthorizeNet_AIM'),
-			array('name'=>'Authorize.Net SIM', 'provider'=>'AuthorizeNet_SIM'),
-			array('name'=>'CardSave', 'provider'=>'CardSave'),
-			array('name'=>'Eway Rapid', 'provider'=>'Eway_Rapid'),
-			array('name'=>'FirstData Connect', 'provider'=>'FirstData_Connect'),
-			array('name'=>'GoCardless', 'provider'=>'GoCardless'),
-			array('name'=>'Migs ThreeParty', 'provider'=>'Migs_ThreeParty'),
-			array('name'=>'Migs TwoParty', 'provider'=>'Migs_TwoParty'),
-			array('name'=>'Mollie', 'provider'=>'Mollie'),
-			array('name'=>'MultiSafepay', 'provider'=>'MultiSafepay'),
-			array('name'=>'Netaxept', 'provider'=>'Netaxept'),
-			array('name'=>'NetBanx', 'provider'=>'NetBanx'),
-			array('name'=>'PayFast', 'provider'=>'PayFast'),
-			array('name'=>'Payflow Pro', 'provider'=>'Payflow_Pro'),
-			array('name'=>'PaymentExpress PxPay', 'provider'=>'PaymentExpress_PxPay'),
-			array('name'=>'PaymentExpress PxPost', 'provider'=>'PaymentExpress_PxPost'),
-			array('name'=>'PayPal Express', 'provider'=>'PayPal_Express'),
-			array('name'=>'PayPal Pro', 'provider'=>'PayPal_Pro'),
-			array('name'=>'Pin', 'provider'=>'Pin'),
-			array('name'=>'SagePay Direct', 'provider'=>'SagePay_Direct'),
-			array('name'=>'SagePay Server', 'provider'=>'SagePay_Server'),
-			array('name'=>'SecurePay DirectPost', 'provider'=>'SecurePay_DirectPost'),
-			array('name'=>'Stripe', 'provider'=>'Stripe'),
-			array('name'=>'TargetPay Direct eBanking', 'provider'=>'TargetPay_Directebanking'),
-			array('name'=>'TargetPay Ideal', 'provider'=>'TargetPay_Ideal'),
-			array('name'=>'TargetPay Mr Cash', 'provider'=>'TargetPay_Mrcash'),
-			array('name'=>'TwoCheckout', 'provider'=>'TwoCheckout'),
-			array('name'=>'WorldPay', 'provider'=>'WorldPay'),
-		];
-
-		foreach ($gateways as $gateway)
-		{
-			Gateway::create($gateway);
-		}
 
 		$timezones = array(
 		    'Pacific/Midway'       => "(GMT-11:00) Midway Island",
@@ -235,5 +172,6 @@ class ConstantsSeeder extends Seeder
 		foreach ($timezones as $name => $location) {
 			Timezone::create(array('name'=>$name, 'location'=>$location));
 		}
+	
 	}
 }

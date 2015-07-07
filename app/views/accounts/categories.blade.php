@@ -2,6 +2,7 @@
 
 @section('content') 
 
+<br>
   {{ Former::legend('Gestión de Categorias') }}
 
   <div class="row">

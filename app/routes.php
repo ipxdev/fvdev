@@ -11,26 +11,13 @@
 |
 */
 
-Route::get('install', 'AccountController@install');
-Route::get('update', 'AccountController@update');
-Route::get('reset', 'AccountController@reset');
-
 Route::get('/', 'HomeController@showIndex');
-Route::post('/contact_submit', 'HomeController@doContactUs');
 
 Route::get('log_error', 'HomeController@logError');
 Route::get('crear', 'HomeController@createAccount');
-Route::get('s1ng4pur', 'HomeController@invoiceNow');
 Route::post('get_started', 'AccountController@getStarted');
 
 Route::get('view/{invitation_key}', 'InvoiceController@view');
-Route::get('payment/{invitation_key}', 'PaymentController@show_payment');
-Route::post('payment/{invitation_key}', 'PaymentController@do_payment');
-Route::get('complete', 'PaymentController@offsite_payment');
-
-Route::get('license', 'PaymentController@show_license_payment');
-Route::post('license', 'PaymentController@do_license_payment');
-Route::get('claim_license', 'PaymentController@claim_license');
 
 Route::post('signup/validate', 'AccountController@checkEmail');
 Route::post('signup/submit', 'AccountController@submitSignup');
@@ -58,9 +45,7 @@ Route::group(array('before' => 'auth.basic'), function()
   Route::get('loginPOS','InvoiceController@listasCuenta');
   Route::get('cliente/{nit}','ClientController@cliente');
   Route::post('mensajeInvoice','InvoiceController@mensajeInvoice');
- 
   Route::get('obtenerFactura/{public_id}','ClientController@obtenerFactura');
-
   Route::get('msg','ClientController@mensaje');
   Route::get('mensajeCliente','ClientController@mensajeCliente');
   Route::post('mensajeInvoice','InvoiceController@mensajeInvoice');
@@ -72,9 +57,8 @@ Route::group(array('before' => 'auth'), function()
   Route::get('select_branch', 'UserController@select_branch');
   Route::post('select_branch', 'UserController@do_select_branch');
   Route::get('dashboard', 'DashboardController@index');
-  Route::get('view_archive/{entity_type}/{visible}', 'AccountController@setTrashVisible');
+  Route::get('view_archive/{entity_type}/{visible}', 'AccountController@setTrashVisible');//revisar
   Route::get('hide_message', 'HomeController@hideMessage');
-  Route::get('force_inline_pdf', 'UserController@forcePDFJS');
 
   Route::get('api/users', array('as'=>'api.users', 'uses'=>'UserController@getDatatable'));
   Route::resource('users', 'UserController');
@@ -105,12 +89,9 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('account/getSearchData', array('as' => 'getSearchData', 'uses' => 'AccountController@getSearchData'));
   Route::get('company/{section?}/{sub_section?}', 'AccountController@showSection');	
 	Route::post('company/{section?}/{sub_section?}', 'AccountController@doSection');
-	Route::post('user/setTheme', 'UserController@setTheme');
-  Route::post('remove_logo', 'AccountController@removeLogo');
   Route::post('account/go', 'AccountController@enablePlan');
   Route::post('account/go_pro', 'AccountController@enableProPlan');
   Route::post('account/go_pro2', 'AccountController@enableProPlan2');
-
 
 	Route::resource('clients', 'ClientController');
 	Route::get('api/clients', array('as'=>'api.clients', 'uses'=>'ClientController@getDatatable'));
@@ -204,14 +185,13 @@ define('ACCOUNT_INVOICE_DESIGN', 'invoice_design');
 define('ACCOUNT_CHART_BUILDER', 'chart_builder');
 define('ACCOUNT_DATA_VISUALIZATIONS', 'data_visualizations');
 
-define('DEFAULT_INVOICE_NUMBER', '0001');
+define('DEFAULT_INVOICE_NUMBER', '1');
 define('RECENTLY_VIEWED_LIMIT', 8);
 define('LOGGED_ERROR_LIMIT', 100);
 define('RANDOM_KEY_LENGTH', 32);
-define('MAX_NUM_CLIENTS', 500);
-define('MAX_NUM_CLIENTS_PRO', 20000);
-define('MAX_NUM_USERS', 5);
-
+define('MAX_NUM_CLIENTS', 20000);
+define('MAX_NUM_USERS', 20);
+ 
 define('INVOICE_STATUS_DRAFT', 1);
 define('INVOICE_STATUS_SENT', 2);
 define('INVOICE_STATUS_VIEWED', 3);
@@ -283,15 +263,8 @@ define('USER_TYPE_SELF_HOST', 'SELF_HOST');
 define('USER_TYPE_CLOUD_HOST', 'CLOUD_HOST');
 define('NEW_VERSION_AVAILABLE', 'NEW_VERSION_AVAILABLE');
 
-define('IPX_KEY', 'IPXSERVER');
+define('IPX_KEY', 'ipx');
 
-/*
-define('GATEWAY_AMAZON', 30);
-define('GATEWAY_BLUEPAY', 31);
-define('GATEWAY_BRAINTREE', 32);
-define('GATEWAY_GOOGLE', 33);
-define('GATEWAY_QUICKBOOKS', 35);
-*/
 
 /** 
  * TEST VALUES FOR THE CREDIT CARDS

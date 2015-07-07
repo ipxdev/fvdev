@@ -4,7 +4,7 @@
 
 @if (!Auth::user()->confirmed)
 
-<hr>
+<br>
 <div class="btn-group btn-group-justified" role="group" >
   <div class="btn-group" role="group">
         @if(Auth::user()->account->getOp1())

@@ -34,8 +34,11 @@
 	</div>
 
 	<center class="buttons">
-        {{ Button::lg_primary_submit_success(trans('texts.save'))->append_with_icon('floppy-disk') }}
-         {{ Button::lg_default_link('payments/' . ($payment ? $payment->public_id : ''), trans('texts.cancel'))->append_with_icon('remove-circle'); }}
+    
+    {{ Button::lg_default_link('payments/' . ($payment ? $payment->public_id : ''), trans('texts.cancel'))->append_with_icon('remove-circle'); }}
+	
+	{{ Button::lg_primary_submit_success(trans('texts.save'))->append_with_icon('floppy-disk') }}
+
 	</center>
 
 	{{ Former::close() }}

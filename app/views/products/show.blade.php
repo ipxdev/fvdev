@@ -1,8 +1,11 @@
 @extends('header')
 
 @section('content') 
-	
-	
+
+<div class="row">
+
+	<div class="col-md-10 col-md-offset-1">
+<br>
 	@if (!$product->trashed())		
 	<div class="pull-right">
 		{{ Former::open('products/bulk')->addClass('mainForm') }}
@@ -10,13 +13,13 @@
 			{{ Former::text('action') }}
 			{{ Former::text('id')->value($product->public_id) }}
 		</div>
-
+<br>
 		{{ DropdownButton::normal(trans('texts.edit_product'),
 			  Navigation::links(
 			    [
 			      [trans('texts.edit_product'), URL::to('products/' . $product->public_id . '/edit')],
 			      [Navigation::DIVIDER],
-			      [trans('texts.archive_product'), "javascript:onArchiveClick()"],
+			      [trans('texts.delete_product'), "javascript:onArchiveClick()"],
 			    ]
 			  )
 			, ['id'=>'normalDropDown'])->split(); }}	
@@ -31,7 +34,7 @@
 		<div class="col-md-8">
 			<table class="table" style="width:100%">
 				<tr>
-					<td><h3><strong>Nombre Producto </strong> : {{ $product->getDisplayName() }}</h3></td>				
+					<td><h3>{{ $product->getDisplayName() }}</h3></td>				
 				</tr>
 			</table>
 
@@ -43,15 +46,17 @@
 	<div class="row">
 
 		<div class="col-md-3">
-			<h3>{{ trans('texts.details') }}</h3>
+			<h4><br>
 			<p><strong>Código Nº </strong> : {{ $product->getProductKey() }}</p>
 			<p><strong>Costo </strong> : {{ $product->getProductCost() }}</p>
-
+</h4>
 		</div>
 
 	</div>
 
-	<p>&nbsp;</p>
+	</div>
+
+</div>
 
 	
 	<script type="text/javascript">

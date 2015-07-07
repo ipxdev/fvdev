@@ -18,7 +18,8 @@ class InvoiceRepository
   					->join('contacts', 'contacts.client_id', '=', 'clients.id')
             ->join('branches', 'branches.id', '=','invoices.branch_id')
             ->where('invoices.account_id', '=', $accountId)
-    				->where('invoices.is_recurring', '=', false)    			
+    				->where('invoices.is_recurring', '=', false)
+            ->where('contacts.deleted_at', '=', null)    			
     				->where('contacts.is_primary', '=', true)	
   					->select('clients.public_id as client_public_id', 'invoice_number', 'invoice_status_id', 'clients.name as client_name', 'branches.name as branch_name', 'invoices.public_id', 'amount', 'invoices.balance', 'invoice_date', 'due_date', 'invoice_statuses.name as invoice_status_name', 'clients.currency_id', 'contacts.first_name', 'contacts.last_name', 'contacts.email', 'quote_id', 'quote_invoice_id');
 

@@ -153,13 +153,6 @@
           </ul>
         </div>
 
-
-        @if (Auth::user()->getPopOverText() && Utils::isRegistered())
-        <button id="ninjaPopOver" type="button" class="btn btn-default" data-toggle="popover" data-placement="bottom" data-content="{{ Auth::user()->getPopOverText() }}" data-html="true" style="display:none">
-          {{ Auth::user()->getDisplayName() }}
-        </button>
-        @endif
-
 @endif
 
       </div>  
@@ -502,7 +495,7 @@
           @if(Auth::user()->account->getOp1() && Auth::user()->account->getOp2() && Auth::user()->account->getOp3())        
               <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()">ACEPTA QUE REVISO LOS DATOS</button>                    
           @else
-              <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitPlan()" disabled>ACEPTA QUE REVISO LOS DATOS</button>                    
+              <button type="button" class="btn btn-primary" id="proPlanButton" disabled>ACEPTA QUE REVISO LOS DATOS</button>                    
           @endif
 
 

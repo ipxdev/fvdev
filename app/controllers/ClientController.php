@@ -118,7 +118,6 @@ class ClientController extends \BaseController {
 		Utils::trackViewed($client->getDisplayName(), ENTITY_CLIENT);
 	
 		$actionLinks = [
-			[trans('texts.create_invoice'), URL::to('invoices/create/' . $client->public_id )],
      	[trans('texts.enter_payment'), URL::to('payments/create/' . $client->public_id )],
      	[trans('texts.enter_credit'), URL::to('credits/create/' . $client->public_id )]
     ];

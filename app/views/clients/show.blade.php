@@ -10,7 +10,7 @@
 			{{ Former::text('action') }}
 			{{ Former::text('id')->value($client->public_id) }}
 		</div>
-
+<br>
 		{{ DropdownButton::normal(trans('texts.edit_client'),
 			  Navigation::links(
 			    [

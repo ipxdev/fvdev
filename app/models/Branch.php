@@ -1,6 +1,6 @@
 <?php
 
-class Branch extends EntityModelB
+class Branch extends EntityModel
 {
 
 	protected $softDelete = true;	

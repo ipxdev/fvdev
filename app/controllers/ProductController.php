@@ -47,7 +47,7 @@ class ProductController extends \BaseController {
                 <ul class="dropdown-menu" role="menu">
                 <li><a href="' . URL::to('products/'.$model->public_id) . '/edit">'.uctrans('texts.edit_product').'</a></li>                
                 <li class="divider"></li>
-                <li><a href="' . URL::to('products/'.$model->public_id) . '/archive">'.uctrans('texts.archive_product').'</a></li>
+                <li><a href="' . URL::to('products/'.$model->public_id) . '/archive">'.uctrans('texts.delete_product').'</a></li>
               </ul>
             </div>';
           })        
@@ -150,35 +150,53 @@ class ProductController extends \BaseController {
 
   private function save($publicId = null)
   {
-      if ($publicId)
-      {
-        $product = Product::scope($publicId)->firstOrFail();
-      }
-      else
-      {
-        $product = Product::createNew();
-      }
+      
+    $productId =  $publicId ? Product::getPrivateId($publicId) : null;
+    $rules = ['product_key' => 'unique:products,product_key,' . $productId . ',id,account_id,' . Auth::user()->account_id];     
 
-      $product->product_key = strtoupper(trim(Input::get('product_key')));
-      $product->notes = trim(Input::get('notes'));
-      $product->cost = trim(Input::get('cost'));
-      $product->category_id = trim(Input::get('category_id'));
+    $validator = Validator::make(Input::all(), $rules);
 
-      $product->save();
+    if ($validator->fails()) 
+    {
 
-            
-      if ($publicId) 
-      {
-        Session::flash('message', trans('texts.updated_product'));
-      } 
-      else 
-      {
-        // Activity::createProduct($product);
-        Session::flash('message', trans('texts.created_product'));
-      }
+        $url = $publicId ? 'products/' . $publicId . '/edit' : 'products/create';
+        return Redirect::to($url)
+          ->withErrors($validator)
+          ->withInput();
 
-      return Redirect::to('products/' . $product->public_id);
-  
+    } 
+    else 
+    {
+
+        if ($publicId)
+        {
+          $product = Product::scope($publicId)->firstOrFail();
+        }
+        else
+        {
+          $product = Product::createNew();
+        }
+
+        $product->product_key = strtoupper(trim(Input::get('product_key')));
+        $product->notes = trim(Input::get('notes'));
+        $product->cost = trim(Input::get('cost'));
+        $product->category_id = trim(Input::get('category_id'));
+
+        $product->save();
+
+              
+        if ($publicId) 
+        {
+          Session::flash('message', trans('texts.updated_product'));
+        } 
+        else 
+        {
+          // Activity::createProduct($product);
+          Session::flash('message', trans('texts.created_product'));
+        }
+
+        return Redirect::to('products/' . $product->public_id);
+    }
   }
 
   public function archive($publicId)

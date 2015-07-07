@@ -167,7 +167,7 @@ class Account extends Eloquent
 		}
 		else
 		{
-			return 'US/Eastern';
+			return 'America/La_Paz';
 		}
 	}
 
@@ -281,6 +281,25 @@ class Account extends Eloquent
 		}
 
 		return $data;
+	}
+
+	public function isRegistered()
+	{
+
+		if ($this->account_key == IPX_ACCOUNT_KEY)
+		{
+			return true;
+		}
+
+		$datePaid = $this->pro_plan_paid;
+		if (!$datePaid == '0000-00-00')
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function isPro()

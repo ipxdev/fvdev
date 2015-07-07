@@ -35,21 +35,6 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		return $this->belongsTo('Account');
 	}
 
-	public function branch()
-	{
-		return $this->belongsTo('Branch');
-	}
-
-	public function theme()
-	{
-		return $this->belongsTo('Theme');
-	}
-
-	public function getPersonType()
-	{
-		return PERSON_USER;
-	}
-
 	public function getId()
 	{
 		return $this->id;
@@ -93,11 +78,6 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 	public function isDemo()
 	{
 		return $this->account->id == Utils::getDemoAccountId();
-	}
-
-	public function maxInvoiceDesignId()
-	{
-		return $this->isPro() ? 10 : COUNT_FREE_DESIGNS;
 	}
 
 	public function getDisplayName()
@@ -150,61 +130,10 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		}
 	}	
 
-	public function showGreyBackground()
-	{
-		return !$this->theme_id || in_array($this->theme_id, [2, 3, 5, 6, 7, 8, 10, 11, 12]);
-	}
-
-	public function getRequestsCount()
-	{
-		return Session::get(SESSION_COUNTER, 0);
-	}
-
-	public function getPopOverText()
-	{
-		if (!Auth::check() || Session::has('error'))
-		{
-			return false;
-		}
-
-			if (!Utils::isRegistered())
-			{
-				return trans('texts.sign_up_to_save');
-			}
-
-		return false;
-	}
-
-	public function afterSave($success=true, $forced = false)
-	{
-		if ($this->email)
-		{
-			return parent::afterSave($success=true, $forced = false);
-		}
-		else
-		{
-			return true;
-		}	
-	}
 
 	public function getMaxNumClients()
 	{
-		return $this->isPro() ? MAX_NUM_CLIENTS_PRO : MAX_NUM_CLIENTS;
-	}
-
-	public function getRememberToken()
-	{
-	    return $this->remember_token;
-	}
-
-	public function setRememberToken($value)
-	{
-	    $this->remember_token = $value;
-	}
-
-	public function getRememberTokenName()
-	{
-	    return 'remember_token';
+		return MAX_NUM_CLIENTS;
 	}
 
 	public function isAdmin()

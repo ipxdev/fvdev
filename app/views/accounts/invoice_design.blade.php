@@ -95,7 +95,7 @@
     }
 
     function getLogoJavascript() {
-      return invoiceDesigns[0].name; 
+      return invoiceDesigns[0].logo; 
     }
 
     $('#x, #y').change(function() {
@@ -139,15 +139,14 @@
       invoice.branch_name = branches[aux-1].name;
       invoice.address2 = branches[aux-1].address2;
       invoice.address1 = branches[aux-1].address1;
-      invoice.phone = branches[aux-1].postal_code;
+      invoice.phone = branches[aux-1].work_phone;
       invoice.city = branches[aux-1].city;
       invoice.state = branches[aux-1].state;
       invoice.number_autho = branches[aux-1].number_autho;
       invoice.deadline = branches[aux-1].deadline;
-      invoice.activity_pri = branches[aux-1].activity_pri;
-      invoice.aux1 = branches[aux-1].aux2;
-      invoice.third = branches[aux-1].third;
-  
+      invoice.economic_activity = branches[aux-1].economic_activity;
+      invoice.branch_type_id = branches[aux-1].branch_type_id;
+      invoice.type_third = branches[aux-1].type_third;
 
       invoice.is_pro = {{ Auth::user()->isPro() ? 'true' : 'false' }};
       invoice.account.hide_quantity = $('#hide_quantity').is(":checked");
@@ -181,7 +180,7 @@
 
       {{ Former::file('logo')->label('logo')->max(2, 'MB')->accept('image')->inlineHelp(trans('texts.logo_help')) }}
 
-      @if (file_exists($account->getLogoPath()))
+      @if ($invoiceDesign->logo)
         {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
         {{ Former::range('y')->label('vertical')->min(0)->max(60)->step(3)->class('range') }}
         {{ Former::actions( Button::lg_success_submit(trans('Modificar logo'))->append_with_icon('floppy-disk') ) }}

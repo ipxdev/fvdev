@@ -79,18 +79,14 @@
 	{{ Former::open_for_files()->addClass('col-md-12 warn-on-exit')->rules(array(
   		'name' => 'required|min:3',
   		'email' => 'email|required',
-  		'nit' => 'required|Numeric|min:7',
-  		'username' => 'required|min:4',
+  		'nit' => 'required|Numeric|min:5',
   		'uniper' => 'min:4',
   		'work_phone' => 'required|match:/[0-9.-]+/|min:7',
   		'address1' => 'required|min:4',
   		'address2' => 'required|min:4',
-  		'country_id' => 'required',
   		'first_name' => 'required|match:/[a-zA-Z. ]+/|min:3',
   		'last_name' => 'required|match:/[a-zA-Z. ]+/|min:3',
-  		'phone' => 'required|Numeric|match:/[0-9.-]+/|min:8',
-  		'password' => 'required',
-  		'password_confirmation' => 'required'
+  		'phone' => 'required|Numeric|match:/[0-9.-]+/|min:8'
   		
 	)) }}
 
@@ -127,8 +123,6 @@
 
 
 			{{ Former::legend('address')  }}
-			{{ Former::select('country_id')->addOption('','')->label('ciudad  (*)')
-				->fromQuery($countries, 'name', 'id') }}
 			{{ Former::text('address2')->label('Dirección (*)') }}
 			{{ Former::text('address1')->label('Zona/Barrio (*)') }}
 			{{ Former::text('work_phone')->label('Teléfono (*)')->title('Solo se acepta Número Telefónico') }}			
@@ -143,16 +137,6 @@
 				{{ Former::text('last_name')->label('Apellidos (*)')->title('Solo se acepta Letras') }}
 				{{ Former::text('phone')->label('Celular (*)')->title('Solo se acepta Número Telefónico') }}
 				{{ Former::text('email')->label('Correo electrónico (*)') }}
-
-
-				{{ Former::legend('Datos de Ingreso') }}
-				{{ Former::text('username')->label('nombre de Usuario (*)') }}
-
-				@if (!Auth::user()->confirmed)
-					{{ Former::password('password')->label('contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}        
-					{{ Former::password('password_confirmation')->label('Repertir contraseña (*)')->pattern('.{4,}')->title('Mínimo cuatro caracteres') }}      
-
-				@endif 
 
 			@endif
 
@@ -171,34 +155,27 @@
 
   <script type="text/javascript">
 
-  var PlanetsModel = function() {
+  var Model = function() {
       
       this.displayAdvancedOptions = ko.observable({{ $account->is_uniper ? 'true' : 'false' }});
-   
-      // Animation callbacks for the planets list
       this.showPlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
       this.hidePlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove(); }) }
   };
    
-  // Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
-  // Could be stored in a separate utility library
   ko.bindingHandlers.fadeVisible = {
       init: function(element, valueAccessor) {
-          // Initially set the element to be instantly visible/hidden depending on the value
           var value = valueAccessor();
-          $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+          $(element).toggle(ko.utils.unwrapObservable(value));
       },
       update: function(element, valueAccessor) {
-          // Whenever the value subsequently changes, slowly fade the element in or out
           var value = valueAccessor();
           ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
       }
   };
    
-  ko.applyBindings(new PlanetsModel());
+  ko.applyBindings(new Model());
 
   </script>
-
 
 	@if (Auth::user()->confirmed)
 	<script>
@@ -208,21 +185,11 @@
     	 $( "#name" ).prop( "disabled", true );
     	 $( "#unipersonal" ).prop( "disabled", true );
     	 $( "#uniper" ).prop( "disabled", true );
-
-    	 
+     
     });
 	</script>	
 	@endif
 
 	{{ Former::close() }}
-
-
-	<script type="text/javascript">
-
-		$(function() {
-			$('#country_id').combobox();
-		});
-		
-	</script>
 
 @stop

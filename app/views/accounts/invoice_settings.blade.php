@@ -1,5 +1,4 @@
 @extends('accounts.nav_advanced')
-	
 
 @section('content')	
 {{ Former::legend('panel_settings') }}

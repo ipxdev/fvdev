@@ -21,8 +21,6 @@ class CategoryController extends \BaseController {
             </button>
             <ul class="dropdown-menu" role="menu">
             <li><a href="' . URL::to('categories/'.$model->public_id) . '/edit">'.uctrans('texts.edit_category').'</a></li>                
-            <li class="divider"></li>
-            <li><a href="' . URL::to('categories/'.$model->public_id) . '/archive">'.uctrans('texts.archive_category').'</a></li>
           </ul>
         </div>';
       })       
@@ -84,6 +82,21 @@ class CategoryController extends \BaseController {
   private function save($categoryPublicId = false)
   {
 
+    $categoryId =  $categoryPublicId ? Category::getPrivateId($categoryPublicId) : null;
+    $rules = ['name' => 'unique:categories,name,' . $categoryId . ',id,account_id,' . Auth::user()->account_id];     
+
+    $validator = Validator::make(Input::all(), $rules);
+
+    if ($validator->fails()) 
+    {
+        $url = $categoryPublicId ? 'categories/' . $categoryPublicId . '/edit' : 'categories/create';
+        return Redirect::to($url)
+          ->withErrors($validator)
+          ->withInput();
+    } 
+    else 
+    {
+
 	    if ($categoryPublicId)
 	    {
 	      $category = Category::scope($categoryPublicId)->firstOrFail();
@@ -94,6 +107,7 @@ class CategoryController extends \BaseController {
 	    }
 
 	    $category->name = trim(Input::get('name'));
+      $category->description = trim(Input::get('description'));
 
 	    $category->save();
 
@@ -103,7 +117,7 @@ class CategoryController extends \BaseController {
       Session::flash('message', $message);
 
 	    return Redirect::to('company/categories');  
-
+    }
   }
 
   public function archive($publicId)

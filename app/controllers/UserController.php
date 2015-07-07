@@ -60,26 +60,6 @@ class UserController extends BaseController {
         ->make();           
     }
 
-    public function setTheme()
-    {
-        $user = User::find(Auth::user()->id);
-        $user->theme_id = Input::get('theme_id');
-        $user->save();
-        
-        return Redirect::to(Input::get('path'));
-    }
-
-    public function forcePDFJS()
-    {
-        $user = Auth::user();
-        $user->force_pdfjs = true;
-        $user->save();
-
-        Session::flash('message', trans('texts.confide.updated_settings'));
-
-        return Redirect::to('/dashboard'); 
-    }
-
     public function edit($publicId)
     {
         $user = User::where('account_id', '=', Auth::user()->account_id)

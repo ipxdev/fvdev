@@ -7,11 +7,12 @@
     <div class="alert alert-danger"></div>
 @endif
 
-
+<br>
   {{ Former::legend($title) }}
 
-    {{ Former::open_for_files($url)->method($method)->addClass('col-md-12 warn-on-exit')->rules(array( 
-        'name' => 'required'
+    {{ Former::open_for_files($url)->method($method)->addClass('col-md-8 col-md-offset-2 warn-on-exit')->rules(array( 
+        'name' => 'required|match:/[a-zA-Z. ]+/|min:3',
+        'description' => 'match:/[a-zA-Z. ]+/|min:3'
     )); }}
 
     @if ($category)
@@ -20,24 +21,16 @@
       
     @endif
 
-  <div class="row">
-    <div class="col-md-6">  
 
     {{ Former::legend('category') }}
 
     {{ Former::text('name')->label('Nombre (*)') }}
+    {{ Former::text('description')->label('Descripción (*)') }}
 
-    </div>
-
-    <div class="col-md-6">    
-    
-    </div>
-  </div>
-
-
+<hr>
       {{ Former::actions( 
-          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk'),
-          Button::lg_default_link('company/categories', 'Cancelar')->append_with_icon('remove-circle')      
+          Button::lg_default_link('company/categories', 'Cancelar')->append_with_icon('remove-circle'),
+          Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk')
       ) }}
 
 
