@@ -218,7 +218,6 @@ class UserController extends BaseController {
 
             $user->username = trim(Input::get('username'))."@".Auth::user()->account->getNit();
             $user->password = trim(Input::get('password'));
-            $user->password_confirmation = trim(Input::get('password_confirmation'));
 
             $user->is_admin = trim(Input::get('is_admin'));
             $user->email = trim(Input::get('email'));
@@ -246,13 +245,10 @@ class UserController extends BaseController {
             $user->last_name = trim(Input::get('last_name'));
             $user->username = trim(Input::get('username'))."@".Auth::user()->account->getNit();
             $user->password = trim(Input::get('password'));
-            $user->password_confirmation = trim(Input::get('password_confirmation'));
 
             $user->email = trim(Input::get('email'));
             $user->phone = trim(Input::get('phone'));
             $user->registered = true;
-            $user->password = str_random(RANDOM_KEY_LENGTH);
-            $user->password_confirmation = $user->password;
             $user->public_id = $lastUser->public_id + 1;  
 
             if(Input::get('facturador'))

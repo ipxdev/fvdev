@@ -56,8 +56,7 @@ class AccountController extends \BaseController {
 		$username = trim(Input::get('username'));
 		$user->username = $username . "@" . $account->nit;
 		$user->password = trim(Input::get('password'));
-		$user->password_confirmation = trim(Input::get('password'));
-
+		
 		$user->confirmation_code = '';
 		$user->is_admin = true;
 		$account->users()->save($user);
@@ -172,10 +171,10 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 
 	public function enablePlan()
 	{		
-		$user = Auth::user();
-		$user->confirmation_code = '';
-		$user->confirmed = true;
-		$user->amend();
+
+		$account = Auth::user()->account;
+		$account->confirmed = true;
+		$account->save();
 
 		$result = $this->accountRepo->enablePlan();
 
@@ -1408,16 +1407,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 				$user->first_name = trim(Input::get('first_name'));
 				$user->last_name = trim(Input::get('last_name'));
 				$user->password = trim(Input::get('password'));
-				$user->password_confirmation = trim(Input::get('password_confirmation'));
 				
-				if(Input::get('nit'))
-				{
-					$user->username = trim(Input::get('username'))."@".trim(Input::get('nit'));
-				}else
-				{
-           			$user->username = trim(Input::get('username'))."@".Auth::user()->account->getNit();      
-				}
-
 				$user->email = trim(strtolower(Input::get('email')));
 				$user->phone = trim(Input::get('phone'));				
 				$user->save();

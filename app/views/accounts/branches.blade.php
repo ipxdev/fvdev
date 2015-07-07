@@ -2,7 +2,7 @@
 
 @section('content') 
 
-@if (!Auth::user()->confirmed)
+@if (!Auth::user()->account->confirmed)
 
 <br>
 <div class="btn-group btn-group-justified" role="group" >
@@ -66,7 +66,7 @@
 
 @endif
 
-@if (Auth::user()->confirmed)
+@if (Auth::user()->account->confirmed)
 {{ Former::legend('panel_settings') }}
 @endif
 
@@ -113,7 +113,7 @@
 
 
   <center>
-  @if (!Auth::user()->confirmed)
+  @if (!Auth::user()->account->confirmed)
     @if(Auth::user()->account->getOp2()) 
     <a href="{{ URL::to('company/invoice_design') }}">
     <button type="button" class="btn lg-success-submit ipxhover2" >              

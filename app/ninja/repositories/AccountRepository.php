@@ -119,6 +119,7 @@ class AccountRepository
 			$account->account_key = IPX_ACCOUNT_KEY;
 			$account->currency_id = 1;
 			$account->language_id = 1;
+			$account->confirmed = true;
 			$account->op1 = true;
 			$account->op2 = true;
 			$account->op3 = true;

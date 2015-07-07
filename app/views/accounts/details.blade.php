@@ -7,7 +7,7 @@
 
 @section('content') 
 
-@if (!Auth::user()->confirmed)
+@if (!Auth::user()->account->confirmed)
 
 <br>
 <div class="btn-group btn-group-justified" role="group" >
@@ -68,7 +68,7 @@
 
 @endif
 
-@if (Auth::user()->confirmed)
+@if (Auth::user()->account->confirmed)
 {{ Former::legend('panel_settings') }}
 @else
 {{ Former::legend('Perfil de la Empresa') }}
@@ -145,7 +145,7 @@
 	
 	<center>
 
-	@if (Auth::user()->confirmed)
+	@if (Auth::user()->account->confirmed)
 		{{ Button::lg_success_submit(trans('texts.save'))->append_with_icon('floppy-disk') }}
 	@else
 		{{ Button::lg_success_submit('Siguiente')->append_with_icon('chevron-right') }}
@@ -177,7 +177,7 @@
 
   </script>
 
-	@if (Auth::user()->confirmed)
+	@if (Auth::user()->account->confirmed)
 	<script>
 
     $(function() {   

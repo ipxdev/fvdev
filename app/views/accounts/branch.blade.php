@@ -112,7 +112,7 @@
 
         @if (!$branch->isValid1())
 
-            @if (Utils::isConfirmed())
+            @if (Auth::user()->account->confirmed)
                   {{ Former::actions( 
                     Button::lg_default_link('company/branches', 'Volver')      
                   ) }}

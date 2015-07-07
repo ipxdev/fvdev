@@ -2,7 +2,7 @@
 
 @section('content')
  
-@if (Auth::user()->confirmed)
+@if (Auth::user()->account->confirmed)
 
 <ul class="nav nav-tabs nav nav-justified">
 

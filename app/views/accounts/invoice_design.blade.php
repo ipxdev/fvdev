@@ -17,7 +17,7 @@
 
 @section('content') 
 
-@if (!Auth::user()->confirmed)
+@if (!Auth::user()->account->confirmed)
 
 <br>
 <div class="btn-group btn-group-justified" role="group" >
@@ -171,15 +171,12 @@
       @if ($invoiceDesign->logo)
         {{ Former::range('x')->label('horizontal')->min(0)->max(160)->step(5)->class('range')->onkeyup('onItemChange()') }}
         {{ Former::range('y')->label('vertical')->min(0)->max(60)->step(3)->class('range') }}
-        {{ Former::actions( Button::lg_success_submit(trans('Modificar logo'))->append_with_icon('floppy-disk') ) }}
-      @else
-        {{ Former::actions( Button::lg_success_submit(trans('Guardar logo'))->append_with_icon('floppy-disk') ) }}
       @endif
 
-      @if (Utils::isConfirmed())
-        {{ Former::legend('Nuevo Diseño') }}
+      @if (Auth::user()->account->confirmed)
+        {{ Former::legend('Crear Nuevo Diseño') }}
       @else
-        {{ Former::legend('Cambiar Diseño') }}
+        {{ Former::legend('Modificar Diseño') }}
       @endif
 
       {{ Form::textarea('design', null, ['size' => '6x2']) }}
@@ -187,10 +184,10 @@
       <p>&nbsp;</p>
       <p>&nbsp;</p>
 
-      @if (Auth::user()->confirmed)
-        {{ Former::actions( Button::lg_success_submit(trans('Modificar Diseño'))->append_with_icon('floppy-disk') ) }}
+      @if (Auth::user()->account->confirmed)
+        {{ Former::actions( Button::lg_success_submit(trans('Crear Nuevo Diseño'))->append_with_icon('floppy-disk') ) }}
       @else
-        {{ Former::actions( Button::lg_success_submit(trans('Guardar Diseño'))->append_with_icon('floppy-disk') ) }}
+        {{ Former::actions( Button::lg_success_submit(trans('Modificar Diseño'))->append_with_icon('floppy-disk') ) }}
       @endif
 
     </div>

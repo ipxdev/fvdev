@@ -51,12 +51,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="{{ URL::to('/') }}" class='navbar-brand'>
+      <a href="" class='navbar-brand'>
         <img src="{{ asset('images/logo-factura-virtual.png') }}" style="height:25px;margin-top:-5px;width:auto"/>
       </a>      
     </div>
       
-    @if (Auth::user()->confirmed)
+    @if (Auth::user()->account->confirmed)
 
       <div style="font-size:15px; margin:0 ;color:#fff;text-align:right;">
 
@@ -84,7 +84,7 @@
 
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
-    @if (Auth::user()->confirmed)
+    @if (Auth::user()->account->confirmed)
       <ul class="nav navbar-nav">
 
         {{ HTML::nav_link('dashboard', 'dashboard') }}
@@ -104,7 +104,7 @@
       <div class="navbar-form navbar-right">
 
         @if (Auth::check())
-          @if (!Auth::user()->confirmed)
+          @if (!Auth::user()->account->confirmed)
 
             {{-- Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) --}} &nbsp;
             {{ Button::sm_primary('Calcular Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
@@ -122,7 +122,7 @@
         @endif
 
 
-    @if (Auth::user()->confirmed)
+    @if (Auth::user()->account->confirmed)
 
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
