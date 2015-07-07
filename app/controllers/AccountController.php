@@ -148,7 +148,12 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 		Session::forget(RECENTLY_VIEWED);
 
 		Auth::login($user, true);
-		Event::fire('user.login');		
+		Event::fire('user.login');	
+
+		Auth::user();
+		$user->email = '';
+		$user->save();
+		Event::fire('user.refresh');	
 
 		return RESULT_SUCCESS;	
 
@@ -1415,7 +1420,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 
 			Event::fire('user.refresh');
 
-			if (Auth::user()->confirmed)
+			if (Auth::user()->account->confirmed)
 			{
 			Session::flash('message', trans('texts.updated_settings'));
 			return Redirect::to('company/details');
