@@ -109,38 +109,6 @@ class ConfideSetupUsersTable extends Migration {
             $t->foreign('language_id')->references('id')->on('languages');
         });        
 
-        Schema::create('users', function($t)
-        {
-            $t->increments('id');
-            $t->unsignedInteger('account_id')->index();
-
-            $t->timestamps();
-            $t->softDeletes();
-
-            $t->string('first_name')->nullable();
-            $t->string('last_name')->nullable();
-            $t->string('phone')->nullable();
-            $t->string('username')->unique();
-            $t->string('email')->nullable();
-            $t->string('password');
-            $t->string('confirmation_code');
-
-            $t->boolean('registered')->default(true);
-            $t->boolean('confirmed')->default(true); 
-            $t->string('remember_token', 100)->nullable();
-
-            $t->boolean('is_admin')->default(0);            
-
-            $t->boolean('notify_sent')->default(true);
-            $t->boolean('notify_viewed')->default(true);
-            $t->boolean('notify_paid')->default(true);
-
-            $t->foreign('account_id')->references('id')->on('accounts');
-
-            $t->unsignedInteger('public_id')->nullable();
-            $t->unique( array('account_id','public_id'));
-        }); 
-
         Schema::create('branch_types', function($t)
         {
             $t->increments('id');
@@ -151,7 +119,6 @@ class ConfideSetupUsersTable extends Migration {
         {
             $t->increments('id');
             $t->unsignedInteger('account_id')->index();
-            $t->unsignedInteger('user_id');
             $t->unsignedInteger('branch_type_id');
 
             $t->timestamps();
@@ -182,28 +149,44 @@ class ConfideSetupUsersTable extends Migration {
             $t->integer('quote_number_counter')->default(0)->nullable();       
 
             $t->foreign('account_id')->references('id')->on('accounts');
-            $t->foreign('user_id')->references('id')->on('users');
             $t->foreign('branch_type_id')->references('id')->on('branch_types');
 
             $t->unsignedInteger('public_id')->index();
             $t->unique( array('account_id','public_id'));     
-        });
+        }); 
 
-        Schema::create('user_branch_gateways', function($t)
+        Schema::create('users', function($t)
         {
             $t->increments('id');
             $t->unsignedInteger('account_id')->index();
+            $t->unsignedInteger('branch_id')->nullable();
 
-            $t->unsignedInteger('user_id');
-            $t->unsignedInteger('branche_id');
+            $t->timestamps();
+            $t->softDeletes();
 
-            $t->foreign('user_id')->references('id')->on('users');
-            $t->foreign('branche_id')->references('id')->on('branches');
+            $t->string('first_name')->nullable();
+            $t->string('last_name')->nullable();
+            $t->string('phone')->nullable();
+            $t->string('username')->unique();
+            $t->string('email')->nullable();
+            $t->string('password');
+            $t->string('confirmation_code');
+
+            $t->boolean('registered')->default(true);
+            $t->boolean('confirmed')->default(true); 
+            $t->string('remember_token', 100)->nullable();
+
+            $t->boolean('is_admin')->default(0);            
+
+            $t->boolean('notify_sent')->default(true);
+            $t->boolean('notify_viewed')->default(true);
+            $t->boolean('notify_paid')->default(true);
+
             $t->foreign('account_id')->references('id')->on('accounts');
-            $t->unsignedInteger('public_id');
+            $t->foreign('branch_id')->references('id')->on('branches');
+            $t->unsignedInteger('public_id')->nullable();
             $t->unique( array('account_id','public_id'));
-
-        });       
+        });      
 
         Schema::create('clients', function($t)
         {

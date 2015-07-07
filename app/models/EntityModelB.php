@@ -1,6 +1,6 @@
 <?php
 
-class EntityModel extends Eloquent
+class EntityModelB extends Eloquent
 {
 	protected $softDelete = true;
 	public $timestamps = true;
@@ -14,14 +14,11 @@ class EntityModel extends Eloquent
 		
 		if ($parent)
 		{
-			$entity->user_id = $parent instanceof User ? $parent->id : $parent->user_id;
 			$entity->account_id = $parent->account_id;
-
 		} 
 		else if (Auth::check()) 
 		{
-			$entity->user_id = Auth::user()->id;
-			$entity->account_id = Auth::user()->account_id;
+			$entity->account_id = Auth::user()->account_id;			
 		} 
 		else 
 		{

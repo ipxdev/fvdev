@@ -1,6 +1,6 @@
 <?php
 
-class Branch extends EntityModel
+class Branch extends EntityModelB
 {
 
 	protected $softDelete = true;	
@@ -8,11 +8,6 @@ class Branch extends EntityModel
 	public function account()
 	{
 		return $this->belongsTo('Account');
-	}
-	
-	public function users()
-	{
-		return $this->hasMany('User');
 	}
 
 	public function invoices()

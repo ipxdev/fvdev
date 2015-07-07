@@ -17,4 +17,9 @@ class Category extends EntityModel
 	{
 		return $this->hasMany('User');
 	}
+
+	public function getName()
+	{
+		return $this->name();
+	}
 }

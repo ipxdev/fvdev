@@ -26,23 +26,7 @@ function printCanvas() {
   logoImages.imageLogo1 = "{{ HTML::image_data('images/report_logo1.jpg') }}";
   logoImages.imageLogoWidth1 =120;
   logoImages.imageLogoHeight1 = 40;
-
-  logoImages.imageLogo2 = "{{ HTML::image_data('images/report_logo2.jpg') }}";
-  logoImages.imageLogoWidth2 =325/2;
-  logoImages.imageLogoHeight2 = 81/2;
-
-  logoImages.imageLogo3 = "{{ HTML::image_data('images/report_logo3.jpg') }}";
-  logoImages.imageLogoWidth3 =325/2;
-  logoImages.imageLogoHeight3 = 81/2;
-
-  @if (file_exists($account->getLogoPath()))
-  if (window.invoice) {
-    invoice.image = "{{ HTML::image_data($account->getLogoPath()) }}";
-    invoice.imageWidth = {{ $account->getLogoWidth() }};
-    invoice.imageHeight = {{ $account->getLogoHeight() }};
-  }
-  @endif  
-
+ 
   var NINJA = NINJA || {};
   NINJA.primaryColor = "{{ $account->primary_color }}";
   NINJA.secondaryColor = "{{ $account->secondary_color }}";
@@ -53,11 +37,8 @@ function printCanvas() {
   var needsRefresh = false;
 
   function refreshPDF() {
-    if ({{ Auth::check() && Auth::user()->force_pdfjs ? 'true' : 'false' }} && (isFirefox || (isChrome && !isChromium))) {
-      var string = getPDFString();
-      if (!string) return;
-      $('#theFrame').attr('src', string).show();    
-    } else {      
+    if ({{ Auth::check()}}) {      
+      
       if (isRefreshing) {
         needsRefresh = true;
         return;
@@ -87,15 +68,6 @@ function printCanvas() {
         });
       }); 
     }
-  }
-
-  function showMoreDesigns() {
-    trackUrl('/view_more_designs');
-    $('#moreDesignsModal').modal('show');
-  }
-
-  function buyDesigns() {
-    window.open('{{ Utils::isNinjaDev() ? '' : NINJA_URL }}/license?return_url=' + window.location + '&affiliate_key={{ DESIGNS_AFFILIATE_KEY }}&product_id={{ PRODUCT_INVOICE_DESIGNS }}');
   }
 
 </script>

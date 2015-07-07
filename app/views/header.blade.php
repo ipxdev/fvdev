@@ -65,12 +65,9 @@
         @if (Utils::isAdmin())
         <a href="{{ URL::to('/select_branch') }}" style="color:#00B0DC!important;">
         
-        {{ Auth::user()->getDisplayBranch() }}
+        Cambiar Sucursal
         <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
         </a>
-        @else
-        {{ Auth::user()->getDisplayBranch() }}
-        <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
         @endif
 
       </div>

@@ -75,11 +75,6 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		return $this->account->isPro();
 	}
 
-	public function isDemo()
-	{
-		return $this->account->id == Utils::getDemoAccountId();
-	}
-
 	public function getDisplayName()
 	{
 		if ($this->getFullName())
@@ -94,28 +89,6 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		{
 			return 'Nombre de Usuario';
 		}
-	}
-
-	public function getDisplayBranch()
-	{
-		if($this->isAdmin())
-		{
-			if ($this->branch_id==NULL)
-			{
-				return "Sin Sucursal";
-			}
-			else
-			{
-				return $this->branch->name();
-			}
-
-		}
-		else
-		{
-			return $this->branch->name();
-
-		}
-		
 	}
 
 	public function getFullName()

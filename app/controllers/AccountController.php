@@ -605,7 +605,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 						File::delete('logo/' . $account->account_key . '.jpg');		
 
 						$image = Image::make($path)->resize(200, 120, true, false);
-						Image::canvas($image->width, $image->height, '#FFFFFF')->insert($image)->save($account->getLogoPath());
+						Image::canvas($image->width, $image->height, '#FFFFFF')->insert($image)->save('logo/' . $account->account_key . '.jpg');
 						$invoice_design->logo = HTML::image_data('logo/' . $account->account_key . '.jpg');
 						File::delete('logo/' . $account->account_key . '.jpg');	
 						$invoice_design->save();

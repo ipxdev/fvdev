@@ -97,7 +97,7 @@
 
   var branches = {{ $branches }}; 
 
-  var PlanetsModel = function() {
+  var Model = function() {
       
       this.displayAdvancedOptions = ko.observable(false);
       this.branch_public_id = ko.observable('');
@@ -112,7 +112,7 @@
               var branch = branches[i];
               if (branch.public_id == this.branch_public_id())
               {
-                    str +=  '<b>Actividad Económica</b><br/> ' + branch.activity_pri + '<br/>';
+                    str +=  '<b>Actividad Económica</b><br/> ' + branch.economic_activity + '<br/>';
                     str +=  '<b>Dirección</b><br/> ' + branch.address1 + '<br/>';
                     str +=  '<b>Zona/Barrio</b><br/> ' + branch.address2;
                     break;
@@ -123,33 +123,23 @@
         return str;
 
       }, this);
-   
-      // Animation callbacks for the planets list
-      this.showPlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
-      this.hidePlanetElement = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove(); }) }
   };
    
-  // Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
-  // Could be stored in a separate utility library
   ko.bindingHandlers.fadeVisible = {
       init: function(element, valueAccessor) {
-          // Initially set the element to be instantly visible/hidden depending on the value
           var value = valueAccessor();
-          $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+          $(element).toggle(ko.utils.unwrapObservable(value)); 
       },
       update: function(element, valueAccessor) {
-          // Whenever the value subsequently changes, slowly fade the element in or out
           var value = valueAccessor();
           ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
       }
   };
    
-  ko.applyBindings(new PlanetsModel());
+  ko.applyBindings(new Model());
 
 
   </script>
-
-		
 
 		{{ Former::close() }}
 
