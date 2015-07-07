@@ -415,9 +415,10 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 				else if ($section == ACCOUNT_INVOICE_DESIGN) 
 				{
 					$invoiceDesign = DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
+					$branches = Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('id')->get();
 
 					$data = [
-						'account' => Auth::user()->account,
+						'branches' => $branches,
 						'invoiceDesign' => $invoiceDesign
 					];			
 					$invoice = new stdClass();
@@ -456,9 +457,6 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 					$invoice->invoice_items = [$invoiceItem];			
 					
 					$data['invoice'] = $invoice;
-
-					$data['invoiceDesigns'] = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
-					$data['branches'] = Branch::where('account_id', '=', Auth::user()->account_id)->orderBy('id')->get();
 
 
 					return View::make("accounts.invoice_design", $data);	
@@ -585,7 +583,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 					if (Auth::user()->account->isRegistered())
 					{
 				        $invoice_design = InvoiceDesign::createNew();
-				        $invoice_design_old = InvoiceDesign::scope()->where('account_id', '=', $account->id)->orderBy('public_id', 'desc')->firstOrFail();
+				        $invoice_design_old = InvoiceDesign::scope()->orderBy('public_id', 'desc')->firstOrFail();
 						$invoice_design->javascript = $invoice_design_old->javascript;
 						$invoice_design->x = $invoice_design_old->x;
 						$invoice_design->y = $invoice_design_old->y;
@@ -594,7 +592,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 					}
 				    else
 				    {
-				        $invoice_design = InvoiceDesign::scope()->where('account_id', '=', $account->id)->orderBy('public_id', 'desc')->firstOrFail();
+				        $invoice_design = InvoiceDesign::scope()->orderBy('public_id', 'desc')->firstOrFail();
 				    }
 			    
 				    if ($file = Input::file('logo'))

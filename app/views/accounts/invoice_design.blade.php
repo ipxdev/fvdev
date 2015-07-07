@@ -82,20 +82,20 @@
   @parent
 
   <script>
-    var invoiceDesigns = {{ $invoiceDesigns }};
+
     var branches = {{ $branches }};
+    var invoiceDesign = {{ json_encode($invoiceDesign) }};
     var invoice = {{ json_encode($invoice) }};   
 
-    var xd = invoiceDesigns[0].x;   
-    var yd = invoiceDesigns[0].y;
+    var xd = invoiceDesign.x;   
+    var yd = invoiceDesign.y;
 
     function getDesignJavascript() {
-      // var id = $('#invoice_design_id').val();
-      return invoiceDesigns[0].javascript;
+      return invoiceDesign.javascript;
     }
 
     function getLogoJavascript() {
-      return invoiceDesigns[0].logo; 
+      return invoiceDesign.logo; 
     }
 
     $('#x, #y').change(function() {
@@ -116,6 +116,7 @@
       for (i = 0; i < branches.length; i++) { 
         if(branches[i].public_id == id){
           aux = branches[i].public_id;
+          aux--;
         }
       }
 
@@ -136,21 +137,19 @@
         return yd;
       }
 
-      invoice.branch_name = branches[aux-1].name;
-      invoice.address2 = branches[aux-1].address2;
-      invoice.address1 = branches[aux-1].address1;
-      invoice.phone = branches[aux-1].work_phone;
-      invoice.city = branches[aux-1].city;
-      invoice.state = branches[aux-1].state;
-      invoice.number_autho = branches[aux-1].number_autho;
-      invoice.deadline = branches[aux-1].deadline;
-      invoice.economic_activity = branches[aux-1].economic_activity;
-      invoice.branch_type_id = branches[aux-1].branch_type_id;
-      invoice.type_third = branches[aux-1].type_third;
+      invoice.branch_name = branches[aux].name;
+      invoice.address2 = branches[aux].address2;
+      invoice.address1 = branches[aux].address1;
+      invoice.phone = branches[aux].work_phone;
+      invoice.city = branches[aux].city;
+      invoice.state = branches[aux].state;
+      invoice.number_autho = branches[aux].number_autho;
+      invoice.deadline = branches[aux].deadline;
+      invoice.economic_activity = branches[aux].economic_activity;
+      invoice.branch_type_id = branches[aux].branch_type_id;
+      invoice.type_third = branches[aux].type_third;
 
       invoice.is_pro = {{ Auth::user()->isPro() ? 'true' : 'false' }};
-      invoice.account.hide_quantity = $('#hide_quantity').is(":checked");
-      invoice.account.hide_paid_to_date = $('#hide_paid_to_date').is(":checked");
       NINJA.primaryColor = $('#primary_color').val();
       NINJA.secondaryColor = $('#secondary_color').val();
       var doc = generatePDF(invoice, getDesignJavascript(), getLogoJavascript(), getLogoXJavascript(), getLogoYJavascript(), true);
@@ -165,9 +164,7 @@
   </script> 
 
 {{ Former::open_for_files()->addClass('warn-on-exit')->onchange('refreshPDF()')->rules(['design' => 'required']) }}
-{{ Former::populate($account) }}
 
-{{ Former::populateField('hide_quantity', intval($account->hide_quantity)) }}
 {{ Former::populateField('x', intval($invoiceDesign->x)) }}
 {{ Former::populateField('y', intval($invoiceDesign->y)) }}
 
