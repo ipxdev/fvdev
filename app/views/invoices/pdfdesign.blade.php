@@ -79,19 +79,7 @@ function printCanvas() {
   logoImages.imageLogo3 = "{{ HTML::image_data('images/report_logo3.jpg') }}";
   logoImages.imageLogoWidth3 =325/2;
   logoImages.imageLogoHeight3 = 81/2;
-
-  @if (file_exists($account->getLogoPath()))
-  if (window.invoice) {
-    invoice.image = "{{ HTML::image_data($account->getLogoPath()) }}";
-    invoice.imageWidth = {{ $account->getLogoWidth() }};
-    invoice.imageHeight = {{ $account->getLogoHeight() }};
-  }
-  @endif  
-
-  var NINJA = NINJA || {};
-  NINJA.primaryColor = "{{ $account->primary_color }}";
-  NINJA.secondaryColor = "{{ $account->secondary_color }}";
-
+  
   var invoiceLabels = {{ json_encode($account->getInvoiceLabels()) }};
 
   var isRefreshing = false;
