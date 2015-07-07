@@ -57,13 +57,11 @@ class Activity extends Eloquent
 		{
 			$activity->user_id = $entity instanceof User ? $entity->id : $entity->user_id;
 			$activity->account_id = $entity->account_id;
-			$activity->branch_id = $entity->branch_id;
 		} 
 		else if (Auth::check())
 		{
 			$activity->user_id = Auth::user()->id;
 			$activity->account_id = Auth::user()->account_id;	
-			$activity->branch_id = Auth::user()->branch_id;	
 		} 
 		else 
 		{
@@ -83,21 +81,16 @@ class Activity extends Eloquent
 
 	}
 
-	public static function createClient($client, $notify = true)
+	public static function createClient($client)
 	{		
 		$activity = Activity::getBlank();
 		$activity->client_id = $client->id;
 		$activity->activity_type_id = ACTIVITY_TYPE_CREATE_CLIENT;
 		$activity->message = Utils::encodeActivity(Auth::user(), 'creó', $client);
 		$activity->save();		
-
-		if ($notify)
-		{
-			Activity::checkSubscriptions(EVENT_CREATE_CLIENT, $client);
-		}
 	}
 
-	public static function editClient($client, $notify = true)
+	public static function editClient($client)
 	{		
 		$activity = Activity::getBlank();
 		$activity->client_id = $client->id;
@@ -105,10 +98,6 @@ class Activity extends Eloquent
 		$activity->message = Utils::encodeActivity(Auth::user(), 'editó', $client);
 		$activity->save();		
 
-		if ($notify)
-		{
-			Activity::checkSubscriptions(EVENT_CREATE_CLIENT, $client);
-		}
 	}
 
 	public static function updateClient($client)
@@ -165,7 +154,6 @@ class Activity extends Eloquent
 		$activity->adjustment = $adjustment;
 		$activity->save();
 
-		Activity::checkSubscriptions($invoice->is_quote ? EVENT_CREATE_QUOTE : EVENT_CREATE_INVOICE, $invoice);
 	}	
 
 	public static function archiveInvoice($invoice)
@@ -326,7 +314,6 @@ class Activity extends Eloquent
 		$activity->adjustment = $payment->amount * -1;
 		$activity->save();
 
-		Activity::checkSubscriptions(EVENT_CREATE_PAYMENT, $payment);
 	}	
 
 	public static function updatePayment($payment)
@@ -467,17 +454,4 @@ class Activity extends Eloquent
 		$activity->save();
 	}
 
-	private static function checkSubscriptions($event, $data)
-	{
-		if (!Auth::check()) {
-			return;
-		}
-		
-		$subscription = Auth::user()->account->getSubscription($event);
-		
-		if ($subscription)
-		{
-			Utils::notifyZapier($subscription, $data);
-		}
-	}
 }

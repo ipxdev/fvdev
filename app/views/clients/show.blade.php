@@ -53,7 +53,6 @@
             <p>{{ $client->getAddress() }}</p>
 		  	<p>{{ $client->getPhone() }}</p>
 		  	<p>{{ $client->getNotes() }}</p>
-		  	<p>{{ $client->getIndustry() }}</p>
 
 		</div>
 
@@ -74,16 +73,16 @@
 			<table class="table" style="width:250px">
 				<tr>
 					<td><small>Pagado</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($client->paid_to_date, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($client->paid_to_date, 1); }}</td>
 				</tr>
 				<tr>
 					<td><small>Balance</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($client->balance, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($client->balance, 1); }}</td>
 				</tr>
 				@if ($credit > 0)
 				<tr>
 					<td><small>{{ trans('texts.credit') }}</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($credit, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($credit, 1); }}</td>
 				</tr>
 				@endif
 			</table>
@@ -97,7 +96,6 @@
             <p>{{ $client->getAddress() }}</p>
 		  	<p>{{ $client->getPhone() }}</p>
 		  	<p>{{ $client->getNotes() }}</p>
-		  	<p>{{ $client->getIndustry() }}</p>
 
 		</div>
 
@@ -112,16 +110,16 @@
 			<table class="table" style="width:250px">
 				<tr>
 					<td><small>Pagado</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($client->paid_to_date, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($client->paid_to_date, 1); }}</td>
 				</tr>
 				<tr>
 					<td><small>Balance</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($client->balance, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($client->balance, 1); }}</td>
 				</tr>
 				@if ($credit > 0)
 				<tr>
 					<td><small>{{ trans('texts.credit') }}</small></td>
-					<td style="text-align: right">{{ Utils::formatMoney($credit, $client->currency_id); }}</td>
+					<td style="text-align: right">{{ Utils::formatMoney($credit, 1); }}</td>
 				</tr>
 				@endif
 			</table>
@@ -140,9 +138,7 @@
 	<ul class="nav nav-tabs nav-justified">
 		{{ HTML::tab_link('#activity', trans('texts.activity'), true) }}
 		{{ HTML::tab_link('#credits', trans('texts.credits')) }}
-		@if (Utils::isPro())
-			{{-- HTML::tab_link('#quotes', trans('texts.quotes')) --}}
-		@endif
+		{{-- HTML::tab_link('#quotes', trans('texts.quotes')) --}}
 		{{ HTML::tab_link('#invoices', trans('texts.invoices')) }}
 		{{ HTML::tab_link('#payments', trans('texts.payments')) }}			
 			
@@ -166,7 +162,6 @@
 
         </div>
 
-    @if (Utils::isPro())
 <!--         <div class="tab-pane" id="quotes">
 
 			{{ Datatable::table()		
@@ -183,7 +178,6 @@
 		    	->render('datatable') }}
 
         </div> -->
-    @endif
 
 		<div class="tab-pane" id="invoices">
 

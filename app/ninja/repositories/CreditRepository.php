@@ -16,7 +16,7 @@ class CreditRepository
 	                ->where('clients.deleted_at', '=', null)
                     ->where('contacts.deleted_at', '=', null)
 	                ->where('contacts.is_primary', '=', true)   
-	                ->select('credits.public_id', 'clients.name as client_name', 'clients.public_id as client_public_id', 'credits.amount', 'credits.balance', 'credits.credit_date', 'clients.currency_id', 'contacts.first_name', 'contacts.last_name', 'contacts.email', 'credits.private_notes');        
+	                ->select('credits.public_id', 'clients.name as client_name', 'clients.public_id as client_public_id', 'credits.amount', 'credits.balance', 'credits.credit_date', 'contacts.first_name', 'contacts.last_name', 'contacts.email', 'credits.private_notes');        
 
 	    if ($clientPublicId) 
 	    {

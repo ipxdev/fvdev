@@ -23,7 +23,7 @@ class ClientController extends \BaseController {
 		return View::make('list', array(
 			'entityType'=>ENTITY_CLIENT, 
 			'title' => trans('texts.clients'),
-			'columns'=>Utils::trans(['checkbox','cod', 'vat_number', 'contact', 'work_phone', 'balance', 'paid_to_dat', 'action'])
+			'columns'=>Utils::trans(['checkbox','cod', 'name', 'contact', 'work_phone', 'balance', 'paid_to_dat', 'action'])
 		));		
 	}
 
@@ -36,11 +36,11 @@ class ClientController extends \BaseController {
         return Datatable::query($clients)
     	    ->addColumn('checkbox', function($model) { return '<input type="checkbox" name="ids[]" value="' . $model->public_id . '">'; })
             ->addColumn('public_id', function($model) {  return $model->public_id; })
-    	    ->addColumn('vat_number', function($model) { return link_to('clients/' . $model->public_id, $model->vat_number); })
+    	    ->addColumn('name', function($model) { return link_to('clients/' . $model->public_id, $model->name); })
     	    ->addColumn('first_name', function($model) { return $model->first_name . ' ' . $model->last_name; })
     	    ->addColumn('work_phone', function($model) { return $model->work_phone ? $model->work_phone : $model->phone; })
-    	    ->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, $model->currency_id); })    	    
-    	    ->addColumn('paid_to_date', function($model) { return Utils::formatMoney($model->paid_to_date, $model->currency_id); })    	    
+    	    ->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, 1); })    	    
+    	    ->addColumn('paid_to_date', function($model) { return Utils::formatMoney($model->paid_to_date, 1); })    	    
     	    ->addColumn('dropdown', function($model) 
     	    { 
     	    	 $str = '<div class="btn-group tr-action" style="visibility:hidden;">
@@ -71,11 +71,11 @@ class ClientController extends \BaseController {
     	    return Datatable::query($clients)
     	    ->addColumn('checkbox', function($model) { return '<input type="checkbox" name="ids[]" value="' . $model->public_id . '">'; })
     	    ->addColumn('public_id', function($model) {  return $model->public_id; })
-    	    ->addColumn('vat_number', function($model) { return link_to('clients/' . $model->public_id, $model->vat_number); })
+    	    ->addColumn('name', function($model) { return link_to('clients/' . $model->public_id, $model->name); })
     	    ->addColumn('first_name', function($model) { return link_to('clients/' . $model->public_id, $model->first_name . ' ' . $model->last_name); })
     	    ->addColumn('work_phone', function($model) { return $model->work_phone ? $model->work_phone : $model->phone; })
-    	    ->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, $model->currency_id); })    	    
-    	    ->addColumn('paid_to_date', function($model) { return Utils::formatMoney($model->paid_to_date, $model->currency_id); })    	    
+    	    ->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, 1); })    	    
+    	    ->addColumn('paid_to_date', function($model) { return Utils::formatMoney($model->paid_to_date, 1); })    	    
     	    ->addColumn('dropdown', function($model) 
     	    { 
     	    	return '<div class="btn-group tr-action" style="visibility:hidden;">
@@ -114,7 +114,7 @@ class ClientController extends \BaseController {
 	 */
 	public function show($publicId)
 	{
-		$client = Client::withTrashed()->scope($publicId)->with('contacts', 'size', 'industry')->firstOrFail();
+		$client = Client::withTrashed()->scope($publicId)->with('contacts')->firstOrFail();
 		Utils::trackViewed($client->getDisplayName(), ENTITY_CLIENT);
 	
 		$actionLinks = [
@@ -185,11 +185,6 @@ class ClientController extends \BaseController {
 	private static function getViewModel()
 	{
 		return [		
-			'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
-			'paymentTerms' => PaymentTerm::remember(DEFAULT_QUERY_CACHE)->orderBy('num_days')->get(['name', 'num_days']),
-			'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-			'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-			'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
 			'customLabel1' => Auth::user()->account->custom_client_label1,
 			'customLabel2' => Auth::user()->account->custom_client_label2,
 			'customLabel3' => Auth::user()->account->custom_client_label3,
@@ -201,7 +196,7 @@ class ClientController extends \BaseController {
 			'customLabel9' => Auth::user()->account->custom_client_label9,
 			'customLabel10' => Auth::user()->account->custom_client_label10,
 			'customLabel11' => Auth::user()->account->custom_client_label11,
-			'customLabel12' => Auth::user()->account->custom_client_label12,
+			'customLabel12' => Auth::user()->account->custom_client_label12
 		];
 	}	
 
@@ -226,7 +221,6 @@ class ClientController extends \BaseController {
 
 		// $clientId =  $publicId ? Client::getPrivateId($publicId) : null;
   // 		$rules = ['nit' => 'unique:clients,nit,' . $clientId . ',id,account_id,' . Auth::user()->account_id];    	
-
 
 		$validator = Validator::make(Input::all(), $rules);
 
@@ -262,12 +256,12 @@ class ClientController extends \BaseController {
 
 			$client->nit = trim(Input::get('nit'));
 			$client->name = trim(Input::get('name'));
-			$client->vat_number = trim(Input::get('vat_number'));
+			$client->business_name = trim(Input::get('business_name'));
             $client->work_phone = trim(Input::get('work_phone'));
 
             if($isPos)
             {
-			$client->vat_number = trim(Input::get('name'));
+			$client->business_name = trim(Input::get('name'));
             }
 
 			$client->custom_value1 = trim(Input::get('custom_value1'));
@@ -287,14 +281,7 @@ class ClientController extends \BaseController {
 			$client->address2 = trim(Input::get('address2'));
 			$client->city = trim(Input::get('city'));
 			$client->state = trim(Input::get('state'));
-			$client->postal_code = trim(Input::get('postal_code'));			
-			$client->country_id = Input::get('country_id') ? : null;
 			$client->private_notes = trim(Input::get('private_notes'));
-			$client->size_id = Input::get('size_id') ? : null;
-			$client->industry_id = Input::get('industry_id') ? : null;
-			$client->currency_id = Input::get('currency_id') ? : 1;
-			$client->payment_terms = Input::get('payment_terms') ? : 0;
-			$client->website = trim(Input::get('website'));
 
 			$client->save();
 
@@ -319,8 +306,6 @@ class ClientController extends \BaseController {
 					$record->first_name = trim($contact->first_name);
 					$record->last_name = trim($contact->last_name);
 					$record->phone = trim($contact->phone);
-					$record->aux1 = trim($contact->aux1);
-					$record->aux2 = trim($contact->aux2);
 					$record->is_primary = $isPrimary;
 					$isPrimary = false;
 
@@ -360,7 +345,7 @@ class ClientController extends \BaseController {
 				'public_id'=>$client->public_id,
 				'name'=>$client->name,
 				'nit'=>$client->nit,
-				'vat_number'=>$client->vat_number
+				'business_name'=>$client->business_name
 				);
 
 				$datos = array(

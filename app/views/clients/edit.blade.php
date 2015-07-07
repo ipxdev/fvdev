@@ -2,12 +2,11 @@
 
 @section('content')
 <div class="row">
-	<!--<h3>{{ $title }} Client</h3>-->
 
 	{{ Former::open($url)->addClass('col-md-12 warn-on-exit')->method($method)->rules(array(
   		'nit' => 'required|Numeric|min:5',		
   		'name' => 'required|min:3',
-  		'vat_number' => 'required|min:3',
+  		'business_name' => 'required|min:3',
   		'phone' => 'Numeric',
   		'work_phone' => 'Numeric',
   		'email' => 'email',
@@ -27,7 +26,7 @@
 		<div class="col-md-6">
 			
 			{{ Former::legend('organization') }}
-			{{ Former::text('vat_number')->label('Nombre (*)')->data_bind("value: vat_number, valueUpdate: 'afterkeydown'") }}     
+			{{ Former::text('name')->label('Nombre (*)') }}     
 			{{ Former::text('work_phone')->title('Solo se acepta Número Telefónico') }}
 
 			@if ($customLabel2)
@@ -57,13 +56,11 @@
 			
 			{{ Former::legend('Datos para Facturar') }}
 
-			{{ Former::text('name')->label('razón Social (*)') }}
+			{{ Former::text('business_name')->label('razón Social (*)') }}
 
 			{{ Former::text('nit')->label('NIT/CI (*)') }}
 
 			{{ Former::legend('address') }}
-			{{ Former::select('country_id')->addOption('','')->label('city')
-				->fromQuery($countries, 'name', 'id') }}
 			{{ Former::text('address1') }}
 			{{ Former::text('address2') }}
 
@@ -107,14 +104,6 @@
 					{{ Former::date('custom_value12')->label($customLabel12) }}
 			@endif
 
-			{{ Former::hidden('payment_terms')->addOption('','')
-				->fromQuery($paymentTerms, 'name', 'num_days') }}
-			{{ Former::hidden('currency_id')->addOption('','')
-				->fromQuery($currencies, 'name', 'id') }}
-			{{ Former::hidden('size_id')->addOption('','')
-				->fromQuery($sizes, 'name', 'id') }}
-			{{ Former::hidden('industry_id')->addOption('','')
-				->fromQuery($industries, 'name', 'id') }}
 			{{ Former::textarea('private_notes') }}
 
 		</div>
@@ -135,8 +124,6 @@
 		self.last_name = ko.observable('');
 		self.email = ko.observable('');
 		self.phone = ko.observable('');
-		self.aux1 = ko.observable('');
-		self.aux2 = ko.observable('');
 
 		if (data) {
 			ko.mapping.fromJS(data, {}, this);			
@@ -146,9 +133,6 @@
 	function ContactsModel(data) {
 		var self = this;
 		self.contacts = ko.observableArray();;
-
-		self.name = ko.observable('');
-		self.vat_number = ko.observable('');
 		
 		self.mapping = {
 		    'contacts': {
@@ -163,12 +147,6 @@
 		} else {
 			self.contacts.push(new ContactModel());
 		}
-
-		// self.placeholderName = ko.pureComputed(function() {
-		// 			if (self.vat_number()) {
-		// 			return self.vat_number();
-		// 			}		
-		// 	});	
 	}
 
 	window.model = new ContactsModel({{ $client }});

@@ -17,11 +17,6 @@ class Client extends EntityModel
 	{
 		return $this->belongsTo('Account');
 	}
-
-	public function branch()
-	{
-		return $this->belongsTo('Branch');
-	}
 	
 	public function invoices()
 	{
@@ -36,31 +31,6 @@ class Client extends EntityModel
 	public function contacts()
 	{
 		return $this->hasMany('Contact');
-	}
-    
-     public function projects()
-	{
-		return $this->hasMany('Project');
-	}
-
-	public function country()
-	{
-		return $this->belongsTo('Country');
-	}
-
-	public function currency()
-	{
-		return $this->belongsTo('Currency');
-	}
-
-	public function size()
-	{
-		return $this->belongsTo('Size');	
-	}
-
-	public function industry()
-	{
-		return $this->belongsTo('Industry');
 	}
 
 	public function getTotalCredit()
@@ -106,16 +76,6 @@ class Client extends EntityModel
 			return '';
 		}	
 		return $this->postal_code;
-	}
-
-	
-	public function getContrato()
-	{
-		if(!$this->nit)
-		{
-			return '';
-		}	
-		return 'Contrato Nº: '.$this->city;
 	}
 
 
@@ -206,22 +166,6 @@ class Client extends EntityModel
 		return $str;
 	}
 
-	public function getIndustry()
-	{
-		$str = '';
-
-		if ($this->client_industry)
-		{
-			$str .= $this->client_industry->name . ' ';
-		}
-
-		if ($this->client_size)
-		{
-			$str .= $this->client_size->name;
-		}
-
-		return $str;
-	}
 
 	public function getCustomFields()
 	{
@@ -290,27 +234,8 @@ class Client extends EntityModel
 		return $str;
 	}
 
-	public function getWebsite()
-	{
-		if (!$this->website)
-		{
-			return '';
-		}
 
-		$link = $this->website;
-		$title = $this->website;
-		$prefix = 'http://';
-
-		if (strlen($link) > 7 && substr($link, 0, 7) === $prefix) {
-			$title = substr($title, 7);
-		} else {
-			$link = $prefix . $link;
-		}
-
-		return link_to($link, $title, array('target'=>'_blank'));
-	}
-
-		public function getCellular()
+	public function getCellular()
 	{
 		$str = '';
 

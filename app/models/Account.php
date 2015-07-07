@@ -24,11 +24,6 @@ class Account extends Eloquent
 		return $this->hasMany('Invoice');
 	}
 
-	public function account_gateways()
-	{
-		return $this->hasMany('AccountGateway');
-	}
-
 	public function tax_rates()
 	{
 		return $this->hasMany('TaxRate');
@@ -37,11 +32,6 @@ class Account extends Eloquent
 	public function invoice_designs()
 	{
 		return $this->hasMany('InvoiceDesign');
-	}
-
-	public function country()
-	{
-		return $this->belongsTo('Country');
 	}
 
 	public function timezone()
@@ -62,16 +52,6 @@ class Account extends Eloquent
 	public function datetime_format()
 	{
 		return $this->belongsTo('DatetimeFormat');	
-	}
-
-	public function size()
-	{
-		return $this->belongsTo('Size');	
-	}
-
-	public function industry()
-	{
-		return $this->belongsTo('Industry');
 	}
 
 	public function categories()
@@ -171,62 +151,6 @@ class Account extends Eloquent
 		}
 	}
 
-	public function getGatewayConfig($gatewayId)
-	{
-		foreach ($this->account_gateways as $gateway)
-		{
-			if ($gateway->gateway_id == $gatewayId)
-			{
-				return $gateway;
-			}
-		}	
-
-		return false;	
-	}
-
-	public function getLogoPath()
-	{
-		return 'logo/' . $this->account_key . '.jpg';
-	}
-
-	public function getLogoWidth()
-	{
-		$path = $this->getLogoPath();
-		if (!file_exists($path)) {
-			return 0;
-		}
-		list($width, $height) = getimagesize($path);
-		return $width;
-	}
-
-	public function getLogoHeight()
-	{
-		$path = $this->getLogoPath();
-		if (!file_exists($path)) {
-			return 0;
-		}
-		list($width, $height) = getimagesize($path);
-		return $height;
-	}
-
-	public function getNextInvoiceNumber($isQuote = false)
-	{
-		$counter = $isQuote && !$this->share_counter ? $this->quote_number_counter : $this->invoice_number_counter;
-		$prefix = $isQuote ? $this->quote_number_prefix : $this->invoice_number_prefix;
-
-		return $prefix . str_pad($counter, 4, "0", STR_PAD_LEFT);
-	}
-
-	public function incrementCounter($isQuote = false) 
-	{
-		if (!$isQuote) {
-
-			$this->credit_counter -= 1;
-		}
-
-		$this->save();
-	}
-	
 	public function getLocale() 
 	{
 		$language = Language::remember(DEFAULT_QUERY_CACHE)->where('id', '=', $this->account->language_id)->first();		
@@ -335,11 +259,6 @@ class Account extends Eloquent
 		{	
 			return false;
 		}
-	}
-
-	public function getSubscription($eventId) 
-	{
-		return Subscription::where('account_id', '=', $this->id)->where('event_id', '=', $eventId)->first();
 	}
 
 	public function hideFieldsForViz()
