@@ -1411,7 +1411,6 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 			{
 				$user->first_name = trim(Input::get('first_name'));
 				$user->last_name = trim(Input::get('last_name'));
-				$user->password = trim(Input::get('password'));
 				
 				$user->email = trim(strtolower(Input::get('email')));
 				$user->phone = trim(Input::get('phone'));				
