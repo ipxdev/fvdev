@@ -212,10 +212,7 @@ class InvoiceController extends \BaseController {
 	public function create($clientPublicId = 0)
 	{	
 		$client = null;
-		// $invoiceNumber = Auth::user()->branch->getNextInvoiceNumber();
-// 'invoiceNumber' => $invoiceNumber,
 		$account = Account::with('country')->findOrFail(Auth::user()->account_id);
-
 		if ($clientPublicId) 
 		{
 			$client = Client::scope($clientPublicId)->firstOrFail();
@@ -244,13 +241,10 @@ class InvoiceController extends \BaseController {
 			'account' => Auth::user()->account,
 			'branches' => Branch::where('account_id', '=', Auth::user()->account_id)->where('id',Auth::user()->branch_id)->orderBy('public_id')->get(),
 			'products' => Product::scope()->orderBy('id')->get(array('product_key','notes','cost','qty')),
-			'countries' => Country::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-			'clients' => Client::scope()->with('contacts', 'country')->orderBy('name')->get(),
+			'clients' => Client::scope()->with('contacts')->orderBy('name')->get(),
 			'taxRates' => TaxRate::scope()->orderBy('name')->get(),
 			'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-			'sizes' => Size::remember(DEFAULT_QUERY_CACHE)->orderBy('id')->get(),
 			'paymentTerms' => PaymentTerm::remember(DEFAULT_QUERY_CACHE)->orderBy('num_days')->get(['name', 'num_days']),
-			'industries' => Industry::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),				
 			'frequencies' => array(
 				1 => 'Semanal',
 				2 => 'Cada 2 semanas',
