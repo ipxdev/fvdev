@@ -32,6 +32,8 @@ define("ACTIVITY_TYPE_DELETE_QUOTE", 23);
 
 define("ACTIVITY_TYPE_ADD_CREDIT_INVOICE", 25);
 
+define("ACTIVITY_TYPE_CREATE_PRODUCT", 25);
+
 
 
 class Activity extends Eloquent
@@ -124,6 +126,16 @@ class Activity extends Eloquent
 			$activity->save();
 		}
 	}	
+
+
+	public static function createProduct($product)
+	{		
+		$activity = Activity::getBlank();
+		$activity->client_id = $product->id;
+		$activity->activity_type_id = ACTIVITY_TYPE_CREATE_PRODUCT;
+		$activity->message = Utils::encodeActivity(Auth::user(), 'creó', $product);
+		$activity->save();		
+	}
 
 	public static function createInvoice($invoice)
 	{

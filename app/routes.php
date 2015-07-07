@@ -67,8 +67,7 @@ Route::group(array('before' => 'auth'), function()
   Route::resource('products', 'ProductController');
   Route::get('api/products', array('as'=>'api.products', 'uses'=>'ProductController@getDatatable'));
   Route::get('api/activities/{product_id?}', array('as'=>'api.activities', 'uses'=>'ActivityController@getDatatable'));  
-  Route::get('products/bulk', 'ProductController@bulk');
-  Route::get('products/{product_id}/archive', 'ProductController@archive');
+  Route::post('products/bulk', 'ProductController@bulk');
 
   Route::get('api/branches', array('as'=>'api.branches', 'uses'=>'BranchController@getDatatable'));
   Route::resource('branches', 'BranchController');

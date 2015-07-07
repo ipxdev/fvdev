@@ -9,7 +9,7 @@ class ProductRepository
     	$query = \DB::table('products')
     		->join('categories', 'categories.id', '=', 'products.category_id')
 			->where('products.account_id', '=', \Auth::user()->account_id)
-			->select('products.public_id', 'products.product_key', 'products.notes', 'products.cost','categories.name as category_name');
+			->select('products.public_id', 'products.product_key', 'products.notes', 'products.cost','categories.name as category_name', 'products.deleted_at');
 
 
     	if (!\Session::get('show_trash:product'))
@@ -42,11 +42,21 @@ class ProductRepository
 
 	public function bulk($ids, $action)
 	{
-		$products = Product::scope($ids)->get();
-
+		$products = Product::withTrashed()->scope($ids)->get();
+		
 		foreach ($products as $product) 
-		{		
-			$product->delete();			
+		{	
+            if ($action == 'restore') {
+                $product->restore();
+                $product->save();
+            }
+            else 
+            {
+                if ($action == 'delete') {
+					$product->delete();
+                }
+                
+            }			
 		}
 
 		return count($products);

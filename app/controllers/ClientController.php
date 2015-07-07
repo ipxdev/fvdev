@@ -122,10 +122,7 @@ class ClientController extends \BaseController {
      	[trans('texts.enter_credit'), URL::to('credits/create/' . $client->public_id )]
     ];
 
-    if (Utils::isPro())
-    {
     	// array_unshift($actionLinks, [trans('texts.create_quote'), URL::to('quotes/create/' . $client->public_id )]);
-    }
 
 		$data = array(
 			'actionLinks' => $actionLinks,
