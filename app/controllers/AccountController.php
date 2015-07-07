@@ -58,7 +58,7 @@ class AccountController extends \BaseController {
 		$user->password = trim(Input::get('password'));
 		$user->password_confirmation = trim(Input::get('password'));
 
-		$user->registered = true;
+		$user->confirmation_code = '';
 		$user->is_admin = true;
 		$account->users()->save($user);
 
@@ -1244,10 +1244,6 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 
 	private function saveNotifications()
 	{
-		$account = Auth::user()->account;
-		$account->invoice_terms = Input::get('invoice_terms');
-		$account->email_footer = Input::get('email_footer');
-		$account->save();
 
 		$user = Auth::user();
 		$user->notify_sent = Input::get('notify_sent');
@@ -1499,12 +1495,6 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 			$activity->save();
 		}
 
-		if (Input::get('go_pro') == 'true')
-		{
-			Session::set(REQUESTED_PRO_PLAN, true);
-		}
-
-		Session::set(SESSION_COUNTER, -1);
 
 		return "{$user->first_name} {$user->last_name}";
 	}

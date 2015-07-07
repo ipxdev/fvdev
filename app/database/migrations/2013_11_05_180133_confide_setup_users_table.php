@@ -76,13 +76,15 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('state');
             $t->string('work_phone');
 
+            $t->boolean('confirmed')->default(false);
+
             $t->integer('credit_counter')->default(0);
 
             $t->boolean('op1')->default(false);
             $t->boolean('op2')->default(false);
             $t->boolean('op3')->default(false);
 
-            $t->date('pro_plan_paid')->null();
+            $t->date('billing_deadline')->null();
 
             $t->boolean('is_uniper')->default(false);
             $t->string('uniper')->nullable();
@@ -123,9 +125,8 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('password');
             $t->string('confirmation_code');
 
-            $t->boolean('registered')->default(false);
-            $t->boolean('confirmed')->default(false);
-            $t->boolean('force_pdfjs')->default(false);  
+            $t->boolean('registered')->default(true);
+            $t->boolean('confirmed')->default(true); 
             $t->string('remember_token', 100)->nullable();
 
             $t->boolean('is_admin')->default(0);            

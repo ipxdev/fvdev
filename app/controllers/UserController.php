@@ -34,7 +34,7 @@ class UserController extends BaseController {
                   ->where('users.account_id', '=', Auth::user()->account_id)
                   ->where('users.deleted_at', '=', null)
                   ->where('users.public_id', '>', 0)
-                  ->select('users.public_id', 'users.first_name', 'users.last_name', 'users.email', 'users.phone','users.is_admin', 'users.confirmed', 'users.public_id');
+                  ->select('users.public_id', 'users.first_name', 'users.last_name', 'users.email', 'users.phone','users.is_admin', 'users.public_id');
 
 
       return Datatable::query($query)
@@ -42,7 +42,6 @@ class UserController extends BaseController {
         ->addColumn('email', function($model) { return $model->email; })
         ->addColumn('phone', function($model) { return $model->phone; })
         ->addColumn('is_admin', function($model) { return $model->is_admin ? 'Administrador' : 'Cajero'; })
-        ->addColumn('confirmed', function($model) { return $model->confirmed ? trans('texts.active') : trans('texts.pending'); })
         ->addColumn('dropdown', function($model) 
         { 
           return '<div class="btn-group tr-action" style="visibility:hidden;">
@@ -56,7 +55,7 @@ class UserController extends BaseController {
             </ul>
           </div>';
         })       
-        ->orderColumns(['first_name', 'email', 'confirmed'])
+        ->orderColumns(['first_name', 'email'])
         ->make();           
     }
 
@@ -283,7 +282,6 @@ class UserController extends BaseController {
 
         return Redirect::to('company/user_management');
 
-        // return Response::json(Input::all());
     }
 
     /**
@@ -428,17 +426,6 @@ class UserController extends BaseController {
             }
             else
             {
-                if (Session::has(REQUESTED_PRO_PLAN))
-                {
-                    Session::forget(REQUESTED_PRO_PLAN);                
-
-                    if ($invoice = $this->accountRepo->enableProPlan())
-                    {
-                        $this->contactMailer->sendInvoice($invoice);
-                        $notice_msg = trans('texts.pro_plan_success');
-                    }
-                }
-
                 return Redirect::action('UserController@login')->with( 'message', $notice_msg );
             }
         }
@@ -555,24 +542,6 @@ class UserController extends BaseController {
      */
     public function logout()
     {
-        // if (Auth::check())
-        // {
-        //     if (!Auth::user()->registered)
-        //     {
-                        
-        //         $InvoiceDesign = InvoiceDesign::where('user_id', '=', Auth::user()->id)->firstOrFail();
-        //         $InvoiceDesign->forceDelete();
-
-        //         $user = Auth::user();
-        //         $user->forceDelete();
-
-        //         $account = Auth::user()->account;
-        //         $account->forceDelete();
-        //     }
-        // }
-
-        Session::forget('news_feed_id');
-        Session::forget('news_feed_message');
 
         Confide::logout();
 
