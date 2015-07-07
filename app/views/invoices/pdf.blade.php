@@ -3,37 +3,6 @@
 <div class="container"  style=" display: block;margin-left: 64px;margin-right: 64px;">
   <canvas id="theCanvas" style="width:85%;border:solid 1px #CCCCCC;"></canvas>
 </div>
-<div class="modal fade" id="moreDesignsModal" tabindex="-1" role="dialog" aria-labelledby="moreDesignsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">{{ trans('texts.more_designs_title') }}</h4>
-      </div>
-
-      <div class="container">
-        @if (Utils::isNinja())
-          <h3>{{ trans('texts.more_designs_cloud_header') }}</h3>
-          <p>{{ trans('texts.more_designs_cloud_text') }}</p>          
-        @else
-          <h3>{{ trans('texts.more_designs_self_host_header') }}</h3>
-          <p>{{ trans('texts.more_designs_self_host_text') }}</p>
-        @endif
-      </div>
-
-      <div class="modal-footer" id="signUpFooter">          
-        <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('texts.cancel') }}</button>
-        
-        @if (Utils::isNinjaProd())
-          <button type="button" class="btn btn-primary" onclick="showProPlan('invoice_designs')">{{ trans('texts.go_pro') }}</button>
-        @else
-          <button type="button" class="btn btn-primary" onclick="buyDesigns()">{{ trans('texts.buy') }}</button>
-        @endif
-      </div>
-    </div>
-  </div>
-</div>
-
 
 
 <script type="text/javascript">
