@@ -75,15 +75,12 @@ class ProductController extends \BaseController {
   {
     $product = Product::withTrashed()->scope($publicId)->firstOrFail();
     Utils::trackViewed($product->getDisplayName(), ENTITY_PRODUCT);
-    $categories = Category::where('account_id',Auth::user()->account_id)->where('id',$product->category_id)->get();
-
-
-
+    $category = Category::where('account_id',Auth::user()->account_id)->where('id',$product->category_id)->orderBy('public_id')->firstOrFail();
+    $product->category_name = $category->name;
 
     $data = array(
       'showBreadcrumbs' => false,
       'product' => $product,
-      'categories' => $categories,
       'title' => trans('texts.view_product')
     );
 

@@ -49,7 +49,7 @@
 			<h4><br>
 			<p><strong>Código Nº </strong> : {{ $product->getProductKey() }}</p>
 			<p><strong>Costo </strong> : {{ $product->getProductCost() }}</p>
-			<!-- <p><strong>Costo </strong> : {{ $categories->getName() }}</p> -->
+			<p><strong>Categoría </strong> : {{ $product->category_name }}</p>
 
 </h4>
 		</div>

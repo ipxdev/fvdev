@@ -8,9 +8,6 @@
 		{{ Former::text('statusId') }}
 		{{ Former::text('id') }}
 	</div>
-
-	@if($entityType != 'product')
-	
 	
 	{{ DropdownButton::normal(trans('texts.archive'),
 		  Navigation::links(
@@ -24,7 +21,7 @@
 		<input id="trashed" type="checkbox" onclick="setTrashVisible()" 
 			{{ Session::get("show_trash:{$entityType}") ? 'checked' : ''}}/> {{ trans('texts.show_')}} {{ strtolower(trans('texts.'.$entityType.'s')) }} {{ trans('texts._archived')}}
 	</label>
-@endif
+
 	<div id="top_right_buttons" class="pull-right">
 		<input id="tableFilter" type="text" style="width:200px;margin-right:17px" class="form-control pull-left" placeholder="{{ trans('texts.filter') }}"/> 
 		{{ Button::success_link(URL::to($entityType . 's/create'), trans("texts.new_$entityType"), array('class' => 'pull-right'))->append_with_icon('plus-sign'); }}	

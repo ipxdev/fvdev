@@ -9,7 +9,6 @@ class ProductRepository
     	$query = \DB::table('products')
     		->join('categories', 'categories.id', '=', 'products.category_id')
 			->where('products.account_id', '=', \Auth::user()->account_id)
-			->where('products.deleted_at', '=', null)
 			->select('products.public_id', 'products.product_key', 'products.notes', 'products.cost','categories.name as category_name');
 
 
