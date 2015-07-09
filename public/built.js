@@ -31032,38 +31032,28 @@ function GetPdf(invoice, javascript, logo, x, y){
  	if (!invoice.branch_name)
   	{
 		var account = invoice.account;
-		var branches = invoice.branches;
+		var branch = invoice.branches[0];
 		var client = invoice.client;
+
+
   		invoice.account_name = account.name;
+  		invoice.account_nit = account.nit;
   		invoice.account_uniper = account.uniper;
-
-		invoice.branch_name = invoice.branch_id;
-		invoice.branch_name = invoice.ale;
-
-		var k = 0;
-		for (var i=0; i<branches.length; i++) {
-			var branch = branches[i];
-			if (branch.public_id == invoice.branch_id) {
-				k = i;
-				break;
-			}
-		}
-		invoice.branch_name = branches[k].name;
-	    invoice.address2 = branches[k].address2;
-	    invoice.address1 = branches[k].address1;
-	    invoice.phone = branches[k].postal_code;
-	    invoice.city = branches[k].city;
-	    invoice.state = branches[k].state;
-	    invoice.number_autho = branches[k].number_autho;
-	    invoice.deadline = branches[k].deadline;
-	    invoice.activity_pri = branches[k].activity_pri;
-	    invoice.aux1 = branches[k].aux2;
-		invoice.third = branches[k].third;
-	    invoice.account_nit = account.nit;
-	    invoice.invoice_number = '0';
-
 	    invoice.client_name = client.name;
 	    invoice.client_nit = client.nit;
+
+		invoice.branch_name = branch.name;
+		invoice.branch_type_id = branch.branch_type_id;
+	    invoice.address2 = branch.address2;
+	    invoice.address1 = branch.address1;
+	    invoice.phone = branch.work_phone;
+	    invoice.city = branch.city;
+	    invoice.state = branch.state;
+	    invoice.number_autho = branch.number_autho;
+	    invoice.deadline = branch.deadline;
+	    invoice.economic_activity = branch.economic_activity;
+		invoice.type_third = branch.type_third;
+	    invoice.invoice_number = '0';
 	    invoice.control_code = '00-00-00-00';
 	    invoice.status = 0;
   	}
@@ -31643,68 +31633,6 @@ CONSTS.INVOICE_STATUS_PAID = 5;
 $.fn.datepicker.defaults.autoclose = true;
 $.fn.datepicker.defaults.todayHighlight = true;
 
-
-
-
-
-function displayAccount(doc, invoice, x, y, layout) {
-  var account = invoice.account;
-
-  if (!account) {
-    return;
-  }
-
-  var data1 = [
-    account.name,
-    account.vat_number,
-    account.work_email,
-    account.work_phone
-  ];
-
-  var data2 = [
-    concatStrings(account.address1, account.address2),
-    concatStrings(account.city, account.state, account.postal_code),    
-    account.country ? account.country.name : false,
-    invoice.account.custom_value1 ? invoice.account['custom_label1'] + ' ' + invoice.account.custom_value1 : false, 
-    invoice.account.custom_value2 ? invoice.account['custom_label2'] + ' ' + invoice.account.custom_value2 : false,     
-  ];
-
-  if (layout.singleColumn) {
-
-    displayGrid(doc, invoice, data1.concat(data2), x, y, layout, {hasHeader:true});
-
-  } else {
-
-    displayGrid(doc, invoice, data1, x, y, layout, {hasHeader:true});
-
-    var nameWidth = account.name ? (doc.getStringUnitWidth(account.name) * doc.internal.getFontSize() * 1.1) : 0;
-    var emailWidth = account.work_email ? (doc.getStringUnitWidth(account.work_email) * doc.internal.getFontSize() * 1.1) : 0;
-    width = Math.max(emailWidth, nameWidth, 120);
-    x += width;
-
-    displayGrid(doc, invoice, data2, x, y, layout);  
-  }
-}
-
-
-function displayClient(doc, invoice, x, y, layout) {
-  var client = invoice.client;
-  if (!client) {
-    return;
-  }  
-  var data = [
-    getClientDisplayName(client),
-    client.vat_number,
-    concatStrings(client.address1, client.address2),
-    concatStrings(client.city, client.state, client.postal_code),
-    client.country ? client.country.name : false,
-    client.contacts && getClientDisplayName(client) != client.contacts[0].email ? client.contacts[0].email : false,
-    invoice.client.custom_value1 ? invoice.account['custom_client_label1'] + ' ' + invoice.client.custom_value1 : false, 
-    invoice.client.custom_value2 ? invoice.account['custom_client_label2'] + ' ' + invoice.client.custom_value2 : false, 
-  ];
-  return displayGrid(doc, invoice, data, x, y, layout, {hasheader:true});
-}
-
 function displayInvoice(doc, invoice, x, y, layout, rightAlignX) {
   if (!invoice) {
     return;
@@ -31718,37 +31646,6 @@ function displayInvoice(doc, invoice, x, y, layout, rightAlignX) {
 
   return displayGrid(doc, invoice, data, x, y, layout, options);
 }
-
-function getInvoiceDetails(invoice) {
-  return [
-    {'invoice_number': invoice.invoice_number},
-    {'po_number': invoice.po_number},
-    {'invoice_date': invoice.invoice_date},
-    {'due_date': invoice.due_date},
-    {'balance_due': formatMoney(invoice.balance_amount, invoice.client.currency_id)},
-  ]; 
-}
-
-function getInvoiceDetailsHeight(invoice, layout) {
-  var data = getInvoiceDetails(invoice);
-  var count = 0;
-  for (var key in data) {
-    if (!data.hasOwnProperty(key)) {
-      continue;
-    }
-    var obj = data[key];
-    for (var subKey in obj) {
-      if (!obj.hasOwnProperty(subKey)) {
-        continue;
-      }
-      if (obj[subKey]) {
-        count++;
-      }
-    }
-  }
-  return count * layout.rowHeight;
-}
-
 
 
 function displaySubtotals(doc, layout, invoice, y, rightAlignTitleX)
@@ -31768,27 +31665,6 @@ function displaySubtotals(doc, layout, invoice, y, rightAlignTitleX)
 
     ];
   }
-
-  // if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 == '1') {    
-  //   data.push({'custom_invoice_label1': formatMoney(invoice.custom_value1, invoice.client.currency_id) })
-  // }
-  // if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 == '1') {
-  //   data.push({'custom_invoice_label2': formatMoney(invoice.custom_value2, invoice.client.currency_id) }) 
-  // }
-
-  // data.push({'tax': invoice.tax_amount > 0 ? formatMoney(invoice.tax_amount, invoice.client.currency_id) : false});
-
-  // if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 != '1') {    
-  //   data.push({'custom_invoice_label1': formatMoney(invoice.custom_value1, invoice.client.currency_id) })
-  // }
-  // if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 != '1') {
-  //   data.push({'custom_invoice_label2': formatMoney(invoice.custom_value2, invoice.client.currency_id) }) 
-  // }
-
-  // var paid = invoice.amount - invoice.balance;
-  // if (invoice.account.hide_paid_to_date != '1' || paid) {
-  //   data.push({'paid_to_date': formatMoney(paid, invoice.client.currency_id)});
-  // }
 
   var options = {
     hasheader: true,
@@ -31817,27 +31693,6 @@ function displaySubtotals2(doc, layout, invoice, y, rightAlignTitleX)
 
     ];
   }
-
-  // if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 == '1') {    
-  //   data.push({'custom_invoice_label1': formatMoney(invoice.custom_value1, invoice.client.currency_id) })
-  // }
-  // if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 == '1') {
-  //   data.push({'custom_invoice_label2': formatMoney(invoice.custom_value2, invoice.client.currency_id) }) 
-  // }
-
-  // data.push({'tax': invoice.tax_amount > 0 ? formatMoney(invoice.tax_amount, invoice.client.currency_id) : false});
-
-  // if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 != '1') {    
-  //   data.push({'custom_invoice_label1': formatMoney(invoice.custom_value1, invoice.client.currency_id) })
-  // }
-  // if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 != '1') {
-  //   data.push({'custom_invoice_label2': formatMoney(invoice.custom_value2, invoice.client.currency_id) }) 
-  // }
-
-  // var paid = invoice.amount - invoice.balance;
-  // if (invoice.account.hide_paid_to_date != '1' || paid) {
-  //   data.push({'paid_to_date': formatMoney(paid, invoice.client.currency_id)});
-  // }
 
   var options = {
     hasheader: true,
@@ -32172,14 +32027,6 @@ function calculateAmounts(invoice) {
   //   total -= discount;
   // }
 
-  // custom fields with taxes
-  if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 == '1') {    
-    total += roundToTwo(invoice.custom_value1);    
-  }
-  if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 == '1') {
-    total += roundToTwo(invoice.custom_value2);    
-  }
-
   var tax = 0;
   if (invoice.tax && parseFloat(invoice.tax.rate)) {
     tax = parseFloat(invoice.tax.rate);
@@ -32190,14 +32037,6 @@ function calculateAmounts(invoice) {
   if (tax) {
     var tax = roundToTwo(total * (tax/100));
     total = parseFloat(total) + parseFloat(tax);
-  }
-
-  // custom fields w/o with taxes
-  if (NINJA.parseFloat(invoice.custom_value1) && invoice.custom_taxes1 != '1') {    
-    total += roundToTwo(invoice.custom_value1);    
-  }
-  if (NINJA.parseFloat(invoice.custom_value2) && invoice.custom_taxes2 != '1') {
-    total += roundToTwo(invoice.custom_value2);    
   }
 
   // invoice.balance_amount = roundToTwo(total) - (roundToTwo(invoice.amount) - roundToTwo(invoice.balance));
@@ -32408,17 +32247,6 @@ function displayInvoiceHeader(doc, invoice, layout) {
 	doc.line(layout.marginLeft - layout.tablePadding+345, layout.headerTop+140, layout.marginLeft - layout.tablePadding+345, layout.tableTop + 35);
 	doc.line(layout.marginLeft - layout.tablePadding+450, layout.headerTop+140, layout.marginLeft - layout.tablePadding+450, layout.tableTop + 35);
 
-
-  // if (invoice.account.hide_quantity != '1') {
-  //   doc.text(qtyX, layout.tableTop, invoiceLabels.quantity);
-  // }
-  // doc.text(totalX, layout.tableTop, invoiceLabels.line_total);
-
-  // if (invoice.has_taxes)
-  // {
-  //   doc.text(taxX, layout.tableTop, invoiceLabels.tax);
-  // }
-
 }
 
 function displayInvoiceHeader2(doc, invoice, layout) {
@@ -32441,16 +32269,6 @@ function displayInvoiceHeader2(doc, invoice, layout) {
 	doc.line(layout.marginRight + layout.tablePadding,layout.headerTop+140, layout.marginRight + layout.tablePadding, layout.tableTop + 35);
 
 	doc.line(layout.marginLeft - layout.tablePadding+420, layout.headerTop+140, layout.marginLeft - layout.tablePadding+420, layout.tableTop + 35);
-
-  // if (invoice.account.hide_quantity != '1') {
-  //   doc.text(qtyX, layout.tableTop, invoiceLabels.quantity);
-  // }
-  // doc.text(totalX, layout.tableTop, invoiceLabels.line_total);
-
-  // if (invoice.has_taxes)
-  // {
-  //   doc.text(taxX, layout.tableTop, invoiceLabels.tax);
-  // }
 
 }
 

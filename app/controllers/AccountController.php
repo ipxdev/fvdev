@@ -164,13 +164,12 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 	{		
 		
 		$code = Input::get('code');
-
-		$result = $this->accountRepo->enableProPlan();
-
-		if ($code == "123")
+		if ($code == CREDIT_KEY)
 		{
-			return RESULT_SUCCESS;	
+			$result = $this->accountRepo->enableProPlan();
 		}
+			return RESULT_SUCCESS;	
+		
 	
 	}
 

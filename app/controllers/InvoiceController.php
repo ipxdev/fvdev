@@ -212,7 +212,7 @@ class InvoiceController extends \BaseController {
 	public function create($clientPublicId = 0)
 	{	
 		$client = null;
-		$account = Account::with('country')->findOrFail(Auth::user()->account_id);
+		$account = Account::findOrFail(Auth::user()->account_id);
 		if ($clientPublicId) 
 		{
 			$client = Client::scope($clientPublicId)->firstOrFail();
@@ -238,13 +238,10 @@ class InvoiceController extends \BaseController {
 	private static function getViewModel()
 	{
 		return [
-			'account' => Auth::user()->account,
-			'branches' => Branch::where('account_id', '=', Auth::user()->account_id)->where('id',Auth::user()->branch_id)->orderBy('public_id')->get(),
+			'branches' => Branch::where('account_id', '=', Auth::user()->account_id)->where('id',Auth::user()->branch_id)->get(),
 			'products' => Product::scope()->orderBy('id')->get(array('product_key','notes','cost','qty')),
 			'clients' => Client::scope()->with('contacts')->orderBy('name')->get(),
 			'taxRates' => TaxRate::scope()->orderBy('name')->get(),
-			'currencies' => Currency::remember(DEFAULT_QUERY_CACHE)->orderBy('name')->get(),
-			'paymentTerms' => PaymentTerm::remember(DEFAULT_QUERY_CACHE)->orderBy('num_days')->get(['name', 'num_days']),
 			'frequencies' => array(
 				1 => 'Semanal',
 				2 => 'Cada 2 semanas',
@@ -282,44 +279,25 @@ class InvoiceController extends \BaseController {
 		
 		$invoice = $input->invoice;
 
-		if (Utils::isAdmin())
-	    {
-	      $branch_id = $input->invoice->branch_id;
-	      $branch = Branch::where('account_id', '=', Auth::user()->account_id)->where('public_id',$branch_id)->first();
 
-	      // $branch = DB::table('branches')->where('id',$branch_id)->first();
-	    }
-	    else
-	    {
-	      $branch = Auth::user()->branch;
-	      $branch_id = $branch->id;		
-	      $branch = DB::table('branches')->where('id',$branch_id)->first();
-
-	    }
-
+	    $branch = Branch::where('account_id', '=', Auth::user()->account_id)->where('public_id',Auth::user()->branch_id)->first();
 		$today = new DateTime('now');
-
 		$today = $today->format('Y-m-d');
 		$datelimit = DateTime::createFromFormat('Y-m-d', $branch->deadline);	
 		$datelimit = $datelimit->format('Y-m-d');
-
-		$valoresPrimera = explode ("-", $datelimit); 
-		$valoresSegunda = explode ("-", $today); 
-
-		$diaPrimera    = $valoresPrimera[2];  
-		$mesPrimera  = $valoresPrimera[1];  
-		$anyoPrimera   = $valoresPrimera[0]; 
-
-		$diaSegunda   = $valoresSegunda[2];  
-		$mesSegunda = $valoresSegunda[1];  
-		$anyoSegunda  = $valoresSegunda[0];
-
-		$a = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);  
-		$b = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);  
+		$first = explode ("-", $datelimit); 
+		$second = explode ("-", $today); 
+		$first_day    = $first[2];  
+		$first_month  = $first[1];  
+		$first_year   = $first[0]; 
+		$second_day   = $second[2];  
+		$second_month = $second[1];  
+		$second_year  = $second[0];
+		$a = gregoriantojd($first_month, $first_day, $first_year);  
+		$b = gregoriantojd($second_month, $second_day, $second_year);  
 		$errorS = "Expiró la fecha límite de " . $branch->name;
 		if($a - $b < 0)
-		{
-			
+		{	
 			Session::flash('error', $errorS);
 			return Redirect::to("{$entityType}s/create")
 				->withInput();
@@ -331,14 +309,10 @@ class InvoiceController extends \BaseController {
 		if ($last_invoice)
 		{
 			$yesterday = $last_invoice->invoice_date;
-
 			$today = date("Y-m-d", strtotime($invoice->invoice_date));
-
 			$errorD = "La fecha de la factura es incorrecta";
-
 			$yesterday = new DateTime($yesterday);
 			$today = new DateTime($today);
-
 
 			if($yesterday > $today)
 			{			
@@ -348,8 +322,6 @@ class InvoiceController extends \BaseController {
 
 			}
 		}
-
-
 
 		if ($errors = $this->invoiceRepo->getErrors($invoice))
 		{					
@@ -376,15 +348,6 @@ class InvoiceController extends \BaseController {
 			$invoice = $this->invoiceRepo->save($publicId, $invoiceData, $entityType);
 			
 			$account = Auth::user()->account;
-			// if ($account->invoice_taxes != $input->invoice_taxes 
-			// 			|| $account->invoice_item_taxes != $input->invoice_item_taxes
-			// 			|| $account->invoice_design_id != $input->invoice->invoice_design_id)
-			// {
-			// 	$account->invoice_taxes = $input->invoice_taxes;
-			// 	$account->invoice_item_taxes = $input->invoice_item_taxes;
-			// 	$account->invoice_design_id = $input->invoice->invoice_design_id;
-			// 	$account->save();
-			// }
 
 			$client->load('contacts');
 			$sendInvoiceIds = [];
@@ -415,47 +378,45 @@ class InvoiceController extends \BaseController {
 				}
 			}	
 
+   //  		$invoice_date = date("d/m/Y", strtotime($invoice->invoice_date));
+			// require_once(app_path().'/includes/BarcodeQR.php');
 
+		 //    // $ice = $invoice->amount-$invoice->fiscal;
+		 //    $desc = $invoice->subtotal-$invoice->amount;
 
-    		$invoice_date = date("d/m/Y", strtotime($invoice->invoice_date));
-			require_once(app_path().'/includes/BarcodeQR.php');
+		 //    $subtotal = number_format($invoice->subtotal, 2, '.', '');
+		 //    $amount = number_format($invoice->amount, 2, '.', '');
+		 //    $fiscal = number_format($invoice->fiscal, 2, '.', '');
 
-		    // $ice = $invoice->amount-$invoice->fiscal;
-		    $desc = $invoice->subtotal-$invoice->amount;
+		 //    // $icef = number_format($ice, 2, '.', '');
+		 //    $descf = number_format($desc, 2, '.', '');
 
-		    $subtotal = number_format($invoice->subtotal, 2, '.', '');
-		    $amount = number_format($invoice->amount, 2, '.', '');
-		    $fiscal = number_format($invoice->fiscal, 2, '.', '');
+		 //    // if($icef=="0.00"){
+		 //    //   $icef = 0;
+		 //    // }
+		 //    if($descf=="0.00"){
+		 //      $descf = 0;
+		 //    }
 
-		    // $icef = number_format($ice, 2, '.', '');
-		    $descf = number_format($desc, 2, '.', '');
+		 //    $icef = 0;
 
-		    // if($icef=="0.00"){
-		    //   $icef = 0;
-		    // }
-		    if($descf=="0.00"){
-		      $descf = 0;
-		    }
+		 //    $qr = new BarcodeQR();
+		 //    $datosqr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
+		 //    $qr->text($datosqr); 
+		 //    $qr->draw(150, 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png');
+		 //    $input_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png';
+		 //    $output_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.jpg';
 
-		    $icef = 0;
+		 //    $inputqr = imagecreatefrompng($input_file);
+		 //    list($width, $height) = getimagesize($input_file);
+		 //    $output = imagecreatetruecolor($width, $height);
+		 //    $white = imagecolorallocate($output,  255, 255, 255);
+		 //    imagefilledrectangle($output, 0, 0, $width, $height, $white);
+		 //    imagecopy($output, $inputqr, 0, 0, 0, 0, $width, $height);
+		 //    imagejpeg($output, $output_file);
 
-		    $qr = new BarcodeQR();
-		    $datosqr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
-		    $qr->text($datosqr); 
-		    $qr->draw(150, 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png');
-		    $input_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png';
-		    $output_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.jpg';
-
-		    $inputqr = imagecreatefrompng($input_file);
-		    list($width, $height) = getimagesize($input_file);
-		    $output = imagecreatetruecolor($width, $height);
-		    $white = imagecolorallocate($output,  255, 255, 255);
-		    imagefilledrectangle($output, 0, 0, $width, $height, $white);
-		    imagecopy($output, $inputqr, 0, 0, 0, 0, $width, $height);
-		    imagejpeg($output, $output_file);
-
-		    $invoice->qr=HTML::image_data('qr/' . $account->account_key .'_'. $branch->name .'_'. $invoice->invoice_number . '.jpg');
-			$invoice->save();				
+		 //    $invoice->qr=HTML::image_data('qr/' . $account->account_key .'_'. $branch->name .'_'. $invoice->invoice_number . '.jpg');
+			// $invoice->save();				
 
 			$message = trans($publicId ? "texts.updated_{$entityType}" : "texts.created_{$entityType}");
 			if ($input->invoice->client->public_id == '-1')
@@ -466,15 +427,8 @@ class InvoiceController extends \BaseController {
 				Utils::trackViewed($client->getDisplayName(), ENTITY_CLIENT, $url);
 			}
 			
-			if ($action == 'clone')
-			{
-				return $this->cloneInvoice($publicId);
-			}
-			else if ($action == 'convert')
-			{
-				return $this->convertQuote($publicId);
-			}
-			else if ($action == 'email') 
+
+			if ($action == 'email') 
 			{	
 				$aux = 0;
 				foreach ($client->contacts as $contact)
@@ -618,28 +572,10 @@ class InvoiceController extends \BaseController {
 		return Redirect::to("{$entityType}s");
 	}
 
-	public function convertQuote($publicId)
-	{
-		$invoice = Invoice::with('invoice_items')->scope($publicId)->firstOrFail();   
-		$clone = $this->invoiceRepo->cloneInvoice($invoice, $invoice->id);
 
-		Session::flash('message', trans('texts.converted_to_invoice'));
-		return Redirect::to('invoices/' . $clone->public_id);
-	}
 
-	public function cloneInvoice($publicId)
-	{
-		/*
-		$invoice = Invoice::with('invoice_items')->scope($publicId)->firstOrFail();   
-		$clone = $this->invoiceRepo->cloneInvoice($invoice);
-		$entityType = $invoice->getEntityType();
 
-		Session::flash('message', trans('texts.cloned_invoice'));
-		return Redirect::to("{$entityType}s/" . $clone->public_id);
-		*/
 
-		return self::edit($publicId, true);
-	}
 	
 	public function listasCuenta()
     {	

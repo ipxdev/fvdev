@@ -81,10 +81,6 @@ class AccountRepository
 
 	public function enableProPlan()
 	{		
-		if (Auth::user()->isPro())
-		{
-			return false;
-		}
 
 		$account = Auth::user()->account;
 		$credit = $account->credit_counter;
@@ -92,7 +88,7 @@ class AccountRepository
 
         $date = date("Y-m-d", strtotime(date_create()->format('Y-m-d')." +3 month"));
 
-        $account->pro_plan_paid = $date;
+        $account->billing_deadline = $date;
         $account->save();
             
 		$result = 1;

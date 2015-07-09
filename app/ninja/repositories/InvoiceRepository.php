@@ -205,19 +205,7 @@ class InvoiceRepository
 
       $discount_item = Utils::parseFloat($data['discount_item']);
 
-      $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
-
-      if (!$invoice->is_recurring)
-      {
-  		$invoice->invoice_number = $invoiceNumber;
-      }
-      else
-      {
-        $invoice->invoice_number = " ";
-      }
-
-
-  		$invoice->is_recurring = $data['is_recurring'] && !Utils::isDemo() ? true : false;
+  		$invoice->is_recurring = $data['is_recurring'] ? true : false;
       $invoice->invoice_date = Utils::toSqlDate($data['invoice_date']);
         
       if ($invoice->is_recurring)
@@ -226,6 +214,7 @@ class InvoiceRepository
         $invoice->start_date = Utils::toSqlDate($data['start_date']);
         $invoice->end_date = Utils::toSqlDate($data['end_date']);
         $invoice->due_date = null;
+        $invoice->invoice_number = " ";
       }
       else
       {
@@ -244,11 +233,14 @@ class InvoiceRepository
         $invoice->frequency_id = 0;
         $invoice->start_date = null;
         $invoice->end_date = null;
+        
+        $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
+        $invoice->invoice_number = $invoiceNumber;
+
       }
 
   		$invoice->terms = trim($data['terms']);
   		$invoice->public_notes = trim($data['public_notes']);
-  		$invoice->po_number = trim($data['po_number']);
 
       $invoiceDesign = \DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
       $invoice->invoice_design_id = $invoiceDesign->id;
@@ -286,6 +278,7 @@ class InvoiceRepository
         
   			$total += round($lineTotal + ($lineTotal * $invoiceItemTaxRate / 100), 2);
   		}
+
       $invoice->subtotal = $total;
       
   		if ($invoice->discount > 0)
@@ -296,31 +289,6 @@ class InvoiceRepository
       if ($discount_item > 0)
       { 
         $total -= $discount_item;
-      }
-
-
-      $invoice->custom_value1 = round($data['custom_value1'], 2);
-      $invoice->custom_value2 = round($data['custom_value2'], 2);
-      $invoice->custom_taxes1 = $data['custom_taxes1'] ? true : false;
-      $invoice->custom_taxes2 = $data['custom_taxes2'] ? true : false;
-
-      // custom fields charged taxes
-      if ($invoice->custom_value1 && $invoice->custom_taxes1) {
-        $total += $invoice->custom_value1;
-      }
-      if ($invoice->custom_value2 && $invoice->custom_taxes2) {
-        $total += $invoice->custom_value2;
-      }
-
-  		$total += $total * $invoice->tax_rate / 100;
-      $total = round($total, 2);
-
-      // custom fields not charged taxes
-      if ($invoice->custom_value1) {
-        $total += $invoice->custom_value1;
-      }
-      if ($invoice->custom_value2 && !$invoice->custom_taxes2) {
-        $total += $invoice->custom_value2;
       }
 
       if ($publicId)    
@@ -346,8 +314,7 @@ class InvoiceRepository
       $invoice->branch_name=$branch->name;
       $invoice->address1=$branch->address1;
       $invoice->address2=$branch->address2;
-
-      $invoice->phone=$branch->postal_code;
+      $invoice->phone=$branch->work_phone;
       $invoice->city=$branch->city;
       $invoice->state=$branch->state;
 
@@ -358,12 +325,10 @@ class InvoiceRepository
       $invoice->client_nit = $data['client_nit'];
       $invoice->client_name = $data['client_name'];
 
-      $invoice->activity_pri=$branch->activity_pri;
-      $invoice->activity_sec1=$branch->activity_sec1;
-      $invoice->law=$branch->law;
-      $invoice->aux1=$branch->aux2;
+      $invoice->economic_activity = $branch->economic_activity;
+      $invoice->law = $branch->law;
       
-      $invoice->third=$branch->third;
+      $invoice->type_third=$branch->type_third;
 
       $invoice_dateCC = date("Ymd", strtotime($invoice->invoice_date));
       $invoice_date_limitCC = date("d/m/Y", strtotime($branch->deadline));
@@ -371,7 +336,7 @@ class InvoiceRepository
       require_once(app_path().'/includes/control_code.php');
       $cod_control = codigoControl($invoice->invoice_number, $invoice->client_nit, $invoice_dateCC, $invoice->amount, $branch->number_autho, $branch->key_dosage);
 
-      $invoice->control_code=$cod_control;
+      $invoice->control_code = $cod_control;
 
   		$invoice->save();
 
@@ -434,83 +399,6 @@ class InvoiceRepository
     }
 		return $invoice;
 	}
-
-  public function cloneInvoice($invoice, $quotePublicId = null)
-  {
-    $invoice->load('invitations', 'invoice_items');
-
-    $clone = Invoice::createNew($invoice);
-    $clone->balance = $invoice->amount;
-    $clone->invoice_number = $invoice->account->getNextInvoiceNumber();
-
-    foreach ([
-      'client_id',       
-      'discount', 
-      'invoice_date', 
-      'po_number', 
-      'due_date', 
-      'is_recurring', 
-      'frequency_id', 
-      'start_date', 
-      'end_date', 
-      'terms', 
-      'public_notes', 
-      'invoice_design_id', 
-      'tax_name', 
-      'tax_rate', 
-      'amount', 
-      'is_quote',
-      'custom_value1',
-      'custom_value2',
-      'custom_taxes1',
-      'custom_taxes2'] as $field) 
-    {
-      $clone->$field = $invoice->$field;  
-    }   
-
-    if ($quotePublicId)
-    {
-      $clone->is_quote = false;
-      $clone->quote_id = $quotePublicId;
-    }    
-    
-    $clone->save();
-
-    if ($quotePublicId)
-    {
-      $invoice->quote_invoice_id = $clone->public_id;
-      $invoice->save();
-    }
-    
-    foreach ($invoice->invoice_items as $item)
-    {
-      $cloneItem = InvoiceItem::createNew($invoice);
-      
-      foreach ([
-        'product_id', 
-        'product_key', 
-        'notes', 
-        'cost', 
-        'qty', 
-        'tax_name', 
-        'tax_rate'] as $field) 
-      {
-        $cloneItem->$field = $item->$field;
-      }
-
-      $clone->invoice_items()->save($cloneItem);      
-    }   
-
-    foreach ($invoice->invitations as $invitation)
-    {
-      $cloneInvitation = Invitation::createNew($invoice);
-      $cloneInvitation->contact_id = $invitation->contact_id;
-      $cloneInvitation->invitation_key = str_random(RANDOM_KEY_LENGTH);
-      $clone->invitations()->save($cloneInvitation);
-    }
-
-    return $clone;
-  }
 
 
 	public function bulk($ids, $action, $statusId = false)

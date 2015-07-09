@@ -215,7 +215,7 @@ class Account extends Eloquent
 			return true;
 		}
 
-		$datePaid = $this->pro_plan_paid;
+		$datePaid = $this->billing_deadline;
 		if (!$datePaid == '0000-00-00')
 		{
 			return true;
@@ -234,7 +234,7 @@ class Account extends Eloquent
 			return true;
 		}
 		
-		$datePaid = $this->pro_plan_paid;
+		$datePaid = $this->billing_deadline;
 		if (!$datePaid || $datePaid == '0000-00-00')
 		{
 			return false;

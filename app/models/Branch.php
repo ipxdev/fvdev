@@ -10,6 +10,11 @@ class Branch extends EntityModelB
 		return $this->belongsTo('Account');
 	}
 
+	public function users()
+	{
+		return $this->hasMany('User');
+	}
+
 	public function invoices()
 	{
 		return $this->hasMany('Invoice');

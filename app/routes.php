@@ -263,6 +263,7 @@ define('USER_TYPE_CLOUD_HOST', 'CLOUD_HOST');
 define('NEW_VERSION_AVAILABLE', 'NEW_VERSION_AVAILABLE');
 
 define('IPX_KEY', 'ipx');
+define('CREDIT_KEY', 'ipx');
 
 
 /** 

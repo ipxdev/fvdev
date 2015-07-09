@@ -353,30 +353,6 @@
   </div>
 </div>
 
-
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">{{ trans('texts.logout') }}</h4>
-      </div>
-
-      <div class="container">      
-        <h3>{{ trans('texts.are_you_sure') }}</h3>
-        <p>{{ trans('texts.erase_data') }}</p>          
-      </div>
-
-      <div class="modal-footer" id="signUpFooter">          
-        <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('texts.cancel') }}</button>
-        <button type="button" class="btn btn-primary" onclick="logout(true)">{{ trans('texts.logout') }}</button>         
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
   <div class="modal fade" id="proPlanModal" tabindex="-1" role="dialog" aria-labelledby="proPlanModalLabel" aria-hidden="true">
     <div class="modal-dialog medium-dialog">
       <div class="modal-content">
@@ -588,7 +564,6 @@
       </div>
 
       <div style="background-color: #fff; padding-right:20px;padding-left:20px; display:none" id="proPlanSuccess2">
-        {{-- trans('texts.pro_plan_success') --}}
 
         <div class="row">
             <div style="display:none" class="col-md-3" id="showcc">
@@ -723,13 +698,7 @@
     if (force) {
       NINJA.formIsChanged = false;
     }
-
-    // if (force || NINJA.isRegistered) {            
       window.location = '{{ URL::to('logout') }}';
-    // }
-    // else {
-    //   $('#logoutModal').modal('show');  
-    // }
   }
 
   function showSignUp() {    

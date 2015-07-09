@@ -79,134 +79,134 @@ class ClientRepository
 		return false;		
 	}
 
-	// public function save($publicId, $data, $notify = true)
-	// {
-	// 	if (!$publicId || $publicId == "-1") 
-	// 	{
-	// 		$client = Client::createNew();
-	// 		$client->currency_id = 1;
-	// 		$contact = Contact::createNew();
-	// 		$contact->is_primary = true;			
-	// 		$contact->send_invoice = true;
-	// 	}
-	// 	else
-	// 	{
-	// 		$client = Client::scope($publicId)->with('contacts')->firstOrFail();
-	// 		$contact = $client->contacts()->where('is_primary', '=', true)->firstOrFail();
-	// 	}
+	public function save($publicId, $data, $notify = true)
+	{
+		if (!$publicId || $publicId == "-1") 
+		{
+			$client = Client::createNew();
+			$client->currency_id = 1;
+			$contact = Contact::createNew();
+			$contact->is_primary = true;			
+			$contact->send_invoice = true;
+		}
+		else
+		{
+			$client = Client::scope($publicId)->with('contacts')->firstOrFail();
+			$contact = $client->contacts()->where('is_primary', '=', true)->firstOrFail();
+		}
 
 
-	// 	if (isset($data['nit'])) {
-	// 		$client->nit = trim($data['nit']);
-	// 	}
+		if (isset($data['nit'])) {
+			$client->nit = trim($data['nit']);
+		}
 		
-	// 	if (isset($data['name'])) {
-	// 		$client->name = trim($data['name']);
-	// 	}
- //        if (isset($data['business_name'])) {
-	// 		$client->business_name = trim($data['business_name']);
-	// 	}
-	// 	if (isset($data['work_phone'])) {
-	// 		$client->work_phone = trim($data['work_phone']);
-	// 	}
-	// 	if (isset($data['custom_value1'])) {			
-	// 		$client->custom_value1 = trim($data['custom_value1']);
-	// 	}
-	// 	if (isset($data['custom_value2'])) {
-	// 		$client->custom_value2 = trim($data['custom_value2']);
-	// 	}
-	// 	if (isset($data['address1'])) {
-	// 		$client->address1 = trim($data['address1']);
-	// 	}
-	// 	if (isset($data['address2'])) {
-	// 		$client->address2 = trim($data['address2']);
-	// 	}
-	// 	if (isset($data['city'])) {
-	// 		$client->city = trim($data['city']);
-	// 	}
-	// 	if (isset($data['state'])) {
-	// 		$client->state = trim($data['state']);
-	// 	}
-	// 	if (isset($data['private_notes'])) {
-	// 		$client->private_notes = trim($data['private_notes']);
-	// 	}
-	// 	$client->save();
+		if (isset($data['name'])) {
+			$client->name = trim($data['name']);
+		}
+        if (isset($data['business_name'])) {
+			$client->business_name = trim($data['business_name']);
+		}
+		if (isset($data['work_phone'])) {
+			$client->work_phone = trim($data['work_phone']);
+		}
+		if (isset($data['custom_value1'])) {			
+			$client->custom_value1 = trim($data['custom_value1']);
+		}
+		if (isset($data['custom_value2'])) {
+			$client->custom_value2 = trim($data['custom_value2']);
+		}
+		if (isset($data['address1'])) {
+			$client->address1 = trim($data['address1']);
+		}
+		if (isset($data['address2'])) {
+			$client->address2 = trim($data['address2']);
+		}
+		if (isset($data['city'])) {
+			$client->city = trim($data['city']);
+		}
+		if (isset($data['state'])) {
+			$client->state = trim($data['state']);
+		}
+		if (isset($data['private_notes'])) {
+			$client->private_notes = trim($data['private_notes']);
+		}
+		$client->save();
 		
-	// 	$isPrimary = true;
-	// 	$contactIds = [];
+		$isPrimary = true;
+		$contactIds = [];
 
-	// 	if (isset($data['contact']))
-	// 	{
-	// 		$info = $data['contact'];
-	// 		if (isset($info['email'])) {
-	// 			$contact->email = trim(strtolower($info['email']));
-	// 		}
-	// 		if (isset($info['first_name'])) {
-	// 			$contact->first_name = trim($info['first_name']);
-	// 		}
-	// 		if (isset($info['last_name'])) {				
-	// 			$contact->last_name = trim($info['last_name']);
-	// 		}
-	// 		if (isset($info['phone'])) {
-	// 			$contact->phone = trim($info['phone']);
-	// 		}
-	// 		$contact->is_primary = true;
-	// 		$contact->send_invoice = true;
-	// 		$client->contacts()->save($contact);
-	// 	}
-	// 	else
-	// 	{
-	// 		foreach ($data['contacts'] as $record)
-	// 		{
-	// 			$record = (array) $record;
+		if (isset($data['contact']))
+		{
+			$info = $data['contact'];
+			if (isset($info['email'])) {
+				$contact->email = trim(strtolower($info['email']));
+			}
+			if (isset($info['first_name'])) {
+				$contact->first_name = trim($info['first_name']);
+			}
+			if (isset($info['last_name'])) {				
+				$contact->last_name = trim($info['last_name']);
+			}
+			if (isset($info['phone'])) {
+				$contact->phone = trim($info['phone']);
+			}
+			$contact->is_primary = true;
+			$contact->send_invoice = true;
+			$client->contacts()->save($contact);
+		}
+		else
+		{
+			foreach ($data['contacts'] as $record)
+			{
+				$record = (array) $record;
 
-	// 			if ($publicId != "-1" && isset($record['public_id']) && $record['public_id'])
-	// 			{
-	// 				$contact = Contact::scope($record['public_id'])->firstOrFail();
-	// 			}
-	// 			else
-	// 			{
-	// 				$contact = Contact::createNew();
-	// 			}
+				if ($publicId != "-1" && isset($record['public_id']) && $record['public_id'])
+				{
+					$contact = Contact::scope($record['public_id'])->firstOrFail();
+				}
+				else
+				{
+					$contact = Contact::createNew();
+				}
 
-	// 			if (isset($record['email'])) {
-	// 				$contact->email = trim(strtolower($record['email']));
-	// 			}
-	// 			if (isset($record['first_name'])) {				
-	// 				$contact->first_name = trim($record['first_name']);
-	// 			}
-	// 			if (isset($record['last_name'])) {
-	// 				$contact->last_name = trim($record['last_name']);
-	// 			}
-	// 			if (isset($record['phone'])) {
-	// 				$contact->phone = trim($record['phone']);
-	// 			}
-	// 			$contact->is_primary = $isPrimary;
-	// 			$contact->send_invoice = isset($record['send_invoice']) ? $record['send_invoice'] : true;
-	// 			$isPrimary = false;
+				if (isset($record['email'])) {
+					$contact->email = trim(strtolower($record['email']));
+				}
+				if (isset($record['first_name'])) {				
+					$contact->first_name = trim($record['first_name']);
+				}
+				if (isset($record['last_name'])) {
+					$contact->last_name = trim($record['last_name']);
+				}
+				if (isset($record['phone'])) {
+					$contact->phone = trim($record['phone']);
+				}
+				$contact->is_primary = $isPrimary;
+				$contact->send_invoice = isset($record['send_invoice']) ? $record['send_invoice'] : true;
+				$isPrimary = false;
 
-	// 			$client->contacts()->save($contact);
-	// 			$contactIds[] = $contact->public_id;
-	// 		}
+				$client->contacts()->save($contact);
+				$contactIds[] = $contact->public_id;
+			}
 			
-	// 		foreach ($client->contacts as $contact)
-	// 		{
-	// 			if (!in_array($contact->public_id, $contactIds))
-	// 			{	
-	// 				$contact->delete();
-	// 			}
-	// 		}
-	// 	}
+			foreach ($client->contacts as $contact)
+			{
+				if (!in_array($contact->public_id, $contactIds))
+				{	
+					$contact->delete();
+				}
+			}
+		}
 
-	// 	$client->save();
+		$client->save();
 		
-	// 	if (!$publicId || $publicId == "-1")
-	// 	{
-	// 		\Activity::createClient($client, $notify);
-	// 	}
+		if (!$publicId || $publicId == "-1")
+		{
+			\Activity::createClient($client, $notify);
+		}
 
-	// 	return $client;
-	// }
+		return $client;
+	}
 
 	public function bulk($ids, $action)
 	{
