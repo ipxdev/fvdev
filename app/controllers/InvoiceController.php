@@ -138,7 +138,7 @@ class InvoiceController extends \BaseController {
 
 	public function edit($publicId, $clone = false)
 	{
-		$invoice = Invoice::scope($publicId)->withTrashed()->with('invitations', 'account.country', 'client.contacts', 'client.country', 'invoice_items')->firstOrFail();
+		$invoice = Invoice::scope($publicId)->withTrashed()->with('invitations', 'client.contacts', 'invoice_items')->firstOrFail();
 		$entityType = $invoice->getEntityType();
 
   	$contactIds = DB::table('invitations')
@@ -148,29 +148,37 @@ class InvoiceController extends \BaseController {
 			->where('invitations.deleted_at', '=', null)
 			->select('contacts.public_id')->lists('public_id');
 		
-		if ($clone)
-		{
-			$invoice->id = null;
-			$invoice->invoice_number = Auth::user()->account->getNextInvoiceNumber($invoice->is_quote);
-			$invoice->balance = $invoice->amount;
-			$method = 'POST';			
-			$url = "{$entityType}s";
-		}
-		else
-		{
+
 			Utils::trackViewed($invoice->invoice_number . ' - ' . $invoice->client->getDisplayName(), $invoice->getEntityType());
 			$method = 'PUT';
 			$url = "{$entityType}s/{$publicId}";
-		}
 		
 		$invoice->invoice_date = Utils::fromSqlDate($invoice->invoice_date);
 		$invoice->due_date = Utils::fromSqlDate($invoice->due_date);
 		$invoice->start_date = Utils::fromSqlDate($invoice->start_date);
 		$invoice->end_date = Utils::fromSqlDate($invoice->end_date);
-		$invoice->is_pro = Auth::user()->isPro();
    		
    		$invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->get();
    		// $invoiceDesigns = InvoiceDesign::where('account_id',\Auth::user()->account_id)->where('id',$invoice->invoice_design_id)->orderBy('public_id', 'desc')->first();
+
+		require_once(app_path().'/includes/BarcodeQR.php');
+	    $qr = new BarcodeQR();
+	    $qr->text($invoice->qr); 
+	    $qr->draw(150, 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png');
+	    $input_file = 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png';
+	    $output_file = 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg';
+
+	    $inputqr = imagecreatefrompng($input_file);
+	    list($width, $height) = getimagesize($input_file);
+	    $output = imagecreatetruecolor($width, $height);
+	    $white = imagecolorallocate($output,  255, 255, 255);
+	    imagefilledrectangle($output, 0, 0, $width, $height, $white);
+	    imagecopy($output, $inputqr, 0, 0, 0, 0, $width, $height);
+	    imagejpeg($output, $output_file);
+
+	    $invoice->qr=HTML::image_data('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg');
+	    File::delete('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg');
+	    File::delete('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png');	
 
 		$data = array(
 				'entityType' => $entityType,
@@ -376,47 +384,7 @@ class InvoiceController extends \BaseController {
 				{
 					$invitation->delete();
 				}
-			}	
-
-   //  		$invoice_date = date("d/m/Y", strtotime($invoice->invoice_date));
-			// require_once(app_path().'/includes/BarcodeQR.php');
-
-		 //    // $ice = $invoice->amount-$invoice->fiscal;
-		 //    $desc = $invoice->subtotal-$invoice->amount;
-
-		 //    $subtotal = number_format($invoice->subtotal, 2, '.', '');
-		 //    $amount = number_format($invoice->amount, 2, '.', '');
-		 //    $fiscal = number_format($invoice->fiscal, 2, '.', '');
-
-		 //    // $icef = number_format($ice, 2, '.', '');
-		 //    $descf = number_format($desc, 2, '.', '');
-
-		 //    // if($icef=="0.00"){
-		 //    //   $icef = 0;
-		 //    // }
-		 //    if($descf=="0.00"){
-		 //      $descf = 0;
-		 //    }
-
-		 //    $icef = 0;
-
-		 //    $qr = new BarcodeQR();
-		 //    $datosqr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
-		 //    $qr->text($datosqr); 
-		 //    $qr->draw(150, 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png');
-		 //    $input_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.png';
-		 //    $output_file = 'qr/' . $account->account_key .'_'. $branch->name .'_'.  $invoice->invoice_number . '.jpg';
-
-		 //    $inputqr = imagecreatefrompng($input_file);
-		 //    list($width, $height) = getimagesize($input_file);
-		 //    $output = imagecreatetruecolor($width, $height);
-		 //    $white = imagecolorallocate($output,  255, 255, 255);
-		 //    imagefilledrectangle($output, 0, 0, $width, $height, $white);
-		 //    imagecopy($output, $inputqr, 0, 0, 0, 0, $width, $height);
-		 //    imagejpeg($output, $output_file);
-
-		 //    $invoice->qr=HTML::image_data('qr/' . $account->account_key .'_'. $branch->name .'_'. $invoice->invoice_number . '.jpg');
-			// $invoice->save();				
+			}					
 
 			$message = trans($publicId ? "texts.updated_{$entityType}" : "texts.created_{$entityType}");
 			if ($input->invoice->client->public_id == '-1')

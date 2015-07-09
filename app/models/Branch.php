@@ -51,7 +51,7 @@ class Branch extends EntityModelB
 		return $prefix . $counter;
 	}
 
-	public function incrementCounter($isQuote = false) 
+	public function incrementCounterInvoice($isQuote = false) 
 	{
 		if ($isQuote) {
 			$this->quote_number_counter += 1;

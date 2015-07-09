@@ -151,6 +151,16 @@ class Account extends Eloquent
 		}
 	}
 
+	public function decreaseCounterCredit($isQuote = false) 
+	{
+		if (!$isQuote) {
+
+			$this->credit_counter -= 1;
+		}
+
+		$this->save();
+	}
+
 	public function getLocale() 
 	{
 		$language = Language::remember(DEFAULT_QUERY_CACHE)->where('id', '=', $this->account->language_id)->first();		

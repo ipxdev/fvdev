@@ -17,13 +17,11 @@ class BookSale extends Eloquent
 		{
 			$BookSale->user_id = $entity->user_id;
 			$BookSale->account_id = $entity->account_id;
-			$BookSale->branch_id = $entity->branch_id;
 		} 
 		else if (Auth::check())
 		{
 			$BookSale->user_id = Auth::user()->id;
 			$BookSale->account_id = Auth::user()->account_id;	
-			$BookSale->branch_id = Auth::user()->branch_id;	
 		} 
 		else 
 		{

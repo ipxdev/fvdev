@@ -233,7 +233,7 @@ class InvoiceRepository
         $invoice->frequency_id = 0;
         $invoice->start_date = null;
         $invoice->end_date = null;
-        
+
         $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
         $invoice->invoice_number = $invoiceNumber;
 
@@ -245,16 +245,16 @@ class InvoiceRepository
       $invoiceDesign = \DB::table('invoice_designs')->where('account_id',\Auth::user()->account_id)->orderBy('public_id', 'desc')->first();
       $invoice->invoice_design_id = $invoiceDesign->id;
 
-  		if (isset($data['tax_name']) && isset($data['tax_rate']) && Utils::parseFloat($data['tax_rate']) > 0)
-  		{
-  			$invoice->tax_rate = Utils::parseFloat($data['tax_rate']);
-  			$invoice->tax_name = trim($data['tax_name']);
-  		} 
-  		else
-  		{
-  			$invoice->tax_rate = 0;
-  			$invoice->tax_name = '';
-  		}
+  		// if (isset($data['tax_name']) && isset($data['tax_rate']) && Utils::parseFloat($data['tax_rate']) > 0)
+  		// {
+  		// 	$invoice->tax_rate = Utils::parseFloat($data['tax_rate']);
+  		// 	$invoice->tax_name = trim($data['tax_name']);
+  		// } 
+  		// else
+  		// {
+  		// 	$invoice->tax_rate = 0;
+  		// 	$invoice->tax_name = '';
+  		// }
   		
   		$total = 0;						
   		
@@ -269,10 +269,10 @@ class InvoiceRepository
   			$invoiceItemQty = Utils::parseFloat($item->qty);
   			$invoiceItemTaxRate = 0;
 
-  			if (isset($item->tax_rate) && Utils::parseFloat($item->tax_rate) > 0)
-  			{
-  				$invoiceItemTaxRate = Utils::parseFloat($item->tax_rate);				
-  			}
+  			// if (isset($item->tax_rate) && Utils::parseFloat($item->tax_rate) > 0)
+  			// {
+  			// 	$invoiceItemTaxRate = Utils::parseFloat($item->tax_rate);				
+  			// }
 
   			$lineTotal = $invoiceItemCost * $invoiceItemQty;
         
@@ -311,6 +311,8 @@ class InvoiceRepository
       $invoice->account_name=$account->name;
       $invoice->account_nit=$account->nit;
 
+      $invoice->branch_id = \Auth::user()->branch->id;
+      $invoice->branch_type_id=$branch->branch_type_id;
       $invoice->branch_name=$branch->name;
       $invoice->address1=$branch->address1;
       $invoice->address2=$branch->address2;
@@ -335,8 +337,24 @@ class InvoiceRepository
 
       require_once(app_path().'/includes/control_code.php');
       $cod_control = codigoControl($invoice->invoice_number, $invoice->client_nit, $invoice_dateCC, $invoice->amount, $branch->number_autho, $branch->key_dosage);
-
       $invoice->control_code = $cod_control;
+
+      $invoice_date = date("d/m/Y", strtotime($invoice->invoice_date));
+      // $ice = $invoice->amount-$invoice->fiscal;
+      $desc = $invoice->subtotal-$invoice->amount;
+      $subtotal = number_format($invoice->subtotal, 2, '.', '');
+      $amount = number_format($invoice->amount, 2, '.', '');
+      $fiscal = number_format($invoice->fiscal, 2, '.', '');
+      // $icef = number_format($ice, 2, '.', '');
+      $descf = number_format($desc, 2, '.', '');
+      // if($icef=="0.00"){
+      //   $icef = 0;
+      // }
+      if($descf=="0.00"){
+        $descf = 0;
+      }
+      $icef = 0;
+      $invoice->qr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
 
   		$invoice->save();
 
@@ -379,23 +397,16 @@ class InvoiceRepository
         $invoiceItem->notes = trim($invoice->is_recurring ? $item->notes : Utils::processVariables($item->notes));
         $invoiceItem->cost = Utils::parseFloat($item->cost);
         $invoiceItem->qty = Utils::parseFloat($item->qty);
-        $invoiceItem->tax_rate = 0;
+        // $invoiceItem->tax_rate = 0;
 
-        if (isset($item->tax_rate) && Utils::parseFloat($item->tax_rate) > 0)
-        {
-          $invoiceItem->tax_rate = Utils::parseFloat($item->tax_rate);
-          $invoiceItem->tax_name = trim($item->tax_name);
-        }
+        // if (isset($item->tax_rate) && Utils::parseFloat($item->tax_rate) > 0)
+        // {
+        //   $invoiceItem->tax_rate = Utils::parseFloat($item->tax_rate);
+        //   $invoiceItem->tax_name = trim($item->tax_name);
+        // }
 
         $invoice->invoice_items()->save($invoiceItem);
       }
-
-  		if ($data['set_default_terms'])
-  		{
-  			$account = \Auth::user()->account;
-  			$account->invoice_terms = $invoice->terms;
-  			$account->save();
-  		}
     }
 		return $invoice;
 	}

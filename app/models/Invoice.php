@@ -254,8 +254,8 @@ Invoice::created(function($invoice)
 	
     if (!$invoice->is_recurring)
     {
-	$invoice->branch->incrementCounter($invoice->is_quote);
-	$invoice->account->incrementCounter($invoice->is_quote);
+	$invoice->branch->incrementCounterInvoice($invoice->is_quote);
+	$invoice->account->decreaseCounterCredit($invoice->is_quote);
 
 	}	
 	Activity::createInvoice($invoice);
