@@ -164,20 +164,11 @@ class InvoiceController extends \BaseController {
 		require_once(app_path().'/includes/BarcodeQR.php');
 	    $qr = new BarcodeQR();
 	    $qr->text($invoice->qr); 
-	    $qr->draw(150, 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png');
-	    $input_file = 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png';
-	    $output_file = 'qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg';
-
-	    $inputqr = imagecreatefrompng($input_file);
-	    list($width, $height) = getimagesize($input_file);
-	    $output = imagecreatetruecolor($width, $height);
-	    $white = imagecolorallocate($output,  255, 255, 255);
-	    imagefilledrectangle($output, 0, 0, $width, $height, $white);
-	    imagecopy($output, $inputqr, 0, 0, 0, 0, $width, $height);
-	    imagejpeg($output, $output_file);
-
-	    $invoice->qr=HTML::image_data('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg');
-	    File::delete('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.jpg');
+	    $qr->draw(150, 'qr/' . Auth::user()->account_id .'-'. Auth::user()->branch_id . '.png');
+	    $path = 'qr/' . Auth::user()->account_id .'-'. Auth::user()->branch_id . '.png';
+		$type = pathinfo($path, PATHINFO_EXTENSION);
+		$data = file_get_contents($path);
+		$invoice->qr = 'data:image/' . $type . ';base64,' . base64_encode($data);
 	    File::delete('qr/' . Auth::user()->account_id . Auth::user()->branch_id . '.png');	
 
 		$data = array(

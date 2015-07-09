@@ -5,6 +5,11 @@
 
 		<script src="{{ asset('js/pdf_viewer.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('js/compatibility.js') }}" type="text/javascript"></script>
+		
+		<script src="{{ asset('js/png.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('js/zlib.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('js/addimage.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('js/png_support.js') }}" type="text/javascript"></script>
 @stop
 
 @section('content')
