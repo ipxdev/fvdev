@@ -23,7 +23,7 @@
 
 		<ol class="breadcrumb">
 			<li class='active'>Nueva Factura</li>
-			<li class='active'><span  class="ipxtitle"></span></li>
+			<li class='active'><span  class="ipxtitle">{{ Auth::user()->branch->name }}</span></li>
 		</ol>  
 
 	@endif

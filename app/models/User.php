@@ -35,6 +35,11 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		return $this->belongsTo('Account');
 	}
 
+	public function branch()
+	{
+		return $this->belongsTo('Branch');
+	}
+
 	public function getId()
 	{
 		return $this->id;
