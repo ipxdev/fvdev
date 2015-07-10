@@ -31921,7 +31921,7 @@ function displayQR(doc, layout, invoice, y)
 	}
 	else
 	{
-	doc.addImage(invoice.qr, 'JPEG', layout.marginLeft-15, y+12+qry, 80, 80);
+	doc.addImage(invoice.qr, 'PNG', layout.marginLeft-15, y+12+qry, 80, 80);
 	}
 }
 

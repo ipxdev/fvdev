@@ -123,6 +123,5 @@ Route::filter('csrf', function()
     Session::flash('warning', trans('texts.session_expired'));   
 
  		return Redirect::to('/');
-		//throw new Illuminate\Session\TokenMismatchException;
  	}
 });

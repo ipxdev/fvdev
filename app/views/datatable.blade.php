@@ -41,7 +41,7 @@
              "displayLength": 15,
             // Disable sorting on the first column
             "aoColumnDefs": [ {
-                'bSortable': false,
+                'bSortable': true,
                 'aTargets': [ 0, {{ count($columns) - 1 }} ]                
             } ],
             @endif

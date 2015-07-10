@@ -107,11 +107,11 @@ class InvoiceRepository
 
     $table->addColumn("branch_name", function($model) { return $model->branch_name; });        
 
-    $table->addColumn('amount', function($model) { return Utils::formatMoney($model->amount, $model->currency_id); });
+    $table->addColumn('amount', function($model) { return Utils::formatMoney($model->amount, 1); });
 
     if ($entityType == ENTITY_INVOICE)
     {
-      $table->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, $model->currency_id); });
+      $table->addColumn('balance', function($model) { return Utils::formatMoney($model->balance, 1); });
     }
 
     return $table->addColumn('due_date', function ($model) { return Utils::fromSqlDate2($model->due_date); })
@@ -234,9 +234,6 @@ class InvoiceRepository
         $invoice->start_date = null;
         $invoice->end_date = null;
 
-        $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
-        $invoice->invoice_number = $invoiceNumber;
-
       }
 
   		$invoice->terms = trim($data['terms']);
@@ -356,9 +353,15 @@ class InvoiceRepository
       $icef = 0;
       $invoice->qr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
 
+      if (!$invoice->is_recurring)
+      { 
+          $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
+          $invoice->invoice_number = $invoiceNumber;
+      }
+
   		$invoice->save();
 
-      $invoice->invoice_items()->forceDelete();
+      // $invoice->invoice_items()->forceDelete();
       
       foreach ($data['invoice_items'] as $item) 
       {
