@@ -39,8 +39,8 @@ class CreditController extends \BaseController {
                   ->addColumn('client_name', function($model) { return link_to('clients/' . $model->client_public_id, Utils::getClientDisplayName($model)); });
         }
         
-        return $table->addColumn('amount', function($model){ return Utils::formatMoney($model->amount, $model->currency_id); })
-            ->addColumn('balance', function($model){ return Utils::formatMoney($model->balance, $model->currency_id); })
+        return $table->addColumn('amount', function($model){ return Utils::formatMoney($model->amount, 1); })
+            ->addColumn('balance', function($model){ return Utils::formatMoney($model->balance, 1); })
             ->addColumn('credit_date', function($model) { return Utils::fromSqlDate($model->credit_date); })
             ->addColumn('private_notes', function($model) { return $model->private_notes; })
             ->addColumn('dropdown', function($model) 
