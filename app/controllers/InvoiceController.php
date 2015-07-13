@@ -279,7 +279,7 @@ class InvoiceController extends \BaseController {
 		$invoice = $input->invoice;
 
 
-	    $branch = Branch::where('account_id', '=', Auth::user()->account_id)->where('public_id',Auth::user()->branch_id)->first();
+	    $branch = Branch::where('account_id', '=', Auth::user()->account_id)->where('id',Auth::user()->branch_id)->first();
 		$today = new DateTime('now');
 		$today = $today->format('Y-m-d');
 		$datelimit = DateTime::createFromFormat('Y-m-d', $branch->deadline);	

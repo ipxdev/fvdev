@@ -21,7 +21,7 @@ class InvoiceRepository
     				->where('invoices.is_recurring', '=', false)
             ->where('contacts.deleted_at', '=', null)    			
     				->where('contacts.is_primary', '=', true)	
-  					->select('clients.public_id as client_public_id', 'invoice_number', 'invoice_status_id', 'clients.name as client_name', 'branches.name as branch_name', 'invoices.public_id', 'amount', 'invoices.balance', 'invoice_date', 'due_date', 'invoice_statuses.name as invoice_status_name', 'contacts.first_name', 'contacts.last_name', 'contacts.email', 'quote_id', 'quote_invoice_id');
+  					->select('clients.public_id as client_public_id', 'invoice_number', 'invoice_status_id', 'clients.business_name as client_name', 'branches.name as branch_name', 'invoices.public_id', 'amount', 'invoices.balance', 'invoice_date', 'due_date', 'invoice_statuses.name as invoice_status_name', 'contacts.first_name', 'contacts.last_name', 'contacts.email', 'quote_id', 'quote_invoice_id');
 
       if (!\Session::get('show_trash:invoice'))
       {
@@ -60,7 +60,7 @@ class InvoiceRepository
             ->where('clients.deleted_at', '=', null)
     				->where('invoices.is_recurring', '=', true)
     				->where('contacts.is_primary', '=', true)	
-			   		->select('clients.public_id as client_public_id', 'clients.name as client_name', 'invoices.public_id', 'amount', 'frequencies.name as frequency', 'start_date', 'end_date', 'contacts.first_name', 'contacts.last_name', 'contacts.email');
+			   		->select('clients.public_id as client_public_id', 'clients.business_name as client_name', 'invoices.public_id', 'amount', 'frequencies.name as frequency', 'start_date', 'end_date', 'contacts.first_name', 'contacts.last_name', 'contacts.email');
 
     	if ($clientPublicId) 
     	{
@@ -305,6 +305,12 @@ class InvoiceRepository
 
       $branch = \Auth::user()->branch;
 
+      if (!$invoice->is_recurring)
+      { 
+          $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
+          $invoice->invoice_number = $invoiceNumber;
+      }
+
       $invoice->account_name=$account->name;
       $invoice->account_nit=$account->nit;
 
@@ -352,12 +358,6 @@ class InvoiceRepository
       }
       $icef = 0;
       $invoice->qr = $invoice->account_nit.'|'.$invoice->invoice_number.'|'.$invoice->number_autho.'|'.$invoice_date.'|'.$subtotal.'|'.$amount.'|'.$invoice->control_code.'|'.$invoice->client_nit.'|'.$icef.'|0|0|'.$descf;
-
-      if (!$invoice->is_recurring)
-      { 
-          $invoiceNumber = \Auth::user()->branch->getNextInvoiceNumber();
-          $invoice->invoice_number = $invoiceNumber;
-      }
 
   		$invoice->save();
 

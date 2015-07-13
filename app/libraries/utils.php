@@ -533,14 +533,6 @@ class Utils
 		{
 			return $model->client_name;
 		}
-		else if ($model->first_name || $model->last_name) 
-		{
-			return $model->first_name . ' ' . $model->last_name;
-		}
-		else
-		{
-			return $model->email;
-		}
 	}
 
 	public static function encodeActivity($person = null, $action, $entity = null, $otherPerson = null)

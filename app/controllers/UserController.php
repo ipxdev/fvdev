@@ -351,25 +351,42 @@ class UserController extends BaseController {
             'remember' => true,
         );
 
-        // If you wish to only allow login from confirmed users, call logAttempt
-        // with the second parameter as true.
-        // logAttempt will check if the 'email' perhaps is the username.
-        // Get the value from the config file instead of changing the controller
+
         if ( Input::get( 'login_email' ) && Input::get( 'nit' ) && Confide::logAttempt( $input, false ) ) 
         {            
             Event::fire('user.login');
-            // Redirect the user to the URL they were trying to access before
-            // caught by the authentication filter IE Redirect::guest('user/login').
-            // Otherwise fallback to '/'
-            // Fix pull #145
-            if (Utils::isAdmin())
+
+            if (Auth::user()->account->confirmed)
             {
-                return Redirect::intended('/select_branch');
+                if (Utils::isAdmin())
+                {
+                    return Redirect::intended('/select_branch');
+                }
+                else
+                {
+                    return Redirect::intended('/clients');
+                }  
             }
             else
             {
-                return Redirect::intended('/clients');
-            }
+                if(!Auth::user()->account->op1)
+                {
+                    return Redirect::intended('company/details');
+                }
+                elseif(!Auth::user()->account->op2)
+                {
+                    return Redirect::intended('company/branches');
+
+                }
+                elseif(!Auth::user()->account->op3)
+                {
+                    return Redirect::intended('company/invoice_design');
+
+                }
+
+             }
+
+
         }
         else
         {

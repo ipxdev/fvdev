@@ -377,7 +377,7 @@ return array(
 
   'pro_plan_product' => 'Plan Empresarial',
   'pro_plan_description' => 'La vigencia es de un año en el Plan Empresarial',
-  'pro_plan_success' => 'Gracias por acompañarnos!',
+  'pro_plan_success' => 'Satisfactorio',
   'unsaved_changes' => 'Usted tiene cambios que no guardo.',
   'custom_fields' => 'Campos personalizados',
   'company_fields' => 'Campos adicionales de su Empresa',

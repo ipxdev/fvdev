@@ -11,7 +11,6 @@
     padding-top: 114px; 
   }
 
-  /* Fix for header covering stuff when the screen is narrower */
   @media screen and (min-width: 1200px) {
     body {
       padding-top: 56px; 
@@ -23,7 +22,6 @@
 
 <script type="text/javascript">
 
-  /* Set the defaults for DataTables initialisation */
   $.extend( true, $.fn.dataTable.defaults, {
     "sDom": "t<'row-fluid'<'span6'i><'span6'p>>",
     "sPaginationType": "bootstrap",
@@ -39,7 +37,6 @@
 @stop
 
 @section('body')
-
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 
@@ -65,9 +62,12 @@
         @if (Utils::isAdmin())
         <a href="{{ URL::to('/select_branch') }}" style="color:#00B0DC!important;">
         
-        Cambiar Sucursal
+        {{ Auth::user()->getDisplayBranch() }}
         <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
         </a>
+        @else
+        {{ Auth::user()->getDisplayBranch() }}
+        <span style="margin:3px 0" class="glyphicon glyphicon-chevron-down"></span>
         @endif
 
       </div>
@@ -105,7 +105,7 @@
 
             {{-- Button::sm_success_primary(trans('texts.sign_up'), array('id' => 'signUpButton', 'data-toggle'=>'modal', 'data-target'=>'#signUpModal')) --}} &nbsp;
             {{ Button::sm_primary('Calcular Código de Control', array('class' => 'btncc', 'id' => 'proPlanButton2', 'data-toggle'=>'modal', 'data-target'=>'#proPlanModal2')) }} &nbsp;
-            {{ Button::sm_success_primary('COMENZAR LA CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#PlanModal')) }} &nbsp;
+            {{ Button::sm_success_primary('FINALIZAR CONFIGURACIÓN', array('id' => 'proPlanButton', 'data-toggle'=>'modal', 'data-target'=>'#PlanModal')) }} &nbsp;
 
           @else
 
@@ -149,8 +149,18 @@
             <li class="fvlinkred" style="font-size:14px;">{{ link_to('#', trans('texts.logout'), array('onclick'=>'logout()')) }}</li>
           </ul>
         </div>
-
-@endif
+    @else
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span id="myAccountButton">
+            </span>
+            <span class="glyphicon glyphicon-cog"></span>
+          </button>     
+          <ul class="dropdown-menu fvlink" role="menu">
+          <li class="fvlinkred" style="font-size:14px;">{{ link_to('#', trans('texts.logout'), array('onclick'=>'logout()')) }}</li>
+          </ul>
+        </div>
+    @endif
 
       </div>  
 
@@ -390,22 +400,25 @@
         </div>
       </div>
 
-      <div style="background-color: #fff; padding-right:20px;padding-left:20px; display:none" id="proPlanSuccess">
+      <div style="background-color: #fff; padding-right:20px;padding-left:20px; display:none" id="proPlanSuccessR">
         &nbsp;<br/>
         Recarga Exitosa
         <br/>&nbsp;
       </div>
-      <div class="modal-footer" style="margin-top: 0px; display:none" id="proPlanFooterError">
+      <div class="modal-footer" style="margin-top: 0px; display:none" id="proPlanErrorR">
               &nbsp;<br/>
         Código Incorrecto
         <br/>&nbsp;
-        <button type="button" class="btn btn-default" id="proPlanButton" data-dismiss="modal">CERRAR</button>          
+        <div class="modal-footer" style="margin-top: 0px" id="proPlanFooterErrorR">
+         <button type="button" class="btn btn-default" id="proPlanButtonR" onclick="reload()" data-dismiss="modal">VOLVER</button>   
+        </div>        
       </div>
 
 
-       <div class="modal-footer" style="margin-top: 0px" id="proPlanFooter">
-          <button type="button" class="btn btn-default" id="proPlanButton" data-dismiss="modal">CERRAR</button>          
-          <button type="button" class="btn btn-primary" id="proPlanButton" onclick="submitProPlan()">ACEPTAR</button>                    
+
+       <div class="modal-footer" style="margin-top: 0px" id="proPlanFooterR">
+          <button type="button" class="btn btn-default" id="proPlanButtonR" data-dismiss="modal">CERRAR</button>          
+          <button type="button" class="btn btn-primary" id="proPlanButtonR" onclick="submitProPlan()">ACEPTAR</button>                    
        </div>     
       </div>
     </div>
@@ -420,7 +433,7 @@
       <div class="modal-content">
         <div class="modal-header"style="padding-bottom:10px!important;background-color:#016797!important;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="PlanModalLabel">COMENZAR LA CONFIGURACIÓN</h4>
+          <h4 class="modal-title" id="PlanModalLabel">FINALIZAR CONFIGURACIÓN</h4>
         </div>
 
         <div style="background-color: #fff; padding-left: 16px; padding-right: 16px" id="proPlanDiv">
@@ -727,16 +740,17 @@
         success: function(result) { 
           if (result == 'success')
           { 
-            $('#proPlanSuccess, #proPlanFooter').show();
+            $('#proPlanSuccessR').show();
             $('#proPlanWorking, #proPlanButton').hide();
             $('#proPlanWorking, #proPlanButton2').hide();
             location.reload();
           }
           else
           {
-            $('#proPlanSuccess').show();
-            $('#proPlanFooterError').show();
+            $('#proPlanErrorR').show();
+            $('#proPlanFooterErrorR').show();
             $('#proPlanWorking').hide();
+            $('#proPlanFooterR').hide();
           }
 
         }
@@ -745,6 +759,10 @@
       $('#proPlanModal').modal('hide');
       $('#go_pro').val('true');
     }
+  }
+
+  function reload() {
+    location.reload();
   }
 
   function submitPlan() {

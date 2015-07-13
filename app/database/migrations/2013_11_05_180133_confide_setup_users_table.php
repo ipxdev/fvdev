@@ -70,7 +70,7 @@ class ConfideSetupUsersTable extends Migration {
             $t->string('nit')->unique();
             $t->string('name');
 
-            $t->string('domain')->unique();
+            // $t->string('domain')->unique();
             
             $t->string('address1');
             $t->string('address2');

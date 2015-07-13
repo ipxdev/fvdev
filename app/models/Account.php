@@ -217,24 +217,6 @@ class Account extends Eloquent
 		return $data;
 	}
 
-	public function isRegistered()
-	{
-
-		if ($this->account_key == IPX_ACCOUNT_KEY)
-		{
-			return true;
-		}
-
-		$datePaid = $this->billing_deadline;
-		if (!$datePaid == '0000-00-00')
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 	public function isPro()
 	{

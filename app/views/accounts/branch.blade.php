@@ -7,23 +7,6 @@
     <div class="alert alert-danger"></div>
 @endif
 
-
-    <script type="text/javascript">
-
-    function disabletext(e){
-    return false
-    }
-    function reEnable(){
-    return true
-    }
-    document.onselectstart=new Function ("return false")
-    if (window.sidebar){
-    document.onmousedown=disabletext
-    document.onclick=reEnable
-    }
-
-   </script>
-
   {{ Former::legend($title) }}
   @parent
 

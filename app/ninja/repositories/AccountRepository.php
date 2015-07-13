@@ -141,7 +141,10 @@ class AccountRepository
 
 			$InvoiceDesign = new InvoiceDesign;
 			$InvoiceDesign->user_id =$user->getId();
+
 			$InvoiceDesign->logo = "";
+			$InvoiceDesign->x = "5";
+			$InvoiceDesign->y = "5";
 			$InvoiceDesign->javascript = "displaytittle(doc, invoice, layout);
 
 displayHeader(doc, invoice, layout);
@@ -195,10 +198,10 @@ doc.setFontType('bold');
 if(invoice.branch_type_id==1)
 {
 
-    displayInvoiceHeader2(doc, invoice, layout);
-	var y = displayInvoiceItems2(doc, invoice, layout);
+    displayInvoiceHeader(doc, invoice, layout);
+	var y = displayInvoiceItems(doc, invoice, layout);
 	displayQR(doc, layout, invoice, y);
-	y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
+	y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
 }
 if(invoice.branch_type_id==2)
 {

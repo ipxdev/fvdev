@@ -43,21 +43,20 @@ class Branch extends EntityModelB
 		return $this->third;
 	}
 	
-	public function getNextInvoiceNumber($isQuote = false)
+	public function getNextInvoiceNumber()
 	{
-		$counter = $isQuote ? $this->quote_number_counter : $this->invoice_number_counter;
-		$prefix = $isQuote ? $this->quote_number_prefix : $this->invoice_number_prefix;
+		$counter =  $this->invoice_number_counter;
 
-		return $prefix . $counter;
+		$this->invoice_number_counter += 1;
+		$this->save();
+
+		return $counter;
 	}
 
-	public function incrementCounterInvoice($isQuote = false) 
+	public function incrementCounterInvoice() 
 	{
-		if ($isQuote) {
-			$this->quote_number_counter += 1;
-		} else {
-			$this->invoice_number_counter += 1;
-		}
+
+		$this->invoice_number_counter += 1;
 
 		$this->save();
 	}

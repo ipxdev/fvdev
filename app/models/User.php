@@ -106,6 +106,28 @@ class User extends ConfideUser implements UserInterface, RemindableInterface
 		{
 			return '';
 		}
+	}
+
+	public function getDisplayBranch()
+	{
+		if($this->isAdmin())
+		{
+			if ($this->branch_id==NULL)
+			{
+				return "Sin Sucursal";
+			}
+			else
+			{
+				return $this->branch->name();
+			}
+
+		}
+		else
+		{
+			return $this->branch->name();
+
+		}
+		
 	}	
 
 

@@ -71,7 +71,7 @@ class AccountController extends \BaseController {
 		$InvoiceDesign->user_id =$user->getId();
 		$InvoiceDesign->logo = "";
 		$InvoiceDesign->x = "5";
-		$InvoiceDesign->y = "5";
+		$InvoiceDesign->y = "15";
 		$InvoiceDesign->javascript = "displaytittle(doc, invoice, layout);
 
 displayHeader(doc, invoice, layout);
@@ -125,10 +125,10 @@ doc.setFontType('bold');
 if(invoice.branch_type_id==1)
 {
 
-    displayInvoiceHeader2(doc, invoice, layout);
-	var y = displayInvoiceItems2(doc, invoice, layout);
+    displayInvoiceHeader(doc, invoice, layout);
+	var y = displayInvoiceItems(doc, invoice, layout);
 	displayQR(doc, layout, invoice, y);
-	y += displaySubtotals2(doc, layout, invoice, y+15, layout.unitCostRight+35);
+	y += displaySubtotals(doc, layout, invoice, y+15, layout.unitCostRight+35);
 }
 if(invoice.branch_type_id==2)
 {
@@ -167,8 +167,10 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 		if ($code == CREDIT_KEY)
 		{
 			$result = $this->accountRepo->enableProPlan();
-		}
+
 			return RESULT_SUCCESS;	
+		}
+			
 		
 	
 	}
@@ -583,7 +585,7 @@ displayNotesAndTerms(doc, layout, invoice, y);";
 
 				if ($file = Input::file('logo') || Input::get('design')|| Input::get('x'))
 				{
-					if (Auth::user()->account->isRegistered())
+					if (Auth::user()->account->confirmed)
 					{
 				        $invoice_design = InvoiceDesign::createNew();
 				        $invoice_design_old = InvoiceDesign::scope()->orderBy('public_id', 'desc')->firstOrFail();
