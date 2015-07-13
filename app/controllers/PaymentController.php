@@ -46,7 +46,7 @@ class PaymentController extends \BaseController
         $table->addColumn('transaction_reference', function($model) { return $model->transaction_reference ? $model->transaction_reference : '<i>Pagado</i>'; })
               ->addColumn('payment_type', function($model) { return $model->payment_type ? $model->payment_type : ($model->account_gateway_id ? '<i>Pago en línea</i>' : ''); });
 
-        return $table->addColumn('amount', function($model) { return Utils::formatMoney($model->amount, $model->currency_id); })
+        return $table->addColumn('amount', function($model) { return Utils::formatMoney($model->amount, 1); })
             ->addColumn('payment_date', function($model) { return Utils::dateToString($model->payment_date); })
             ->addColumn('dropdown', function($model) 
             { 
